@@ -5,6 +5,8 @@ const routes = {
   users: "/users",
   categories: "/categories",
   brands: "/brands",
-  book: "/books/:id", 
+  book: "/books/:id",
+  cart: "/cartItem",
+  logout: "/logout",
 };
 export default routes;

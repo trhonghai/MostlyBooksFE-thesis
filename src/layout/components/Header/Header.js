@@ -3,13 +3,49 @@ import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
 import { HiMenuAlt2 } from "react-icons/hi";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import Tippy from "@tippyjs/react/headless";
 import config from "~/config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faDolly } from "@fortawesome/free-solid-svg-icons";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import {
+  faAddressBook,
+  faArrowRightFromBracket,
+  faBagShopping,
+  faCartShopping,
+  faDolly,
+  faDollyBox,
+  faReceipt,
+  faShoppingBasket,
+  faShoppingCart,
+} from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faUser } from "@fortawesome/free-regular-svg-icons";
 import CategoryNav from "./CategoryNav";
 import images from "~/assets/images";
+import { useState } from "react";
+import { useLogout } from "~/hooks";
+import { Icon } from "@mui/material";
+export const userMenu = [
+  {
+    title: "Thông tin tài khoản",
+    icon: faUser,
+    to: "/account",
+  },
+  {
+    title: "Đơn hàng của tôi",
+    icon: faReceipt,
+    to: "/account/orders",
+  },
+  {
+    title: "Sản phẩm yêu thích",
+    icon: faHeart,
+    to: "/account/favorite",
+  },
+  {
+    title: "Sổ địa chỉ",
+    icon: faAddressBook,
+    to: "/account/favorite",
+  },
+];
 
 function Header() {
   const navBarList = [
@@ -22,6 +58,17 @@ function Header() {
       link: config.routes.register,
     },
   ];
+  const { logout } = useLogout();
+  const navigate = useNavigate();
+
+  const currentUser = localStorage.getItem("refresh_token");
+
+  // console.log(currentUser);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
 
   return (
     <div className="w-full h-full  bg-white border-b-[1px]  sticky top-0 z-10">
@@ -52,23 +99,100 @@ function Header() {
           <FaSearch className="w-5 h-5 hover:cursor-pointer " color="#FFD16B" />
           {/* )} */}
         </div>
-        <div className="hidden md:inline-flex items-center gap-2">
-          {navBarList.map((item) => (
-            <NavLink
-              to={item?.link}
-              key={item?.link}
-              className="flex font-medium text-lg text-black w-32 h-6 justify-center items-center pl-3 pr-6 text-gray-600  underline-offset-4 decoration-[1px] hover:text-[#FFD16B] md:border-r-[2px] border-r-[#FFD16B] duration-200 last:border-r-0"
-            >
-              {item?.title}
-            </NavLink>
-          ))}
+        <div className="hidden md:inline-flex  gap-2">
+          {currentUser ? (
+            <>
+              <Tippy
+                interactive
+                // visible
+                // disabled={false}
+                placement="bottom-end"
+                render={(attrs) => (
+                  <div
+                    className="w-60 h-auto bg-white border rounded-lg  z-999"
+                    tabIndex="-1"
+                    {...attrs}
+                  >
+                    <ul className=" w-full text-sm text-gray-700 dark:text-gray-200">
+                      <li className=" flex hover:scale-105 transition duration-400 ease-in-out pl-4 block text-left w-full font-medium py-2 text-gray-600 hover:bg-[#FFD16B] hover:rounded-lg dark:hover:bg-gray-600 hover:text-white">
+                        <div className=" flex w-10 h-10 rounded-full overflow-hidden">
+                          <img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwr8JOGWLBh31dNoWlGXqynbrZRyFTTvV8wg&usqp=CAU"
+                            alt="Customer Avatar"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
 
-          <button className="flex hover:font-medium w-8 h-6 justify-center items-center  text-gray-500 ">
-            <FontAwesomeIcon icon={faHeart} className=" w-12 h-5" />
-          </button>
-          <button className="flex hover:font-medium  justify-center items-center  text-gray-500 hover:underline underline-offset-4 decoration-[1px] hover:text--600 md:border-r-[2px] border-r-[#FFD16B] duration-200 last:border-r-0">
-            <FontAwesomeIcon icon={faDolly} className="mr-2  w-12 h-6" />
-          </button>
+                        <div className="grid">
+                          <span className="ml-2 text-gray-700 dark:text-gray-200">
+                            Trương Hồng Hải
+                          </span>
+                          <span className="ml-2 text-xs text-gray-500 dark:text-gray-200">
+                            Thành viên
+                          </span>
+                        </div>
+                      </li>
+                      {userMenu.map((item, index) => (
+                        <li className="hover:scale-105 transition duration-400 ease-in-out pl-4 block text-left w-full font-medium py-2 text-gray-600 hover:bg-[#FFD16B] hover:rounded-lg dark:hover:bg-gray-600 hover:text-white">
+                          <Link key={index} to={item.to} className="">
+                            <FontAwesomeIcon icon={item.icon} size="xl" />
+                            <span className="ml-2">{item.title}</span>
+                          </Link>
+                        </li>
+                      ))}
+                      <li>
+                        {" "}
+                        <Link
+                          to="/logout"
+                          onClick={handleLogout}
+                          className=" pl-4 block text-left w-full font-medium py-2 text-gray-500 hover:bg-[#FFD16B] hover:rounded-lg dark:hover:bg-gray-600 hover:text-white"
+                        >
+                          <FontAwesomeIcon
+                            icon={faArrowRightFromBracket}
+                            size="xl"
+                          />
+                          <span className="ml-2">Đăng xuất</span>
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              >
+                <div className="grid">
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    className="text-gray-500 w-12 h-5 cursor-pointer hover:text-[#FFD16B] duration-200"
+                  />
+                  <span className="text-xs text-gray-500">Truong Hai</span>
+                </div>
+              </Tippy>
+            </>
+          ) : (
+            <>
+              {navBarList.map((item) => (
+                <NavLink
+                  to={item?.link}
+                  key={item?.link}
+                  className="flex font-medium text-lg text-black w-32 h-6 justify-center items-center pl-3 pr-6 text-gray-600  underline-offset-4 decoration-[1px] hover:text-[#FFD16B] md:border-r-[2px] border-r-[#FFD16B] duration-200 last:border-r-0"
+                >
+                  {item?.title}
+                </NavLink>
+              ))}
+            </>
+          )}
+
+          <NavLink
+            to="/cartItem"
+            className="pl-8 pr-12 flex items-center text-gray-500 hover:text-[#FFD16B] transition-colors duration-300"
+          >
+            <div className="grid">
+              <FontAwesomeIcon
+                icon={faShoppingCart}
+                className="text-gray-500 w-12 h-5 cursor-pointer hover:text-[#FFD16B] duration-200"
+              />
+              <span className="text-xs text-gray-500">Giỏ hàng</span>
+            </div>
+          </NavLink>
         </div>
         <HiMenuAlt2 className="inline-flex md:hidden cursor-pointer" />
       </div>

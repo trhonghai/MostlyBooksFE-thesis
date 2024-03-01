@@ -13,8 +13,8 @@ function CategoryNav() {
 
   useEffect(() => {
     const category = async () => {
-      const token = JSON.parse(localStorage.getItem("user")).access_token;
-      console.log(token);
+      // const token = JSON.parse(localStorage.getItem("user")).access_token;
+      // console.log(token);
       try {
         const response = await axios.get("http://localhost:8080/categories");
         const { data } = response;

@@ -22,20 +22,19 @@ function Login() {
     try {
       await login(data);
       alert("Đăng nhập thành công");
+      navigate(config.routes.home);
     } catch (error) {
       console.log(error);
     }
-
-    navigate(config.routes.home);
   };
   return (
-    <div className="border-red-500 bg-gray-200  flex items-center justify-center">
-      <div className="bg-gray-100 p-1 flex rounded-2xl shadow-lg max-w-4xl">
+    <div className="border-red-500 bg-gray-200 py-10 flex items-center justify-center">
+      <div className="bg-gray-100 p-1 flex rounded-2xl shadow-lg max-w-2xl">
         <div className="w-1/2 h-full md:block hidden ">
           <img src={images.Login} className="rounded-2xl" alt="page img" />
         </div>
         <div className="md:w-1/2 px-5">
-          <h2 className="text-2xl font-bold text-gray-700">Đăng nhập</h2>
+          <h2 className="text-2xl mt-4 font-bold text-gray-700">Đăng nhập</h2>
 
           <form
             className="mt-6"

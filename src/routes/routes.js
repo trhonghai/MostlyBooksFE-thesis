@@ -8,6 +8,7 @@ import Login from "~/pages/Login/Login";
 import DefaultLayout from "~/layout/DefaultLayout";
 import Register from "~/pages/Register";
 import BookDetails from "~/pages/BookDetails";
+import CartItem from "~/pages/CartItem";
 
 const privateRoutes = [
   { path: config.routes.users, component: ManageUsers, layout: AdminLayout },
@@ -28,6 +29,7 @@ const publicRoutes = [
   { path: config.routes.login, component: Login, layout: DefaultLayout },
   { path: config.routes.register, component: Register, layout: DefaultLayout },
   { path: config.routes.book, component: BookDetails, layout: DefaultLayout },
+  { path: config.routes.cart, component: CartItem, layout: DefaultLayout },
 ];
 
 export { privateRoutes, publicRoutes };

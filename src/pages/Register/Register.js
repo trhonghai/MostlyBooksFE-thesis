@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import images from "~/assets/images";
 import { useRegister } from "~/hooks";
 
@@ -7,6 +8,7 @@ const Sex = {
   female: 1,
 };
 function Register() {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     lastName: "",
     firstName: "",
@@ -56,14 +58,15 @@ function Register() {
     try {
       await register(data);
       alert("Đăng ký thành công");
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className="border-red-500 bg-gray-200   flex items-center justify-center">
-      <div className="bg-gray-100 p-1 flex rounded-2xl shadow-lg max-w-4xl">
+    <div className="border-red-500 bg-gray-200 py-10   flex items-center justify-center">
+      <div className="bg-gray-100 p-1 flex rounded-2xl shadow-lg max-w-2xl">
         <div className="w-1/2  md:block hidden ">
           <img
             src={images.Login}
@@ -83,7 +86,7 @@ function Register() {
               <label className="block text-left text-gray-700">Họ</label>
               <input
                 type="text"
-                name="lastName"
+                name="firstName"
                 value={data.firstName}
                 placeholder="Nhập vào họ"
                 onChange={handleChange}
@@ -95,7 +98,7 @@ function Register() {
               <label className="block mt-2 text-left text-gray-700">Tên</label>
               <input
                 type="text"
-                name="firstName"
+                name="lastName"
                 value={data.lastName}
                 placeholder="Nhập vào tên"
                 onChange={handleChange}

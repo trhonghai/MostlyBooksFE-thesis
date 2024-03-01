@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { saveUser } from "~/utils/localStorage";
+// import { saveUser } from "~/utils/localStorage";
 
 function useLogin() {
   const [loading, setLoading] = useState(false);
@@ -12,8 +12,12 @@ function useLogin() {
         "http://localhost:8080/api/users/authentication",
         data
       );
+      console.log("Đăng nhập thành công:", response.data);
       const { access_token, refresh_token } = response.data;
-      saveUser(access_token, refresh_token);
+      console.log(refresh_token);
+      localStorage.setItem("refresh_token", refresh_token);
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("cartId", response.data.cartId);
     } catch (error) {
       console.error("Đăng nhập thất bại:", error.message);
     } finally {

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { formatPrice } from "~/utils/formatPrice";
 
 function Book({ data }) {
   return (
@@ -26,7 +27,7 @@ function Book({ data }) {
             <div className="text-left ">
               <div className="flex">
                 <p class="text-xs mr-2 font-sans  sm:text-sm md:text-base">
-                  {data.price}đ
+                  {formatPrice(data.price)}
                 </p>
                 <div class=" bg-red-500 text-white px-2  rounded-lg">-20%</div>
               </div>

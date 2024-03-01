@@ -13,7 +13,7 @@ import Reviews from "./Reviews";
 function BookDetails() {
   const { id } = useParams();
   const [book, setBook] = useState();
-  console.log(id);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -24,8 +24,41 @@ function BookDetails() {
     fetchBook();
   }, []);
 
+  const AddtoCart = async (id, price, quantity) => {
+    const cartId = localStorage.getItem("cartId");
+
+    try {
+      const data = {
+        cartId: cartId,
+        bookId: id,
+        price: price,
+        quantity: quantity,
+      };
+      console.log(quantity);
+
+      const response = await axios.post(
+        "http://localhost:8080/user-cart/add-to-cart",
+        data
+      );
+      console.log(response);
+      // fetchCartItem();
+    } catch (error) {
+      console.error("Thêm sản phẩm thất bại:", error.message);
+    }
+  };
+  const increaseQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  // Hàm giảm số lượng
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity((prevQuantity) => prevQuantity - 1);
+    }
+  };
+
   return (
-    <section class=" pt-4  justify-center bg-gray-100">
+    <section class="pt-2 justify-center bg-gray-100">
       <div class="container w-9/12 mx-auto px-4 bg-white rounded-lg">
         {/* <nav class="flex">
           <ol role="list" class="flex items-center">
@@ -74,7 +107,7 @@ function BookDetails() {
           </ol>
         </nav> */}
         <div class="lg:col-gap-12 xl:col-gap-16 mt-4 grid grid-cols-1 gap-12 lg:grid-cols-4 lg:gap-16">
-          <div class="lg:col-span-2 lg:row-end-1">
+          <div class="lg:col-span-2 lg:row-end-1 mt-4">
             <div class="lg:flex lg:items-start">
               <div class="lg:order-2  ">
                 <div class="max-w-xl overflow-hidden rounded-lg">
@@ -91,7 +124,7 @@ function BookDetails() {
                     <button
                       key={index}
                       type="button"
-                      class="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-gray-200 text-center"
+                      class="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-gray-200 text-center transition-all object-cover duration-300 hover:hover:scale-110"
                     >
                       <img
                         class="h-full w-full object-cover"
@@ -105,8 +138,8 @@ function BookDetails() {
             </div>
           </div>
 
-          <div class="lg:col-span-5 lg:row-span-2 lg:row-end-2">
-            <h1 class="text-left text-2xl font-bold text-gray-900 sm:text-3xl">
+          <div class="lg:col-span-5 lg:row-span-2 lg:row-end-2 mt-4 mb-6">
+            <h1 class="text-left text-2xl  text-gray-900 sm:text-2xl">
               {book?.name}
             </h1>
 
@@ -195,20 +228,26 @@ function BookDetails() {
 
             <div class="mt-4 flex flex-col items-center justify-between b text-[#F7941D] space-y-4  sm:flex-row sm:space-y-0">
               <div class="flex items-end">
-                <h1 class="text-4xl font-bold">{book?.price}</h1>
+                <h1 class="text-3xl font-bold">{book?.price}</h1>
                 <span class="text-base">đ</span>
               </div>
             </div>
             <div class=" flex mt-4 justify-start ">
               <div>Số lượng:</div>
               <div class="flex ml-10 h-8 items-stretch text-gray-600">
-                <button class="flex items-center justify-center rounded-l-md bg-gray-200 px-4 transition hover:bg-black hover:text-white">
+                <button
+                  onClick={decreaseQuantity}
+                  class="flex items-center justify-center rounded-l-md bg-gray-200 px-4 transition hover:bg-black hover:text-white"
+                >
                   -
                 </button>
                 <div class="flex  items-center justify-center bg-gray-100 px-4 text-xs uppercase transition">
-                  1
+                  {quantity}
                 </div>
-                <button class="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-black hover:text-white">
+                <button
+                  onClick={increaseQuantity}
+                  class="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-black hover:text-white"
+                >
                   +
                 </button>
               </div>
@@ -216,14 +255,15 @@ function BookDetails() {
             <div className="mt-4 flex justify-items-start">
               <button
                 type="button"
-                class="inline-flex items-center w-full justify-center rounded-md border-2 border-transparent bg-[#FBA31A] bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-teal-600"
+                onClick={() => AddtoCart(book.id, book.price, quantity)}
+                class="inline-flex items-center w-full justify-center rounded-md border-2 border-transparent bg-[#FBA31A] bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-[#faaf00]"
               >
                 <FontAwesomeIcon icon={faShoppingBag} className="mr-2" />
-                Add to cart
+                Thêm vào giỏ hàng
               </button>
               <button
                 type="button"
-                class=" ml-4 w-full inline-flex items-center justify-center rounded-md border-2 border-transparent bg-[#FBA31A] bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-teal-600"
+                class=" ml-4 w-full inline-flex items-center justify-center rounded-md border-2 border-transparent bg-[#FBA31A] bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-[#faaf00]"
               >
                 Mua ngay
               </button>
