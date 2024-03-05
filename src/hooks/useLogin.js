@@ -18,6 +18,7 @@ function useLogin() {
       localStorage.setItem("refresh_token", refresh_token);
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("cartId", response.data.cartId);
+      localStorage.setItem("userId", response.data.userId);
     } catch (error) {
       console.error("Đăng nhập thất bại:", error.message);
     } finally {

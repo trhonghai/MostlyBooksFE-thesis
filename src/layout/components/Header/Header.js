@@ -23,7 +23,7 @@ import CategoryNav from "./CategoryNav";
 import images from "~/assets/images";
 import { useState } from "react";
 import { useLogout } from "~/hooks";
-import { Icon } from "@mui/material";
+
 export const userMenu = [
   {
     title: "Thông tin tài khoản",
@@ -158,12 +158,14 @@ function Header() {
                   </div>
                 )}
               >
-                <div className="grid">
-                  <FontAwesomeIcon
-                    icon={faUser}
-                    className="text-gray-500 w-12 h-5 cursor-pointer hover:text-[#FFD16B] duration-200"
-                  />
-                  <span className="text-xs text-gray-500">Truong Hai</span>
+                <div className="grid ">
+                  <div className="flex items-center justify-center">
+                    <FontAwesomeIcon
+                      icon={faUser}
+                      className="text-gray-500 w-12 h-5  cursor-pointer hover:text-[#FFD16B] duration-200"
+                    />
+                  </div>
+                  <span className="text-xs text-gray-500">Truong Hong Hai</span>
                 </div>
               </Tippy>
             </>
@@ -183,7 +185,7 @@ function Header() {
 
           <NavLink
             to="/cartItem"
-            className="pl-8 pr-12 flex items-center text-gray-500 hover:text-[#FFD16B] transition-colors duration-300"
+            className="pl-8 pr-28 flex items-center text-gray-500 hover:text-[#FFD16B] transition-colors duration-300"
           >
             <div className="grid">
               <FontAwesomeIcon

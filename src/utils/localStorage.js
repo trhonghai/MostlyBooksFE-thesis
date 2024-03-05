@@ -8,16 +8,4 @@
 //   );
 // };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+export const customerId = localStorage.getItem("userId");

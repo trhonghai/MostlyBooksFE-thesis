@@ -13,6 +13,7 @@ function useLogout() {
       );
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("cartId");
+      localStorage.removeItem("userId");
     } catch (error) {
       console.log("Error:", error);
       return false;

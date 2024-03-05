@@ -5,6 +5,8 @@ import { privateRoutes, publicRoutes } from "~/routes";
 
 import AdminLayout from "./layout/AdminLayout/AdminLayout";
 import DefaultLayout from "./layout/DefaultLayout";
+import { customerId } from "./utils/localStorage";
+import CusLayout from "./layout/CusLayout";
 function App() {
   return (
     <Router>
@@ -27,6 +29,9 @@ function App() {
           })} */}
           {publicRoutes.map((route, index) => {
             let Layout = DefaultLayout;
+            if (route.layout) {
+              Layout = route.layout;
+            }
             const Page = route.component;
             return (
               <Route

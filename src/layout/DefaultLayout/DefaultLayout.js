@@ -1,6 +1,6 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Sidebar from "./Sidebar";
+import Sidebar from "../CusLayout/Sidebar";
 
 function DefaultLayout({ children }) {
   return (

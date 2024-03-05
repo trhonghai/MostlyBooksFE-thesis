@@ -55,8 +55,14 @@ function Register() {
     } else {
       setError((prev) => ({ ...prev, cPassword: "" }));
     }
+    const dataToSend = {
+      ...data,
+      date_of_birth: data.dateOfBirth
+        ? new Date(data.dateOfBirth).toISOString()
+        : "", 
+    };
     try {
-      await register(data);
+      await register(dataToSend);
       alert("Đăng ký thành công");
       navigate("/login");
     } catch (error) {

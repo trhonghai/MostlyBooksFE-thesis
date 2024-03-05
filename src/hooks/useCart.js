@@ -9,6 +9,7 @@ function useCart() {
     console.log(response);
     return { result: response.data };
   };
+
   return { fetchCartItem };
 }
 
