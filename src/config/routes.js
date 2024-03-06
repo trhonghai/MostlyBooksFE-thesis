@@ -12,5 +12,6 @@ const routes = {
   address: "/account/address",
   order: "/account/orders",
   favorite: "/account/favorite",
+  checkout: "/checkout",
 };
 export default routes;

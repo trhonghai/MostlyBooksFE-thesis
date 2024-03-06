@@ -5,6 +5,8 @@ const images = {
   Logo: require("~/assets/images/Mostly.png"),
   HeaderBanner: require("~/assets/images/Header_banner.png"),
   Banner: require("~/assets/images/Banner.png"),
+  Paypal: require("~/assets/images/paypal.png"),
+  Money: require("~/assets/images/money.png"),
 };
 
 export default images;

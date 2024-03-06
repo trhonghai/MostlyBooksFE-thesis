@@ -12,6 +12,7 @@ import CartItem from "~/pages/CartItem";
 import Account from "~/pages/Account";
 import CusLayout from "~/layout/CusLayout/CusLayout";
 import Address from "~/pages/Address";
+import Checkout from "~/pages/Checkout";
 
 const privateRoutes = [
   { path: config.routes.users, component: ManageUsers, layout: AdminLayout },
@@ -33,6 +34,7 @@ const publicRoutes = [
   { path: config.routes.register, component: Register, layout: DefaultLayout },
   { path: config.routes.book, component: BookDetails, layout: DefaultLayout },
   { path: config.routes.cart, component: CartItem, layout: DefaultLayout },
+  { path: config.routes.checkout, component: Checkout, layout: DefaultLayout },
   { path: config.routes.account, component: Account, layout: CusLayout },
   { path: config.routes.address, component: Address, layout: CusLayout },
 ];

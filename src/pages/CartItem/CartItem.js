@@ -3,12 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useCart } from "~/hooks";
+import { Link } from "react-router-dom";
+
 import { formatPrice } from "~/utils/formatPrice";
 
 function CartItem() {
   const [cartItem, setCartItem] = useState([]);
   const [selectAllItems, setSelectAllItems] = useState(false);
+  const [dataCheckOut, setDataCheckOut] = useState([{}]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const cartId = localStorage.getItem("cartId");
 
@@ -66,6 +69,9 @@ function CartItem() {
     const newCartItem = [...cartItem];
     newCartItem[index].isChecked = !newCartItem[index].isChecked;
     setCartItem(newCartItem);
+    const updatedSelectedItems = newCartItem.filter((item) => item.isChecked);
+    setDataCheckOut(updatedSelectedItems);
+    console.log(dataCheckOut);
   };
 
   // Hàm xử lý chọn tất cả hoặc bỏ chọn tất cả
@@ -76,6 +82,11 @@ function CartItem() {
     }));
     setCartItem(updatedCartItem);
     setSelectAllItems(!selectAllItems);
+    const updatedSelectedItems = updatedCartItem.filter(
+      (item) => item.isChecked
+    );
+    setDataCheckOut(updatedSelectedItems);
+    console.log(dataCheckOut);
   };
 
   const calculateSubtotal = () => {
@@ -87,11 +98,7 @@ function CartItem() {
     });
     return totalPrice;
   };
-  const calculateTotalPrice = () => {
-    const subtotal = calculateSubtotal();
-    const shippingFee = 5000; // Đây là ví dụ, bạn có thể thay đổi phí vận chuyển theo yêu cầu của mình
-    return subtotal + shippingFee;
-  };
+
   return (
     <div class="bg-gray-100 min-h-screen py-8">
       <div class="container md:w-4/5 mx-auto px-4">
@@ -176,25 +183,32 @@ function CartItem() {
           </div>
           <div class="md:w-1/3">
             <div class="bg-white rounded-lg shadow-md p-6">
-              <h2 class="text-lg font-semibold mb-4">Summary</h2>
               <div class="flex justify-between mb-2">
                 <span>Thành tiền</span>
                 <span>{formatPrice(calculateSubtotal())}</span>
               </div>
 
-              <div class="flex justify-between mb-2">
+              {/* <div class="flex justify-between mb-2">
                 <span>Vận chuyển</span>
                 <span>{formatPrice(5000)}</span>
-              </div>
+              </div> */}
               <div class="flex justify-between mb-2 border-1 border-b pb-2">
                 <span class="font-semibold text-xl">Tổng số tiền</span>
                 <span class="font-semibold">
-                  {formatPrice(calculateTotalPrice())}
+                  {formatPrice(calculateSubtotal())}
                 </span>
               </div>
-              <button class="bg-[#FFD16B] text-white py-2 px-4 rounded-lg mt-4 w-full">
-                Checkout
-              </button>
+              <Link
+                to="/checkout"
+                state={{
+                  data: dataCheckOut,
+                  total_price: calculateSubtotal(),
+                }}
+              >
+                <button class="bg-[#FFD16B] text-white py-2 px-4 rounded-lg mt-4 w-full">
+                  Thanh toán
+                </button>
+              </Link>
             </div>
           </div>
         </div>
