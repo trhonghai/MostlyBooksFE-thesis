@@ -1,6 +1,7 @@
 import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AspectRatio } from "@material-ui/icons";
 import { Modal } from "@mui/material";
 
 import { useState } from "react";
@@ -10,6 +11,7 @@ import { useAddress } from "~/hooks";
 function Address() {
   const [allAddress, setAllAddress] = useState([]);
   const [addressData, setAddressData] = useState({
+    id: "",
     firstName: "",
     lastName: "",
     address: "",
@@ -38,17 +40,20 @@ function Address() {
   useEffect(() => {
     fetchAddress();
     fetchProvinces();
+    console.log(addressData);
   }, []);
 
   const fetchAddress = async () => {
     const result = await Address();
     setAllAddress(result);
     console.log(allAddress);
+    console.log(allAddress);
   };
 
   const handleClickEditAddress = (item) => {
     setMode("edit");
     setAddressData(item);
+    console.log(addressData);
     setIsModalOpen(true);
   };
 
@@ -74,7 +79,7 @@ function Address() {
     });
   };
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name } = e.target;
     let { value } = e.target;
     console.log(name, value);
@@ -85,16 +90,12 @@ function Address() {
       value = e.target.checked;
     }
 
-    setAddressData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
     const selectedCity = provinces.find((province) => province.name === value);
     console.log(selectedCity);
     const selectedCityId = selectedCity ? selectedCity.code : null;
 
     if (selectedCityId) {
-      fetchDistricts(selectedCityId);
+      await fetchDistricts(selectedCityId);
     }
     const selectedDistrict = districts.find(
       (district) => district.name === value
@@ -102,9 +103,48 @@ function Address() {
     console.log(selectedCity);
     const selectedDistrictId = selectedDistrict ? selectedDistrict.code : null;
     if (selectedDistrictId) {
-      fetchWards(selectedDistrictId);
+      await fetchWards(selectedDistrictId);
     }
+    setAddressData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
+  // const handleChange = async (e) => {
+  //   const { name, value, checked, type } = e.target;
+  //   let newValue = value;
+
+  //   if (type === "checkbox") {
+  //     newValue = checked;
+  //   } else if (name === "sex") {
+  //     newValue = Number(value);
+  //   }
+
+  //   setAddressData((prevState) => ({
+  //     ...prevState,
+  //     [name]: newValue,
+  //   }));
+
+  //   if (name === "city") {
+  //     const selectedCity = provinces.find(
+  //       (province) => province.name === value
+  //     );
+  //     const selectedCityId = selectedCity ? selectedCity.code : null;
+  //     if (selectedCityId) {
+  //       await fetchDistricts(selectedCityId);
+  //     }
+  //   } else if (name === "district") {
+  //     const selectedDistrict = districts.find(
+  //       (district) => district.name === value
+  //     );
+  //     const selectedDistrictId = selectedDistrict
+  //       ? selectedDistrict.code
+  //       : null;
+  //     if (selectedDistrictId) {
+  //       await fetchWards(selectedDistrictId);
+  //     }
+  //   }
+  // };
 
   const fetchWards = async (districtId) => {
     const result = await getWards(districtId);
@@ -302,6 +342,13 @@ function Address() {
                             value={addressData.city}
                             onChange={handleChange}
                           >
+                            {addressData.city === "" ? (
+                              <option value="">Chọn Tỉnh/Thành</option>
+                            ) : (
+                              <option value={addressData.city}>
+                                {addressData.city}
+                              </option>
+                            )}
                             {provinces?.map((province) => (
                               <option key={province.code} value={province.name}>
                                 {province.name}
@@ -311,8 +358,7 @@ function Address() {
                         </div>
 
                         <div class="md:col-span-2">
-                          <label for="country">Quận/Huyện</label>
-
+                          <label for="district">Quận/Huyện</label>
                           <select
                             name="district"
                             id="district"
@@ -320,8 +366,14 @@ function Address() {
                             value={addressData.district}
                             onChange={handleChange}
                           >
-                            <option value="">Chọn Quận/Huyện</option>
-                            {districts?.map((district) => (
+                            {addressData.district === "" ? (
+                              <option value="">Chọn Quận/Huyện</option>
+                            ) : (
+                              <option value={addressData.district}>
+                                {addressData.district}
+                              </option>
+                            )}
+                            {districts.map((district) => (
                               <option key={district.code} value={district.name}>
                                 {district.name}
                               </option>
@@ -330,7 +382,7 @@ function Address() {
                         </div>
 
                         <div class="md:col-span-2">
-                          <label for="state">Phường/Xã</label>
+                          <label for="ward">Phường/Xã</label>
                           <select
                             name="ward"
                             id="ward"
@@ -338,7 +390,16 @@ function Address() {
                             value={addressData.ward}
                             onChange={handleChange}
                           >
-                            <option value="">Chọn Phường/Xã</option>
+                            {addressData.ward === "" ? (
+                              <option value="">Chọn Phường/Xã</option>
+                            ) : (
+                              <option value={addressData.ward}>
+                                {addressData.ward}
+                              </option>
+                            )}
+                            <option value={addressData.ward}>
+                              {addressData.ward}
+                            </option>
                             {wards?.map((ward) => (
                               <option key={ward.code} value={ward.name}>
                                 {ward.name}
