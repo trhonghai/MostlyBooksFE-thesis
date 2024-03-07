@@ -10,8 +10,7 @@ import { formatPrice } from "~/utils/formatPrice";
 function CartItem() {
   const [cartItem, setCartItem] = useState([]);
   const [selectAllItems, setSelectAllItems] = useState(false);
-  const [dataCheckOut, setDataCheckOut] = useState([{}]);
-  const [totalPrice, setTotalPrice] = useState(0);
+ 
 
   const cartId = localStorage.getItem("cartId");
 
@@ -70,8 +69,9 @@ function CartItem() {
     newCartItem[index].isChecked = !newCartItem[index].isChecked;
     setCartItem(newCartItem);
     const updatedSelectedItems = newCartItem.filter((item) => item.isChecked);
-    setDataCheckOut(updatedSelectedItems);
-    console.log(dataCheckOut);
+    localStorage.setItem("dataCheckOut", JSON.stringify(updatedSelectedItems));
+    // setDataCheckOut(updatedSelectedItems);
+    // console.log(dataCheckOut);
   };
 
   // Hàm xử lý chọn tất cả hoặc bỏ chọn tất cả
@@ -85,8 +85,9 @@ function CartItem() {
     const updatedSelectedItems = updatedCartItem.filter(
       (item) => item.isChecked
     );
-    setDataCheckOut(updatedSelectedItems);
-    console.log(dataCheckOut);
+    localStorage.setItem("dataCheckOut", JSON.stringify(updatedSelectedItems));
+    // setDataCheckOut(updatedSelectedItems);
+    // console.log(dataCheckOut);
   };
 
   const calculateSubtotal = () => {
@@ -200,10 +201,7 @@ function CartItem() {
               </div>
               <Link
                 to="/checkout"
-                state={{
-                  data: dataCheckOut,
-                  total_price: calculateSubtotal(),
-                }}
+               
               >
                 <button class="bg-[#FFD16B] text-white py-2 px-4 rounded-lg mt-4 w-full">
                   Thanh toán

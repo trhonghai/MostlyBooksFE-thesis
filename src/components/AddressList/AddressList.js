@@ -32,13 +32,8 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
     phoneNumber: "",
     defaultForShopping: false,
   });
-  // const fetchAddress = async () => {
-  //   const result = await Address();
-  //   setAllAddress(result);
-  //   console.log(allAddress);
-  // };
+
   useEffect(() => {
-    // fetchAddress();
     fetchProvinces();
     console.log(data);
   }, []);

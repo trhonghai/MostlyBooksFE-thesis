@@ -1,23 +1,16 @@
-import {
-  faCirclePlus,
-  faEdit,
-  faPlus,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useLocale } from "antd/es/locale";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import images from "~/assets/images";
 import AddressList from "~/components/AddressList/AddressList";
 import { useAddress } from "~/hooks";
 import { formatPrice } from "~/utils/formatPrice";
 
 function Checkout() {
-  const location = useLocation();
-  const { data, total_price } = location.state;
   const [allAddress, setAllAddress] = useState([]);
   const [addressChecked, setAddressChecked] = useState("");
+  const [items, setItems] = useState(
+    JSON.parse(localStorage.getItem("dataCheckOut")) || []
+  );
+  console.log(items);
 
   const { Address } = useAddress();
 
@@ -33,13 +26,14 @@ function Checkout() {
     console.log(allAddress);
   };
 
-  console.log(data, total_price);
   const calculateTotalPrice = () => {
-    const subtotal = total_price;
-    const shippingFee = 31000; // Đây là ví dụ, bạn có thể thay đổi phí vận chuyển theo yêu cầu của mình
-
-    return subtotal + shippingFee;
+    let total = 0;
+    items.forEach((item) => {
+      total += item.price * item.quantity;
+    });
+    return total;
   };
+
   return (
     <section class="pt-2  justify-center bg-gray-100">
       <div className="container  md:w-10/12 mx-auto px-4">
@@ -128,7 +122,7 @@ function Checkout() {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((item) => (
+                    {items?.map((item) => (
                       <tr>
                         <td class="py-4">
                           <div class="flex items-center">
@@ -162,11 +156,10 @@ function Checkout() {
         <div class="container w-10/12 mx-auto px-4 bg-white rounded-lg">
           <div class="lg:col-gap-12 xl:col-gap-16 mt-4 grid grid-cols-1 gap-12 lg:grid-cols-4 lg:gap-16">
             <div class="lg:col-span-4 lg:row-end-1 mt-4 mb-4">
-              <h2 class="text-lg font-semibold mb-4">Summary</h2>
               <div class=" items-center justify-between mt-4">
                 <div class="flex justify-between mb-2">
                   <span>Thành tiền</span>
-                  <span>{formatPrice(total_price)}</span>
+                  <span>{formatPrice(calculateTotalPrice())}</span>
                 </div>
 
                 <div class="flex justify-between mb-2">
@@ -176,7 +169,7 @@ function Checkout() {
                 <div class="flex justify-between mb-2 border-1 border-b pb-2">
                   <span class="font-semibold text-xl">Tổng số tiền</span>
                   <span class="font-semibold">
-                    {formatPrice(calculateTotalPrice())}
+                    {formatPrice(calculateTotalPrice() + 31000)}
                   </span>
                 </div>
                 <button class="bg-[#FFD16B] text-white py-2 mb-2 rounded-lg mt-2 w-full">
