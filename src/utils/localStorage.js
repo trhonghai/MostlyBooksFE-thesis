@@ -9,3 +9,4 @@
 // };
 
 export const customerId = localStorage.getItem("userId");
+export const cartId = localStorage.getItem("cartId");

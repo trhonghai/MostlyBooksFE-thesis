@@ -26,12 +26,13 @@ function Account() {
 
   useEffect(() => {
     fetchCustomer();
+    console.log(customerData);
   }, []);
 
   const fetchCustomer = async () => {
     const result = await Customer();
     const { firstName, lastName, email, phone, dateOfBirth, sex } = result;
-    // console.log(sex);
+    console.log(result);
     const birthDate = new Date(dateOfBirth);
     const year = birthDate.getFullYear();
     const month = birthDate.getMonth() + 1;
@@ -47,9 +48,6 @@ function Account() {
       dateOfBirth: birthdayString,
       sex,
     });
-    console.log(customerData);
-    console.log("customerData.sex:", customerData.sex);
-    console.log("Sex.male:", Sex.male);
   };
 
   const handleChange = (e) => {
@@ -137,7 +135,7 @@ function Account() {
             <div class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <input
                 type="text"
-                name=" email"
+                name="email"
                 value={customerData.email}
                 onChange={handleChange}
                 className="w-full font-semibold h-8 border-gray-200 border-solid border-2 rounded-md pl-4  focus:outline-none focus:border-blue-300 focus:ring-blue-300"
@@ -167,7 +165,7 @@ function Account() {
                 id="gender_female"
                 name="sex"
                 value={Sex.female}
-                checked={customerData.sex === Sex.female}
+                checked={customerData.sex == Sex.female}
                 onChange={handleChange}
                 class=" mr-1 form-radio text-pink-500 h-4 w-4"
               />

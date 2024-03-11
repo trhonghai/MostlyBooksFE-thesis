@@ -1,8 +1,10 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import images from "~/assets/images";
 import AddressList from "~/components/AddressList/AddressList";
 import { useAddress } from "~/hooks";
 import { formatPrice } from "~/utils/formatPrice";
+import { cartId, customerId } from "~/utils/localStorage";
 
 function Checkout() {
   const [allAddress, setAllAddress] = useState([]);
@@ -11,6 +13,31 @@ function Checkout() {
     JSON.parse(localStorage.getItem("dataCheckOut")) || []
   );
   console.log(items);
+
+  const orderDetailsId = items.map((item) => item.id);
+  console.log(orderDetailsId);
+
+  const DeleteItemsFromCart = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/user-cart/checkout-items?cart=${cartId}`,
+        orderDetailsId
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error creating payment:", error);
+    }
+  };
+
+  const [paymentRequest, setPaymentRequest] = useState({
+    amount: 10.0,
+    currency: "USD",
+    description: "Payment description",
+    customerId: customerId,
+    orderDetailsId: orderDetailsId,
+  });
+  console.log(items);
+  console.log(paymentRequest);
 
   const { Address } = useAddress();
 
@@ -32,6 +59,30 @@ function Checkout() {
       total += item.price * item.quantity;
     });
     return total;
+  };
+
+  const createPayment = async () => {
+    const total = calculateTotalPrice();
+    setPaymentRequest({
+      ...paymentRequest,
+      amount: total,
+      currency: "USD",
+      description: "Payment description",
+    });
+    console.log(paymentRequest);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/payment/create",
+        paymentRequest
+      );
+      console.log(response.data);
+      // setPayment(response.data);
+      // Redirect to the approval URL
+      window.location.href = response.data.approvalUrl;
+    } catch (error) {
+      console.error("Error creating payment:", error);
+    }
+    await DeleteItemsFromCart();
   };
 
   return (
@@ -172,7 +223,10 @@ function Checkout() {
                     {formatPrice(calculateTotalPrice() + 31000)}
                   </span>
                 </div>
-                <button class="bg-[#FFD16B] text-white py-2 mb-2 rounded-lg mt-2 w-full">
+                <button
+                  onClick={createPayment}
+                  class="bg-[#FFD16B] text-white py-2 mb-2 rounded-lg mt-2 w-full"
+                >
                   Xác nhận thanh toán
                 </button>
               </div>
