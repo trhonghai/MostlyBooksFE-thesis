@@ -1,6 +1,6 @@
 import config from "../config";
 import ManageUsers from "../pages/Admin/ManageUsers";
-import ManageProducts from "../pages/Admin/ManageProducts";
+import ManageProducts from "../pages/Admin/ManageBook";
 import ManageCategories from "../pages/Admin/ManageCategories";
 import AdminLayout from "../layout/AdminLayout/AdminLayout";
 import Home from "~/pages/Home";
@@ -15,36 +15,83 @@ import Address from "~/pages/Address";
 import Checkout from "~/pages/Checkout";
 import Order from "~/pages/Order";
 import OrderDetail from "~/pages/OrderDetail";
+import AdminLoginLayout from "~/layout/AdminLoginLayout";
+import AdminLogin from "~/pages/AdminLogin";
 
-const privateRoutes = [
-  { path: config.routes.users, component: ManageUsers, layout: AdminLayout },
-  {
-    path: config.routes.categories,
-    component: ManageCategories,
-    layout: AdminLayout,
-  },
-  {
-    path: config.routes.products,
-    component: ManageProducts,
-    layout: AdminLayout,
-  },
-];
-
-const publicRoutes = [
+const routes = [
   { path: config.routes.home, component: Home, layout: DefaultLayout },
-  { path: config.routes.login, component: Login, layout: DefaultLayout },
-  { path: config.routes.register, component: Register, layout: DefaultLayout },
+  {
+    path: config.routes.login,
+    component: Login,
+    layout: DefaultLayout,
+    unnecessary: true,
+  },
+  {
+    path: config.routes.register,
+    component: Register,
+    layout: DefaultLayout,
+    unnecessary: true,
+  },
   { path: config.routes.book, component: BookDetails, layout: DefaultLayout },
-  { path: config.routes.cart, component: CartItem, layout: DefaultLayout },
-  { path: config.routes.checkout, component: Checkout, layout: DefaultLayout },
-  { path: config.routes.account, component: Account, layout: CusLayout },
-  { path: config.routes.address, component: Address, layout: CusLayout },
-  { path: config.routes.order, component: Order, layout: CusLayout },
+  {
+    path: config.routes.cart,
+    component: CartItem,
+    layout: DefaultLayout,
+    protected: true,
+  },
+  {
+    path: config.routes.checkout,
+    component: Checkout,
+    layout: DefaultLayout,
+    protected: true,
+  },
+  {
+    path: config.routes.account,
+    component: Account,
+    layout: CusLayout,
+    protected: true,
+  },
+  {
+    path: config.routes.address,
+    component: Address,
+    layout: CusLayout,
+    protected: true,
+  },
+  {
+    path: config.routes.order,
+    component: Order,
+    layout: CusLayout,
+    protected: true,
+  },
   {
     path: config.routes.orderDetail,
     component: OrderDetail,
     layout: CusLayout,
   },
+  {
+    path: config.routes.adminLogin,
+    component: AdminLogin,
+    layout: AdminLoginLayout,
+    unnecessary: true,
+  },
+  {
+    path: config.routes.adminUsers,
+    component: ManageUsers,
+    layout: AdminLayout,
+    onlyAdmin: true,
+  },
+  {
+    path: config.routes.adminCategories,
+    component: ManageCategories,
+    layout: AdminLayout,
+    onlyAdmin: true,
+  },
+  {
+    path: config.routes.adminBooks,
+    component: ManageProducts,
+    layout: AdminLayout,
+    onlyAdmin: true,
+  },
 ];
 
-export { privateRoutes, publicRoutes };
+export default routes;

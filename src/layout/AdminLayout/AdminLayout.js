@@ -17,6 +17,7 @@ function AdminLayout({ children }) {
           </div>
         </div>
       </div>
+      Hi
     </div>
   );
 }

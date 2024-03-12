@@ -2,8 +2,10 @@ const routes = {
   home: "/",
   login: "/login",
   register: "/register",
-  users: "/users",
-  categories: "/categories",
+  adminUsers: "/users",
+  adminCategories: "/categories",
+  adminBooks: "/books",
+  adminLogin: "/adminLogin",
   brands: "/brands",
   book: "/books/:id",
   cart: "/cartItem",
@@ -14,6 +16,6 @@ const routes = {
   favorite: "/account/favorite",
   checkout: "/checkout",
   order: "/account/orders",
-  orderDetail:"/account/orders/:id",
+  orderDetail: "/account/orders/:id",
 };
 export default routes;
