@@ -1,4 +1,5 @@
 import {
+    faArrowLeft,
   faCheck,
   faLocation,
   faLocationDot,
@@ -34,6 +35,7 @@ function OrderDetail() {
         <div className="overflow-y-hidden rounded-lg ">
           <div className="px-4 py-4 sm:px-6">
             <h3 className="text-lg text-left leading-6 font-medium text-gray-900">
+                <FontAwesomeIcon icon={faArrowLeft} className="mr-2" color="#FFD16B" />
               CHI TIẾT ĐƠN HÀNG
             </h3>
           </div>
