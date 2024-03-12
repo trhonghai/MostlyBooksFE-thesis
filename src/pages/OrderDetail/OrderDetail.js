@@ -1,13 +1,12 @@
 import {
-    faArrowLeft,
+  faArrowLeft,
   faCheck,
-  faLocation,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useOrder } from "~/hooks";
 import { formatPrice } from "~/utils/formatPrice";
 
@@ -35,7 +34,13 @@ function OrderDetail() {
         <div className="overflow-y-hidden rounded-lg ">
           <div className="px-4 py-4 sm:px-6">
             <h3 className="text-lg text-left leading-6 font-medium text-gray-900">
-                <FontAwesomeIcon icon={faArrowLeft} className="mr-2" color="#FFD16B" />
+              <Link to="/account/orders">
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  className="mr-10"
+                  color="#FFD16B"
+                />
+              </Link>
               CHI TIẾT ĐƠN HÀNG
             </h3>
           </div>

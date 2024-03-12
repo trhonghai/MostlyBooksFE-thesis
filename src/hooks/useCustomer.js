@@ -18,13 +18,20 @@ function useCustomer() {
       console.log("dataToSend:", dataToSend);
       const response = axios.put(
         `http://localhost:8080/user-infor/update-customer/${id}`,
-        dataToSend,
-        // { headers: { "Content-Type": "application/json" } }
+        dataToSend
       );
-      console.log(response.data);
-      return response.data;
+      console.log(response);
+      return {
+        success: true,
+        message: "Cập nhật thông tin khách hàng thành công",
+        data: response.data,
+      };
     } catch (error) {
-      console.error("Cập nhật thông tin khách hàng thất bại:", error.message);
+      return {
+        success: false,
+        message: "Cập nhật thông tin khách hàng thất bại",
+        data: null,
+      };
     }
   };
   return { Customer, updateCustomer };

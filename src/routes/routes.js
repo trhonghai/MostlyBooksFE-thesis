@@ -40,7 +40,11 @@ const publicRoutes = [
   { path: config.routes.account, component: Account, layout: CusLayout },
   { path: config.routes.address, component: Address, layout: CusLayout },
   { path: config.routes.order, component: Order, layout: CusLayout },
-  {path: config.routes.orderDetail, component: OrderDetail, layout: CusLayout}
+  {
+    path: config.routes.orderDetail,
+    component: OrderDetail,
+    layout: CusLayout,
+  },
 ];
 
 export { privateRoutes, publicRoutes };

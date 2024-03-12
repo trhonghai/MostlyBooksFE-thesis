@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import useCustomer from "~/hooks/useCustomer";
 const Sex = {
   male: 0,
@@ -73,18 +74,17 @@ function Account() {
     };
     console.log(dataToSend);
     const result = await updateCustomer(dataToSend);
-    console.log(result);
-
-    // if (!result.success) {
-    //     setError(result.errors)
-    //     return
-    // }
-
-    // toast.success(result.message);
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
+    console.log(result.message);
   };
 
   return (
     <div class="bg-white max-w-4xl shadow overflow-hidden sm:rounded-lg">
+      
       <div class="px-4 py-5 sm:px-6">
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           THÔNG TIN TÀI KHOẢN

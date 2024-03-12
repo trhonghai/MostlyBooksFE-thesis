@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { useState } from "react";
+import images from "~/assets/images";
 
 function Sidebar() {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
@@ -11,7 +12,7 @@ function Sidebar() {
 
   return (
     <>
-      <div className="flex items-center justify-start rtl:justify-end">
+      <div className="container flex items-center justify-start rtl:justify-end">
         <button
           onClick={toggleSidebar}
           data-drawer-target="default-sidebar"
@@ -45,14 +46,14 @@ function Sidebar() {
           isSidebarVisible ? " w-48" : "hidden w-64"
         } fixed sm:block bg-gray-200 h-screen z-40 transition-transform transform  border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-200 `}
       >
-        <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+        <div className="h-full  pb-4 overflow-y-auto bg-white dark:bg-gray-800">
           <ul className="space-y-2 font-medium flex justify-center">
             <li>
               <Link
                 to="/admin"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
-                MY SHOP
+                <img src={images.Logo} />
               </Link>
             </li>
           </ul>
@@ -90,7 +91,7 @@ function Sidebar() {
                 >
                   <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
                 </svg>
-                <span className="ms-3">Users</span>
+                <span className="ms-3">NGƯỜI DÙNG</span>
               </Link>
             </li>
             <li>
@@ -107,7 +108,7 @@ function Sidebar() {
                 >
                   <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
                 </svg>
-                <span className=" ms-3 ">Products</span>
+                <span className=" ms-3 ">SẢN PHẨM</span>
               </a>
             </li>
             <li>

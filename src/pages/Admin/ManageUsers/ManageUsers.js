@@ -91,7 +91,7 @@ function ManageUsers() {
           <div className="flex mt-4 overflow-hidden rounded-lg shadow-xs">
             <div className="w-full grid justify-items-end mb-6">
               <button
-                className="w-48 h-12 pr-4 pl-4 bg-sky-600 text-white rounded-xl "
+                class=" ml-4 inline-flex items-center justify-center rounded-md border-2 border-transparent bg-[#FBA31A] bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-[#faaf00]"
                 onClick={() => openModal("add")}
               >
                 Thêm người dùng
@@ -107,20 +107,20 @@ function ManageUsers() {
           </div>
           <table className="min-w-full divide-y divide-gray-200 ">
             <thead>
-              <tr>
-                <th className="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <tr className="bg-[#FFD16B] rounded-lg text-left text-xs font-semibold uppercase tracking-widest text-white">
+                <th className="px-6 py-3  text-xs font-medium  uppercase tracking-wider">
                   Tên người dùng
                 </th>
-                <th className="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3  text-xs font-medium  uppercase tracking-wider">
                   Email
                 </th>
-                <th className="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3  text-xs font-medium  uppercase tracking-wider">
                   Vai trò
                 </th>
-                <th className="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3  text-xs font-medium  uppercase tracking-wider">
                   Trạng thái
                 </th>
-                <th className="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3  text-xs font-medium  uppercase tracking-wider">
                   Thao tác
                 </th>
               </tr>
@@ -136,9 +136,13 @@ function ManageUsers() {
                 mode={mode}
               />
               {users.map((user) => (
-                <tr key={user.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                <tr key={user.id} className="border">
+                  <td className="px-6 py-4 text-left whitespace-nowrap">
+                    {user.name}
+                  </td>
+                  <td className="px-6 py-4 text-left whitespace-nowrap">
+                    {user.email}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap flex">
                     {user.roles.map((role) => (
                       <p key={role.id} className="px-2 py-4 whitespace-nowrap">
@@ -146,15 +150,15 @@ function ManageUsers() {
                       </p>
                     ))}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  <td className="px-6 py-4 text-left whitespace-nowrap">
+                    <span className="px-2  inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                       Active
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
                       onClick={() => openModalEdit(user.id, "edit")}
-                      className="px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-600 transition duration-150 ease-in-out"
+                      className="px-4 py-2 font-medium text-white bg-[#FFD16B] rounded-md hover:bg-[#FBA31A] focus:outline-none focus:shadow-outline-blue active:bg-blue-600 transition duration-150 ease-in-out"
                     >
                       <FontAwesomeIcon icon={faEdit} />
                     </button>

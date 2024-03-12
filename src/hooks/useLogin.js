@@ -19,6 +19,7 @@ function useLogin() {
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("cartId", response.data.cartId);
       localStorage.setItem("userId", response.data.userId);
+      localStorage.setItem("roles", response.data.roles);
     } catch (error) {
       console.error("Đăng nhập thất bại:", error.message);
     } finally {
