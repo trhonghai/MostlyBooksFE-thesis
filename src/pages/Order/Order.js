@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
+import { Link } from "react-router-dom";
 import { useOrder } from "~/hooks";
 import { formatDate } from "~/utils/formatDate";
 import { formatPrice } from "~/utils/formatPrice";
@@ -11,11 +12,13 @@ function Order() {
 
   useEffect(() => {
     fetchOrders();
+    console.log(orderDetails);
   }, []);
 
   const fetchOrders = async () => {
     const result = await Orders();
     setOrders(result);
+    console.log(result);
 
     // Lặp qua mỗi đơn hàng và lấy chi tiết của từng đơn hàng
     result.forEach(async (order) => {
@@ -38,7 +41,7 @@ function Order() {
       <div className="mx-auto max-w-screen-lg">
         <div className="overflow-y-hidden rounded-lg ">
           <div className="px-4 py-5 sm:px-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">
+            <h3 className="text-lg text-left leading-6 font-medium text-gray-900">
               ĐƠN HÀNG CỦA TÔI
             </h3>
           </div>
@@ -70,45 +73,55 @@ function Order() {
                   return (
                     <tr key={order.id}>
                       <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">
-                        <p className="whitespace-no-wrap">{order.id}</p>
+                        <Link
+                          to={`/account/orders/${order.id}`}
+                          state={{ dataOrder: order }}
+                        >
+                          <p className="whitespace-no-wrap">{order.id}</p>
+                        </Link>
                       </td>
                       <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                        <div className="flex items-center">
-                          <div className="h-32 w-32 flex-shrink-0">
-                            {/* Hiển thị hình ảnh chỉ cho chi tiết đầu tiên */}
-                            {orderDetails[order.id]?.[0] && (
-                              <img
-                                className="h-full w-full "
-                                src={orderDetails[order.id][0].book.img}
-                                alt=""
-                              />
-                            )}
-                          </div>
-                          <div className="ml-3">
-                            <p className="whitespace-no-wrap text-left">
-                              {/* Hiển thị tên sách của chi tiết đầu tiên */}
-                              {/* Hiển thị tối đa hai tên sách */}
-                              {displayNames.map((name, index) => (
-                                <p
-                                  key={index}
-                                  className="whitespace-no-wrap text-left"
-                                >
-                                  {name}
-                                </p>
-                              ))}
-                              {/* Nếu có nhiều hơn hai tên sách, hiển thị dấu '...' */}
-                              {moreNamesCount > 0 && (
-                                <p className="whitespace-no-wrap text-left">
-                                  ...
-                                </p>
+                        <Link
+                          to={`/account/orders/${order.id}`}
+                          state={{ dataOrder: order }}
+                        >
+                          <div className="flex items-center">
+                            <div className="h-32 w-32 flex-shrink-0">
+                              {/* Hiển thị hình ảnh chỉ cho chi tiết đầu tiên */}
+                              {orderDetails[order.id]?.[0] && (
+                                <img
+                                  className="h-full w-full "
+                                  src={orderDetails[order.id][0].book.img}
+                                  alt=""
+                                />
                               )}
-                            </p>
-                            <p className="text-left">
-                              {/* Hiển thị tổng số lượng */}
-                              Tổng số lượng: {totalQuantity}
-                            </p>
+                            </div>
+                            <div className="ml-3">
+                              <p className="whitespace-no-wrap text-left">
+                                {/* Hiển thị tên sách của chi tiết đầu tiên */}
+                                {/* Hiển thị tối đa hai tên sách */}
+                                {displayNames.map((name, index) => (
+                                  <p
+                                    key={index}
+                                    className="whitespace-no-wrap text-left"
+                                  >
+                                    {name}
+                                  </p>
+                                ))}
+                                {/* Nếu có nhiều hơn hai tên sách, hiển thị dấu '...' */}
+                                {moreNamesCount > 0 && (
+                                  <p className="whitespace-no-wrap text-left">
+                                    ...
+                                  </p>
+                                )}
+                              </p>
+                              <p className="text-left">
+                                {/* Hiển thị tổng số lượng */}
+                                Tổng số lượng: {totalQuantity}
+                              </p>
+                            </div>
                           </div>
-                        </div>
+                        </Link>
                       </td>
                       <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">
                         <p className="whitespace-no-wrap">

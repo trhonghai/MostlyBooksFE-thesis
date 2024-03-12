@@ -14,6 +14,7 @@ import CusLayout from "~/layout/CusLayout/CusLayout";
 import Address from "~/pages/Address";
 import Checkout from "~/pages/Checkout";
 import Order from "~/pages/Order";
+import OrderDetail from "~/pages/OrderDetail";
 
 const privateRoutes = [
   { path: config.routes.users, component: ManageUsers, layout: AdminLayout },
@@ -39,6 +40,7 @@ const publicRoutes = [
   { path: config.routes.account, component: Account, layout: CusLayout },
   { path: config.routes.address, component: Address, layout: CusLayout },
   { path: config.routes.order, component: Order, layout: CusLayout },
+  {path: config.routes.orderDetail, component: OrderDetail, layout: CusLayout}
 ];
 
 export { privateRoutes, publicRoutes };

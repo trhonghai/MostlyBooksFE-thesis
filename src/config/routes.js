@@ -14,5 +14,6 @@ const routes = {
   favorite: "/account/favorite",
   checkout: "/checkout",
   order: "/account/orders",
+  orderDetail:"/account/orders/:id",
 };
 export default routes;

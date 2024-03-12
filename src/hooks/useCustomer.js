@@ -19,7 +19,7 @@ function useCustomer() {
       const response = axios.put(
         `http://localhost:8080/user-infor/update-customer/${id}`,
         dataToSend,
-        { headers: { "Content-Type": "application/json" } }
+        // { headers: { "Content-Type": "application/json" } }
       );
       console.log(response.data);
       return response.data;
