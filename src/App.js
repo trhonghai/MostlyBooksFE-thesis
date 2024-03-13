@@ -1,37 +1,26 @@
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Navigate } from "react-router-dom";
 
-import { privateRoutes, publicRoutes } from "~/routes";
-
-import AdminLayout from "./layout/AdminLayout/AdminLayout";
-import DefaultLayout from "./layout/DefaultLayout";
-import { customerId } from "./utils/localStorage";
-import CusLayout from "./layout/CusLayout";
 import { Toaster } from "react-hot-toast";
 import React, { useState, useEffect } from "react";
 import routes from "./routes";
 import config from "./config";
+import Wrapper from "./Wrapper";
+import { useContext } from "react";
+import AuthContext from "./context/AuthProvider";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isUser, setIsUser] = useState(false);
-  const roleUser = localStorage.getItem("roles");
-  const currentUser = localStorage.getItem("userId");
 
+  const { userCurrent, userRole } = useContext(AuthContext);
+  console.log(userCurrent);
   useEffect(() => {
-    if (roleUser && roleUser.includes("Admin")) {
+    if (userRole && userRole.includes("Admin")) {
       setIsAdmin(true);
     } else {
       setIsAdmin(false);
     }
-    console.log(isAdmin);
-  }, [roleUser]);
+  }, [userRole]);
 
   const renderRoutes = (routes) => {
     return routes.map((route, index) => {
@@ -45,7 +34,7 @@ function App() {
       );
 
       // Nếu đã đăng nhập mà truy cập vào các trang không cần thiết như login, register, ...
-      if (route.unnecessary && currentUser) {
+      if (route.unnecessary && userCurrent) {
         if (isAdmin) {
           element = (
             <Navigate
@@ -60,7 +49,7 @@ function App() {
         }
       }
       // Nếu chưa đăng nhập mà truy cập vào các trang đuợc bảo vệ như cart, account, ...
-      if (route.protected && currentUser === null) {
+      if (route.protected && !userCurrent) {
         element = (
           <Navigate to={config.routes.login} state={{ protected: true }} />
         );
@@ -68,14 +57,14 @@ function App() {
 
       // Khi truy cập vào trang chỉ dành cho admin
       if (route.onlyAdmin) {
-        if (currentUser === null) {
+        if (!userCurrent) {
           element = (
             <Navigate
               to={config.routes.adminLogin}
               state={{ onlyAdmin: true }}
             />
           );
-        } else if (roleUser !== "Admin") {
+        } else if (!isAdmin) {
           element = (
             <Navigate to={config.routes.home} state={{ onlyAdmin: true }} />
           );
@@ -94,7 +83,7 @@ function App() {
     <Router>
       <div className="App">
         <Toaster position="top right" gutter={10} />
-        <Routes>{renderRoutes(routes)}</Routes>
+        <Wrapper>{renderRoutes(routes)}</Wrapper>
       </div>
     </Router>
   );

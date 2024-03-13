@@ -1,11 +1,14 @@
 import axios from "axios";
-import { customerId } from "~/utils/localStorage";
+import { useContext } from "react";
+import AuthContext from "~/context/AuthProvider";
 
 function useOrder() {
+  const { userCurrent } = useContext(AuthContext);
+  console.log(userCurrent);
   const Orders = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/customer/order/${customerId}`
+        `http://localhost:8080/customer/order/${userCurrent}`
       );
       console.log(response.data);
       return response.data;

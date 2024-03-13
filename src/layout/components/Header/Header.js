@@ -143,7 +143,7 @@ function Header() {
                       <li>
                         {" "}
                         <Link
-                          to="/logout"
+                          // to="/logout"
                           onClick={handleLogout}
                           className=" pl-4 block text-left w-full font-medium py-2 text-gray-500 hover:bg-[#FFD16B] hover:rounded-lg dark:hover:bg-gray-600 hover:text-white"
                         >

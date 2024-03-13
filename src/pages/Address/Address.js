@@ -218,7 +218,7 @@ function Address() {
               return 0; // Giữ nguyên vị trí nếu cả hai đều có hoặc không có defaultForShopping
             }
           })
-          .map((item) => (
+          ?.map((item) => (
             <div className="flex border rounded-lg mt-4 text-left px-4 py-5 justify-between">
               <div>
                 <ul className="">

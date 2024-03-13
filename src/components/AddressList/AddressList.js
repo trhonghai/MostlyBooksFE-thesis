@@ -173,7 +173,7 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
                   return 0; // Giữ nguyên vị trí nếu cả hai đều có hoặc không có defaultForShopping
                 }
               })
-              .map((item, index) => (
+              ?.map((item, index) => (
                 <tr key={index} class="border-b border-gray-200">
                   <td class="px-4 py-2 text-left">
                     <input

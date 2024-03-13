@@ -1,11 +1,15 @@
 import axios from "axios";
+import { useContext } from "react";
+import AuthContext from "~/context/AuthProvider";
 import { customerId } from "~/utils/localStorage";
 
 function useAddress() {
+  const { userCurrent } = useContext(AuthContext);
+
   const Address = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/provinces/address/${customerId}`
+        `http://localhost:8080/provinces/address/${userCurrent}`
       );
       console.log(response.data);
       return response.data;
