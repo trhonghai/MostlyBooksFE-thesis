@@ -84,9 +84,9 @@ function ManageUsers() {
   return (
     <main className="h-full overflow-y-auto">
       <div className="container px-6 mx-auto grid">
-        <h2 className="my-6 text-3xl text-left capitalize font-semibold text-indigo-500 ">
+        {/* <h2 className="my-6 text-3xl text-left capitalize font-semibold text-indigo-500 ">
           Quản lý người dùng
-        </h2>
+        </h2> */}
         <div className=" w-full overflow-x-auto">
           <div className="flex mt-4 overflow-hidden rounded-lg shadow-xs">
             <div className="w-full grid justify-items-end mb-6">

@@ -46,7 +46,7 @@ function Order() {
             </h3>
           </div>
           <div className="overflow-x-auto px-4">
-            <table className="w-full">
+            <table className="w-full min-w-full divide-y divide-gray-200">
               <thead>
                 <tr className="bg-[#FFD16B] rounded-lg text-left text-xs font-semibold uppercase tracking-widest text-white">
                   <th className="px-2 py-3">Mã đơn hàng</th>
@@ -56,7 +56,7 @@ function Order() {
                   <th className="px-2 py-3">Trạng thái</th>
                 </tr>
               </thead>
-              <tbody className="text-gray-500">
+              <tbody className="text-gray-500 bg-white divide-y divide-gray-200">
                 {orders.slice(offset, offset + itemsPerPage).map((order) => {
                   // Tính tổng số lượng cho mỗi đơn hàng
                   let totalQuantity = 0;
@@ -71,8 +71,11 @@ function Order() {
                   let moreNamesCount = bookNames.length - 2;
 
                   return (
-                    <tr key={order.id}>
-                      <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">
+                    <tr
+                      key={order.id}
+                      className="hover:bg-gray-200 cursor-pointer transition duration-150 border-b border-gray-200 text-left border-gray-200 bg-white px-5 py-5 text-sm"
+                    >
+                      <td className="border-b  text-left border-gray-200 bg-white px-5 py-5 text-sm">
                         <Link
                           to={`/account/orders/${order.id}`}
                           state={{ dataOrder: order }}

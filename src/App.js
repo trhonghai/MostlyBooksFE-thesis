@@ -10,18 +10,10 @@ import { useContext } from "react";
 import AuthContext from "./context/AuthProvider";
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  const { userCurrent, userRole } = useContext(AuthContext);
+  const { userCurrent, userRole, isAdmin } = useContext(AuthContext);
   console.log(userCurrent);
-  useEffect(() => {
-    if (userRole && userRole.includes("Admin")) {
-      setIsAdmin(true);
-    } else {
-      setIsAdmin(false);
-    }
-  }, [userRole]);
-
+  console.log(userRole);
+  console.log(isAdmin);
   const renderRoutes = (routes) => {
     return routes.map((route, index) => {
       const Layout = route.layout || React.Fragment;

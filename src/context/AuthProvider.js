@@ -6,11 +6,14 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(
+    JSON.parse(localStorage.getItem("roles") || null)?.includes("Admin")
+  );
   const [userCurrent, setUserCurrent] = useState(
     JSON.parse(localStorage.getItem("userId") || false)
   );
   const [userRole, setUserRole] = useState(
-    JSON.parse(localStorage.getItem("roles") || false)
+    JSON.parse(localStorage.getItem("roles") || null)
   );
 
   const handleLogout = () => {
@@ -31,6 +34,13 @@ export const AuthProvider = ({ children }) => {
     setUserRole(data.roles);
   };
   useEffect(() => {
+    if (userRole && userRole.includes("Admin")) {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }, [userRole]);
+  useEffect(() => {
     if (userCurrent) {
       setIsLoggedIn(true);
     } else {
@@ -40,7 +50,14 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, userCurrent, userRole, handleLogout, setLogin }}
+      value={{
+        isLoggedIn,
+        userCurrent,
+        userRole,
+        handleLogout,
+        setLogin,
+        isAdmin,
+      }}
     >
       {children}
     </AuthContext.Provider>

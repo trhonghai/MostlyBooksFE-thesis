@@ -1,6 +1,33 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import images from "~/assets/images";
+import config from "~/config";
+import { useLogin } from "~/hooks";
 
 function AdminLogin() {
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
+  const { login } = useLogin();
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    const { name } = e.target;
+    let { value } = e.target;
+
+    setData((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await login(data);
+      alert("Đăng nhập thành công");
+      navigate(config.routes.adminUsers);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="border-red-500 bg-gray-200 py-10 flex items-center justify-center">
       <div className="bg-gray-100 p-1 flex rounded-2xl shadow-lg max-w-2xl">
@@ -14,15 +41,15 @@ function AdminLogin() {
             className="mt-6"
             action="#"
             method="POST"
-            //   onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
           >
             <div>
               <label className="block text-left text-gray-700">Email</label>
               <input
                 type="email"
                 name="email"
-                //   value={data.email}
-                //   onChange={handleChange}
+                value={data.email}
+                onChange={handleChange}
                 placeholder="Nhập vào địa chỉ Email"
                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                 required
@@ -34,8 +61,8 @@ function AdminLogin() {
               <input
                 type="password"
                 name="password"
-                //   value={data.password}``
-                //   onChange={handleChange}
+                value={data.password}
+                onChange={handleChange}
                 placeholder="Nhập vào mật khẩu"
                 minlength="6"
                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
