@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
   };
   const setLogin = (data) => {
     setIsLoggedIn(true);
+    setIsAdmin(data.roles.includes("Admin"));
     setUserCurrent(data.userId);
     setUserRole(data.roles);
   };

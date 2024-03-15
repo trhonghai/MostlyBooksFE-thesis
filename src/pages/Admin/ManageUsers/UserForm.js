@@ -1,22 +1,8 @@
-import Modal from "react-modal";
+import { Modal } from "@mui/material";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
 import images from "~/assets/images";
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    padding: 0,
-    height: 700,
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    overflow: "auto",
-  },
-};
 
 function UserForm({
   isOpen,
@@ -42,6 +28,7 @@ function UserForm({
     photos: "",
     enabled: false,
   });
+  console.log(userCurrent);
 
   const [roles, setRoles] = useState([]);
   const [selectedRoles, setSelectedRoles] = useState([]);
@@ -100,16 +87,15 @@ function UserForm({
       });
       setSelectedRoles([]);
       onRequestClose();
+    } else {
+      const newUser = {
+        ...data,
+        enabled: enabled,
+        roles: selectedRoles,
+      };
+      onSave(newUser);
+      onRequestClose();
     }
-    // else {
-    //   const newUser = {
-    //     ...data,
-    //     enabled: enabled,
-    //     roles: selectedRoles,
-    //   };
-    //   onSave(newUser);
-    //   onRequestClose();
-    // }
   };
 
   const [file, setFile] = useState(null);
@@ -165,52 +151,15 @@ function UserForm({
 
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      style={customStyles}
-      contentLabel="Thêm người dùng"
-      ariaHideApp={false}
+      open={isOpen}
+      onClose={onRequestClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
     >
-      <div className="flex justify-end  bg-gray-50 ">
-        <button
-          onClick={onRequestClose}
-          className="text-gray-700 hover:text-gray-900"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            ></path>
-          </svg>
-        </button>
-      </div>
-      <div
-        className="w-max-screen bg-gray-50 flex flex-col justify-center sm:px-16 lg:px-16"
-        // style={{ width: 626 }}
-      >
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <img
-            className="mx-auto h-10 w-auto"
-            src="https://www.svgrepo.com/show/301692/login.svg"
-            alt="Workflow"
-          />
-          <h2 className="mt-2 text-center text-2xl leading-9 font-extrabold text-gray-900">
-            {title}
-          </h2>
-        </div>
-        <div className="mt-4  w-auto sm:max-w-md">
-          <div
-            className="w-full bg-white shadow sm:rounded-lg sm:px-4"
-            // style={{ width: 500 }}
-          >
+      <div className="min-h-screen mt-2 mb-2 flex items-center justify-center ">
+        <div className="container max-w-xl ">
+          <div className="bg-white rounded shadow-lg  px-4 md:p-8 mb-6">
+            <h2>{title}</h2>
             <form onSubmit={handleSubmit} encType="multipart/form-data">
               <div>
                 <label className="block text-sm font-medium leading-5 text-gray-700">
@@ -223,13 +172,12 @@ function UserForm({
                     type="text"
                     required
                     value={userCurrent ? data.name : name}
-                    // value={name}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                     onChange={(e) => handleChange(e)}
                   />
                 </div>
               </div>
-              <div className="mt-4">
+              <div className="mt-2">
                 <label className="block text-sm font-medium leading-5 text-gray-700">
                   Tên người dùng
                 </label>
@@ -245,7 +193,7 @@ function UserForm({
                   />
                 </div>
               </div>
-              <div className="mt-4">
+              <div className="mt-2">
                 <label className="block text-sm font-medium leading-5  text-gray-700">
                   Email
                 </label>
@@ -262,7 +210,7 @@ function UserForm({
                   />
                 </div>
               </div>
-              <div className="mt-4">
+              <div className="mt-2">
                 <label className="block text-sm font-medium leading-5 text-gray-700">
                   Mật khẩu
                 </label>
@@ -277,7 +225,7 @@ function UserForm({
                   />
                 </div>
               </div>
-              <div className="mt-4 flex ">
+              <div className="mt-2 flex ">
                 <label className="mr-12 w-32 block text-sm font-medium leading-5 text-gray-700">
                   Vai trò
                 </label>
@@ -300,7 +248,7 @@ function UserForm({
                 </div>
               </div>
 
-              <div className="mt-4 flex">
+              <div className="mt-2 flex">
                 <label className="w-28 text-sm font-medium leading-5 text-gray-700">
                   Enabled
                 </label>
@@ -318,12 +266,12 @@ function UserForm({
                 </div>
               </div>
 
-              <div className="mt-4 flex">
+              <div className=" flex items-center ">
                 <label className="w-28 text-sm font-medium leading-5 text-gray-700">
                   Photo
                 </label>
                 <div className="ml-3 rounded-md shadow-sm ">
-                  <div className=" ">
+                  <div className="flex items-center justify-center ">
                     <input
                       type="file"
                       name="image"
@@ -344,7 +292,7 @@ function UserForm({
                 </div>
               </div>
 
-              <div className="mt-6 mb-6  flex">
+              <div className="mt-2 flex">
                 <span className="block w-full rounded-md shadow-sm">
                   <button
                     value="Lưu"

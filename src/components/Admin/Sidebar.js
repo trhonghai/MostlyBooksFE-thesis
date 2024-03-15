@@ -1,8 +1,14 @@
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { faHome, faUserAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBagShopping,
+  faHome,
+  faUserAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import images from "~/assets/images";
+import config from "~/config";
 
 function Sidebar({ isSidebarOpen }) {
   return (
@@ -21,11 +27,20 @@ function Sidebar({ isSidebarOpen }) {
           <FontAwesomeIcon icon={faHome} className="mr-4" />
           <span className="text-gray-700">Dashboard</span>
         </div>
-        <div className="w-full mt-2 flex items-center text-[#FFD16B] h-10 pl-4  hover:bg-white rounded-lg cursor-pointer">
-          <FontAwesomeIcon icon={faUserAlt} className="mr-4" />
+        <Link to={config.routes.adminUsers}>
+          <div className="w-full mt-2 flex items-center text-[#FFD16B] h-10 pl-4  hover:bg-white rounded-lg cursor-pointer">
+            <FontAwesomeIcon icon={faUserAlt} className="mr-4" />
 
-          <span className="text-gray-700">Người dùng</span>
-        </div>
+            <span className="text-gray-700">Người dùng</span>
+          </div>
+        </Link>
+        <Link to={config.routes.adminOrders}>
+          <div className="w-full mt-2 flex items-center text-[#FFD16B] h-10 pl-4  hover:bg-white rounded-lg cursor-pointer">
+            <FontAwesomeIcon icon={faBagShopping} className="mr-4" />
+  
+            <span className="text-gray-700">Đơn hàng</span>
+          </div>
+        </Link>
         {/* Các mục menu khác */}
       </div>
 
