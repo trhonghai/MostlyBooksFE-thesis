@@ -39,8 +39,8 @@ function AdminOrderDetail() {
   };
 
   return (
-    <div className="bg-white max-w-4xl shadow overflow-hidden sm:rounded-lg">
-      <div className="mx-auto max-w-screen-lg">
+    <div className="bg-white w-full shadow overflow-hidden sm:rounded-lg">
+      <div className="mx-auto max-w-screen-xl">
         <div className="overflow-y-hidden rounded-lg ">
           <div className="px-4 py-4 sm:px-6">
             <h3 className="text-lg text-left leading-6 font-medium text-gray-900">

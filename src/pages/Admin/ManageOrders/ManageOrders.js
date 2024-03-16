@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
+import FilterOrder from "~/components/FilterOrder";
 import { useOrder } from "~/hooks";
 import { formatDate } from "~/utils/formatDate";
 import { formatPrice } from "~/utils/formatPrice";
@@ -11,7 +12,12 @@ function ManageOders() {
   const [orderDetails, setOrderDetails] = useState({});
 
   const { getAllOrders, OrderDetails } = useOrder();
+  const [selectedFilter, setSelectedFilter] = useState("all");
 
+  const handleFilterChange = (filter) => {
+    setSelectedFilter(filter);
+    // Thực hiện các hành động khác tương ứng với việc thay đổi bộ lọc ở đây
+  };
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -46,6 +52,10 @@ function ManageOders() {
               QUẢN LÝ ĐƠN HÀNG
             </h3>
           </div>
+          <FilterOrder
+            handleFilterChange={handleFilterChange}
+            selectedFilter={selectedFilter}
+          />
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
