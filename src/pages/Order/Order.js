@@ -21,7 +21,7 @@ function Order() {
     console.log(result);
 
     // Lặp qua mỗi đơn hàng và lấy chi tiết của từng đơn hàng
-    result.forEach(async (order) => {
+    result?.forEach(async (order) => {
       const orderDetailData = await OrderDetails(order.id);
       setOrderDetails((prev) => ({ ...prev, [order.id]: orderDetailData }));
     });
@@ -30,7 +30,7 @@ function Order() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const offset = (currentPage - 1) * itemsPerPage;
-  const pageCount = Math.ceil(orders.length / itemsPerPage);
+  const pageCount = Math.ceil(orders?.length / itemsPerPage);
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected + 1);
@@ -57,7 +57,7 @@ function Order() {
                 </tr>
               </thead>
               <tbody className="text-gray-500 bg-white divide-y divide-gray-200">
-                {orders.slice(offset, offset + itemsPerPage).map((order) => {
+                {orders?.slice(offset, offset + itemsPerPage).map((order) => {
                   // Tính tổng số lượng cho mỗi đơn hàng
                   let totalQuantity = 0;
                   orderDetails[order.id]?.forEach((detail) => {
@@ -137,15 +137,9 @@ function Order() {
                         </p>
                       </td>
                       <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">
-                        {order.orderStatus.status === "PENDING" ? (
-                          <span className="rounded-full bg-green-200 px-3 py-1 text-xs font-semibold text-green-900">
-                            đã được đặt
-                          </span>
-                        ) : (
-                          <span className="rounded-full bg-red-200 px-3 py-1 text-xs font-semibold text-red-900">
-                            đã hủy
-                          </span>
-                        )}
+                        <span className="rounded-full bg-green-200 px-3 py-1 text-xs font-semibold text-green-900">
+                          {order.orderStatus.status}
+                        </span>
                       </td>
                     </tr>
                   );

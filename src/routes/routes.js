@@ -18,6 +18,7 @@ import OrderDetail from "~/pages/OrderDetail";
 import AdminLoginLayout from "~/layout/AdminLoginLayout";
 import AdminLogin from "~/pages/AdminLogin";
 import ManageOrders from "~/pages/Admin/ManageOrders";
+import AdminOrderDetail from "~/pages/Admin/AdminOrderDetail";
 
 const routes = [
   { path: config.routes.home, component: Home, layout: DefaultLayout },
@@ -78,6 +79,12 @@ const routes = [
   {
     path: config.routes.adminOrders,
     component: ManageOrders,
+    layout: AdminLayout,
+    onlyAdmin: true,
+  },
+  {
+    path: config.routes.adminOrdersDetail,
+    component: AdminOrderDetail,
     layout: AdminLayout,
     onlyAdmin: true,
   },

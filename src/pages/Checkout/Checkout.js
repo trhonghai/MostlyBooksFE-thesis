@@ -1,10 +1,10 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import images from "~/assets/images";
 import AddressList from "~/components/AddressList/AddressList";
+import AuthContext from "~/context/AuthProvider";
 import { useAddress } from "~/hooks";
 import { formatPrice } from "~/utils/formatPrice";
-import { cartId, customerId } from "~/utils/localStorage";
 
 function Checkout() {
   const [allAddress, setAllAddress] = useState([]);
@@ -12,6 +12,7 @@ function Checkout() {
   const [items, setItems] = useState(
     JSON.parse(localStorage.getItem("dataCheckOut")) || []
   );
+  const { cartId, userCurrent } = useContext(AuthContext);
   console.log(items);
 
   const orderDetailsId = items.map((item) => item.id);
@@ -33,7 +34,7 @@ function Checkout() {
     amount: 10.0,
     currency: "USD",
     description: "Payment description",
-    customerId: customerId,
+    customerId: userCurrent,
     orderDetailsId: orderDetailsId,
   });
   console.log(items);
@@ -72,13 +73,20 @@ function Checkout() {
     console.log(paymentRequest);
     try {
       const response = await axios.post(
-        "http://localhost:8080/payment/create",
+        "http://localhost:8080/api/paypal/orders/create",
         paymentRequest
       );
       console.log(response.data);
       // setPayment(response.data);
       // Redirect to the approval URL
-      window.location.href = response.data.approvalUrl;
+      window.location.href = response.data.links
+        .map((link) => {
+          if (link.rel === "approve") return link.href;
+        })
+        .filter((item) => {
+          return item !== undefined;
+        })
+        .join("");
     } catch (error) {
       console.error("Error creating payment:", error);
     }

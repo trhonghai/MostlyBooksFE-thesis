@@ -7,6 +7,7 @@ const routes = {
   adminBooks: "/books",
   adminLogin: "/adminLogin",
   adminOrders: "/adminOrders",
+  adminOrdersDetail: "/adminOrders/:id",
   brands: "/brands",
   book: "/books/:id",
   cart: "/cartItem",

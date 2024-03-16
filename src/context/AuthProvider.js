@@ -16,6 +16,10 @@ export const AuthProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("roles") || null)
   );
 
+  const [cartId, setCartId] = useState(() => {
+    return localStorage.getItem("cartId") || null;
+  });
+
   const handleLogout = () => {
     // Đặt lại giá trị isLoggedIn thành false khi logout
     setIsLoggedIn(false);
@@ -30,10 +34,14 @@ export const AuthProvider = ({ children }) => {
   };
   const setLogin = (data) => {
     setIsLoggedIn(true);
-    setIsAdmin(data.roles.includes("Admin"));
+    setIsAdmin(Array.isArray(data.roles) && data.roles.includes("Admin"));
     setUserCurrent(data.userId);
     setUserRole(data.roles);
+    if (data?.cartId) {
+      setCartId(data?.cartId);
+    }
   };
+
   useEffect(() => {
     if (userRole && userRole.includes("Admin")) {
       setIsAdmin(true);
@@ -58,6 +66,7 @@ export const AuthProvider = ({ children }) => {
         handleLogout,
         setLogin,
         isAdmin,
+        cartId,
       }}
     >
       {children}
