@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
+import FilterOrder from "~/components/FilterOrder";
 import { useOrder } from "~/hooks";
 import { formatDate } from "~/utils/formatDate";
 import { formatPrice } from "~/utils/formatPrice";
@@ -8,23 +9,41 @@ import { formatPrice } from "~/utils/formatPrice";
 function Order() {
   const [orders, setOrders] = useState([]);
   const [orderDetails, setOrderDetails] = useState({});
-  const { Orders, OrderDetails } = useOrder();
+  const { Orders, OrderDetails, fetchOrderByStatus } = useOrder();
+  const [selectedFilter, setSelectedFilter] = useState("all");
 
+  const handleFilterChange = (filter) => {
+    setSelectedFilter(filter);
+    fetchOrderByStatus(filter);
+    // Thực hiện các hành động khác tương ứng với việc thay đổi bộ lọc ở đây
+  };
   useEffect(() => {
-    fetchOrders();
-    console.log(orderDetails);
-  }, []);
+    // fetchOrders();
+    fetchOrdersByStatus(selectedFilter);
+  }, [selectedFilter]);
 
-  const fetchOrders = async () => {
-    const result = await Orders();
-    setOrders(result);
-    console.log(result);
+  console.log(selectedFilter);
 
-    // Lặp qua mỗi đơn hàng và lấy chi tiết của từng đơn hàng
-    result?.forEach(async (order) => {
-      const orderDetailData = await OrderDetails(order.id);
-      setOrderDetails((prev) => ({ ...prev, [order.id]: orderDetailData }));
-    });
+  const fetchOrdersByStatus = async (status) => {
+    try {
+      let result;
+      if (status === "all") {
+        // Gọi API để lấy tất cả các đơn hàng khi trạng thái được chọn là "tất cả"
+        result = await Orders();
+      } else {
+        // Gọi API để lấy các đơn hàng dựa trên trạng thái
+        result = await fetchOrderByStatus(status);
+      }
+      setOrders(result);
+      console.log(result);
+      // Lưu ý: cần cập nhật orderDetails tương ứng ở đây nếu cần
+      result.forEach(async (order) => {
+        const orderDetailData = await OrderDetails(order.id);
+        setOrderDetails((prev) => ({ ...prev, [order.id]: orderDetailData }));
+      });
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
   };
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,6 +55,8 @@ function Order() {
     setCurrentPage(selected + 1);
   };
 
+ 
+
   return (
     <div className="bg-white max-w-4xl shadow overflow-hidden sm:rounded-lg">
       <div className="mx-auto max-w-screen-lg">
@@ -44,6 +65,10 @@ function Order() {
             <h3 className="text-lg text-left leading-6 font-medium text-gray-900">
               ĐƠN HÀNG CỦA TÔI
             </h3>
+            <FilterOrder
+              handleFilterChange={handleFilterChange}
+              selectedFilter={selectedFilter}
+            />
           </div>
           <div className="overflow-x-auto px-4">
             <table className="w-full min-w-full divide-y divide-gray-200">

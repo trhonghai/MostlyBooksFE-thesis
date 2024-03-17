@@ -54,7 +54,39 @@ function useOrder() {
     }
   };
 
-  return { Orders, OrderDetails, getAllOrders, CaptureOrder };
+  const fetchOrderByStatus = async (status) => {
+    console.log(status);
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/customer/order/filterStatus?status=${status}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Lấy danh mục thất bại:", error.message);
+    }
+  };
+
+  const Cancelled = async (orderId) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/customer/order/cancelled/${orderId}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Lấy danh mục thất bại:", error.message);
+    }
+  };
+
+  return {
+    Orders,
+    OrderDetails,
+    getAllOrders,
+    CaptureOrder,
+    fetchOrderByStatus,
+    Cancelled,
+  };
 }
 
 export default useOrder;

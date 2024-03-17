@@ -1,31 +1,34 @@
 import React from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import config from "~/config";
+import AuthContext from "~/context/AuthProvider";
 
 function FilterOrder({ handleFilterChange, selectedFilter }) {
+  const { isAdmin } = useContext(AuthContext);
   const filterOrderStatus = [
     {
       status: "all",
       name: "Tất cả",
     },
     {
-      status: "pending",
+      status: "PENDING",
       name: "Chờ xác nhận",
     },
     {
-      status: "shipping",
-      name: "Vận chuyển",
+      status: "CAPTURED",
+      name: "Giao hàng",
     },
     {
-      status: "delivered",
+      status: "DELIVERED",
       name: "Đã giao hàng",
     },
     {
-      status: "cancelled",
+      status: "CANCELLED",
       name: "Đã hủy",
     },
     {
-      status: "refund",
+      status: "REFUNDED",
       name: "Trả hàng/Hoàn tiền",
     },
   ];
@@ -33,7 +36,7 @@ function FilterOrder({ handleFilterChange, selectedFilter }) {
   return (
     <div className="flex justify-around my-4 space-x-4 border-b pb-2">
       {filterOrderStatus.map((status, index) => (
-        <Link to={config.routes.adminOrders}>
+        <Link to={isAdmin ? config.routes.adminOrders : config.routes.order}>
           <button
             key={index}
             onClick={() => handleFilterChange(status.status)}

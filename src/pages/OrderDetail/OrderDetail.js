@@ -13,8 +13,9 @@ import { formatPrice } from "~/utils/formatPrice";
 function OrderDetail() {
   const location = useLocation();
   const order = location.state ? location.state.dataOrder : null;
-  const { OrderDetails } = useOrder();
+  const { OrderDetails, Cancelled } = useOrder();
   const [orderDetails, setOrderDetails] = useState([]);
+  const [isCancelled, setIsCancelled] = useState(false);
   console.log("order", order);
   useEffect(() => {
     if (order) {
@@ -26,6 +27,17 @@ function OrderDetail() {
   const fetchOrderDetail = async () => {
     const result = await OrderDetails(order.id);
     setOrderDetails(result);
+  };
+
+  const CancelledOrder = async (orderId) => {
+    try {
+      await Cancelled(orderId);
+      setIsCancelled(true);
+      // fetchOrdersByStatus(selectedFilter);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+    await fetchOrderDetail();
   };
 
   return (
@@ -178,12 +190,28 @@ function OrderDetail() {
                 </div>
                 <div class="flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 dark:bg-gray-800 space-y-6">
                   <div class="w-full justify-center items-center">
-                    <button className="transition duration-300 ease-in-out mb-4 hover:bg-red-500 hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-red-600 text-base font-medium leading-4 text-white">
-                      Hủy đơn hàng
-                    </button>
-                    <button class="transition duration-300 ease-in-out hover:bg-[#FBA31A] dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white">
-                      Thanh toán
-                    </button>
+                    {order.orderStatus.status === "PENDING" ? (
+                      <button
+                        onClick={() => CancelledOrder(order.id)}
+                        className="transition duration-300 ease-in-out mb-4 hover:bg-red-500 hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-red-600 text-base font-medium leading-4 text-white"
+                      >
+                        Hủy đơn hàng
+                      </button>
+                    ) : isCancelled ? (
+                      <button
+                        // onClick={() => PaymentAgain(order.id)}
+                        className="transition duration-300 ease-in-out mb-4 hover:bg-[#FBA31A] dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
+                      >
+                        Thanh toán lại
+                      </button>
+                    ) : (
+                      <button
+                        disabled
+                        className="transition duration-300 ease-in-out hover:bg-[#FBA31A] dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
+                      >
+                        Đã thanh toán
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
