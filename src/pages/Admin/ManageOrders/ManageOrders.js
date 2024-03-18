@@ -69,6 +69,7 @@ function ManageOders() {
           <FilterOrder
             handleFilterChange={handleFilterChange}
             selectedFilter={selectedFilter}
+            Orders={getAllOrders}
           />
           {orders.length > 0 ? (
             <div className="overflow-x-auto">

@@ -4,8 +4,10 @@ import {
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Box, Button, Modal } from "@mui/material";
 import { useContext, useState } from "react";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { Link, useLocation } from "react-router-dom";
 import config from "~/config";
 import AuthContext from "~/context/AuthProvider";
@@ -15,9 +17,19 @@ import { formatPrice } from "~/utils/formatPrice";
 function AdminOrderDetail() {
   const location = useLocation();
   const order = location.state ? location.state.dataOrder : null;
-  const { OrderDetails, CaptureOrder } = useOrder();
+  const { OrderDetails, CaptureOrder, Refunded, deleteOrderById } = useOrder();
   const [orderDetails, setOrderDetails] = useState([]);
   const { userRole } = useContext(AuthContext);
+  const [isCancelled, setIsCancelled] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   console.log("order", order);
 
   useEffect(() => {
@@ -33,8 +45,48 @@ function AdminOrderDetail() {
   };
 
   const CaptureOrderHandler = async (orderCode) => {
-    const result = await CaptureOrder(orderCode);
-    console.log(result);
+    try {
+      const result = await CaptureOrder(orderCode);
+      console.log(result);
+      await fetchOrderDetail();
+      toast.success("Xác nhận đơn hàng thành công");
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      toast.error("Xác nhận đơn hàng thất bại");
+    }
+  };
+
+  // const CancelledOrder = async (orderId) => {
+  //   try {
+  //     await Cancelled(orderId);
+  //     setIsCancelled(true);
+  //     // fetchOrdersByStatus(selectedFilter);
+  //   } catch (error) {
+  //     console.error("Error fetching orders:", error);
+  //   }
+  //   await fetchOrderDetail();
+  // };
+
+  const deleteOrder = async (orderId) => {
+    try {
+      await deleteOrderById(orderId);
+      toast.success("Xóa đơn hàng thành công");
+      closeModal();
+      await fetchOrderDetail();
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      toast.error("Xóa đơn hàng thất bại");
+    }
+  };
+
+  const RefundOrderHandler = async (captureId) => {
+    console.log(captureId);
+    try {
+      await Refunded(captureId);
+      await fetchOrderDetail();
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
     await fetchOrderDetail();
   };
 
@@ -188,9 +240,6 @@ function AdminOrderDetail() {
                 </div>
                 <div class="flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 dark:bg-gray-800 space-y-6">
                   <div class="w-full justify-center items-center">
-                    <button className="transition duration-300 ease-in-out mb-4 hover:bg-red-500 hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-red-600 text-base font-medium leading-4 text-white">
-                      Hủy đơn hàng
-                    </button>
                     {userRole &&
                       userRole.includes("Admin") &&
                       order.orderStatus.status === "PENDING" && (
@@ -200,6 +249,105 @@ function AdminOrderDetail() {
                         >
                           Xác nhận đơn hàng
                         </button>
+                      )}
+
+                    {userRole &&
+                      userRole.includes("Admin") &&
+                      order.orderStatus.status === "CAPTURED" && (
+                        <div>
+                          <button
+                            // onClick={() => ShipOrderHandler(order.orderCode)}
+                            className="transition duration-300 ease-in-out mb-4 hover:bg-[#FFD16B] hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
+                          >
+                            Vận chuyển đơn hàng
+                          </button>
+                          <button
+                            onClick={() => RefundOrderHandler(order.captureId)}
+                            className="transition duration-300 ease-in-out mb-4 hover:bg-red-500 hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-red-600 text-base font-medium leading-4 text-white"
+                          >
+                            Hủy đơn hàng / Hoàn tiền
+                          </button>
+                        </div>
+                      )}
+
+                    {userRole &&
+                      userRole.includes("Admin") &&
+                      order.orderStatus.status === "REFUNDED" && (
+                        <div>
+                          <button className="transition duration-300 ease-in-out mb-4 hover:bg-[#FFD16B] hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white">
+                            Đã hoàn tiền
+                          </button>
+                          <button
+                            onClick={openModal}
+                            className="transition duration-300 ease-in-out mb-4 hover:bg-red-500 hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-red-600 text-base font-medium leading-4 text-white"
+                          >
+                            Xóa đơn hàng
+                          </button>
+                        </div>
+                      )}
+
+                    {userRole &&
+                      userRole.includes("Admin") &&
+                      order.orderStatus.status === "CANCELLED" && (
+                        <div>
+                          <button
+                            onClick={openModal}
+                            className="transition duration-300 ease-in-out mb-4 hover:bg-red-500 hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-red-600 text-base font-medium leading-4 text-white"
+                          >
+                            Xóa đơn hàng
+                          </button>
+                          <Modal
+                            open={isModalOpen}
+                            onClose={closeModal}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box className="fixed z-10 inset-0 overflow-y-auto">
+                              <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                <div className="fixed inset-0 transition-opacity">
+                                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                                </div>
+                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
+                                &#8203;
+                                <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                    <h2
+                                      id="modal-modal-title"
+                                      className="text-lg font-medium text-gray-900"
+                                    >
+                                      Xác nhận
+                                    </h2>
+                                    <div className="mt-3 sm:mt-0  sm:text-left">
+                                      <p
+                                        id="modal-modal-description"
+                                        className="text-sm text-gray-500"
+                                      >
+                                        Bạn có chắc chắn muốn xóa đơn hàng
+                                        không?
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                    <button
+                                      onClick={() => deleteOrder(order.id)}
+                                      type="button"
+                                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                    >
+                                      Xóa
+                                    </button>
+                                    <button
+                                      onClick={closeModal}
+                                      type="button"
+                                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                                    >
+                                      Hủy
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </Box>
+                          </Modal>
+                        </div>
                       )}
                   </div>
                 </div>

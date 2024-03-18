@@ -201,69 +201,73 @@ function Address() {
         </button>
       </div>
       <div class="grid m:grid sm:grid-cols-1 sm:grid-rows-1 mb-4 ml-4 mr-4 sm:gap-2  border-t border-gray-200">
-        {allAddress
-          .sort((a, b) => {
-            // Đặt địa chỉ mặc định lên đầu tiên
-            if (
-              a.defaultForShopping === true &&
-              b.defaultForShopping === false
-            ) {
-              return -1; // a sẽ được đưa lên trước b
-            } else if (
-              a.defaultForShopping === false &&
-              b.defaultForShopping === true
-            ) {
-              return 1; // b sẽ được đưa lên trước a
-            } else {
-              return 0; // Giữ nguyên vị trí nếu cả hai đều có hoặc không có defaultForShopping
-            }
-          })
-          ?.map((item) => (
-            <div className="flex border rounded-lg mt-4 text-left px-4 py-5 justify-between">
-              <div>
-                <ul className="">
-                  <li className="text-sm mt-2">
-                    {item.firstName} {item.lastName}
-                  </li>
-                  <li className="text-sm mt-2 ">{item.address}</li>
-                  <li className="text-sm mt-2">
-                    {item.ward}, {item.district}, {item.city}
-                  </li>
-                  <li className="text-sm mt-2">tel: {item.phoneNumber}</li>
-                </ul>
-              </div>
-              <div>
-                <div className="text-end">
-                  <button
-                    className="mr-4"
-                    onClick={() => handleClickEditAddress(item)}
-                  >
-                    {/* <span className="mr-2">Cập nhật</span> */}
-                    <FontAwesomeIcon icon={faEdit} />
-                  </button>
-                  <button
-                    className="mr-4"
-                    onClick={() => handleClickDeleteAddress(item)}
-                  >
-                    {/* <span className="mr-2">Xóa</span> */}
-                    <FontAwesomeIcon icon={faTrash} color="red" />
-                  </button>
+        {allAddress.length > 0 ? (
+          allAddress
+            .sort((a, b) => {
+              // Đặt địa chỉ mặc định lên đầu tiên
+              if (
+                a.defaultForShopping === true &&
+                b.defaultForShopping === false
+              ) {
+                return -1; // a sẽ được đưa lên trước b
+              } else if (
+                a.defaultForShopping === false &&
+                b.defaultForShopping === true
+              ) {
+                return 1; // b sẽ được đưa lên trước a
+              } else {
+                return 0; // Giữ nguyên vị trí nếu cả hai đều có hoặc không có defaultForShopping
+              }
+            })
+            ?.map((item) => (
+              <div className="flex border rounded-lg mt-4 text-left px-4 py-5 justify-between">
+                <div>
+                  <ul className="">
+                    <li className="text-sm mt-2">
+                      {item.firstName} {item.lastName}
+                    </li>
+                    <li className="text-sm mt-2 ">{item.address}</li>
+                    <li className="text-sm mt-2">
+                      {item.ward}, {item.district}, {item.city}
+                    </li>
+                    <li className="text-sm mt-2">tel: {item.phoneNumber}</li>
+                  </ul>
                 </div>
                 <div>
-                  {item.defaultForShopping === true ? (
-                    <button className=" border text-sm rounded-lg hover:bg-[#FFD16B] hover:text-white hover:transition-transform ease-in-out hover:scale-105 duration-500 p-1 mt-2">
-                      {" "}
-                      Mặc định
+                  <div className="text-end">
+                    <button
+                      className="mr-4"
+                      onClick={() => handleClickEditAddress(item)}
+                    >
+                      {/* <span className="mr-2">Cập nhật</span> */}
+                      <FontAwesomeIcon icon={faEdit} />
                     </button>
-                  ) : (
-                    <button className="border text-sm rounded-lg hover:bg-[#FFD16B] hover:text-white hover:transition-transform ease-in-out hover:scale-105 duration-500 p-1 mt-2">
-                      Thiết lập mặc định
+                    <button
+                      className="mr-4"
+                      onClick={() => handleClickDeleteAddress(item)}
+                    >
+                      {/* <span className="mr-2">Xóa</span> */}
+                      <FontAwesomeIcon icon={faTrash} color="red" />
                     </button>
-                  )}
+                  </div>
+                  <div>
+                    {item.defaultForShopping === true ? (
+                      <button className=" border text-sm rounded-lg hover:bg-[#FFD16B] hover:text-white hover:transition-transform ease-in-out hover:scale-105 duration-500 p-1 mt-2">
+                        {" "}
+                        Mặc định
+                      </button>
+                    ) : (
+                      <button className="border text-sm rounded-lg hover:bg-[#FFD16B] hover:text-white hover:transition-transform ease-in-out hover:scale-105 duration-500 p-1 mt-2">
+                        Thiết lập mặc định
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+        ) : (
+          <div className="text-center mt-4">Bạn chưa có địa chỉ nào</div>
+        )}
       </div>
       <Modal
         open={isModalOpen}

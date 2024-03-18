@@ -49,7 +49,7 @@ function Checkout() {
   const fetchAddress = async () => {
     const result = await Address();
     setAllAddress(result);
-    setAddressChecked(result.find((item) => item.defaultForShopping).id || "");
+    setAddressChecked(result.find((item) => item.defaultForShopping)?.id || "");
     console.log(addressChecked);
     console.log(allAddress);
   };

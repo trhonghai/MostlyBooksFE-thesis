@@ -69,8 +69,8 @@ function useOrder() {
 
   const Cancelled = async (orderId) => {
     try {
-      const response = await axios.put(
-        `http://localhost:8080/customer/order/cancelled/${orderId}`
+      const response = await axios.delete(
+        `http://localhost:8080/api/paypal/orders/${orderId}/cancelled`
       );
       console.log(response.data);
       return response.data;
@@ -79,6 +79,30 @@ function useOrder() {
     }
   };
 
+  const Refunded = async (captureId) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/paypal/orders/${captureId}/refund`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Lấy danh mục thất bại:", error.message);
+    }
+  }
+
+  const deleteOrderById = async (orderId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/customer/order/delete/${orderId}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Lấy danh mục thất bại:", error.message);
+    }
+  }
+
   return {
     Orders,
     OrderDetails,
@@ -86,6 +110,8 @@ function useOrder() {
     CaptureOrder,
     fetchOrderByStatus,
     Cancelled,
+    Refunded,
+    deleteOrderById
   };
 }
 

@@ -11,6 +11,7 @@ function Order() {
   const [orderDetails, setOrderDetails] = useState({});
   const { Orders, OrderDetails, fetchOrderByStatus } = useOrder();
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [orderCounts, setOrderCounts] = useState({});
 
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
@@ -20,6 +21,7 @@ function Order() {
   useEffect(() => {
     // fetchOrders();
     fetchOrdersByStatus(selectedFilter);
+    // updateOrderCounts(orders);
   }, [selectedFilter]);
 
   console.log(selectedFilter);
@@ -32,9 +34,12 @@ function Order() {
         result = await Orders();
       } else {
         // Gọi API để lấy các đơn hàng dựa trên trạng thái
-        result = await fetchOrderByStatus(status);
+        result = await Orders().filter(
+          (order) => order.orderStatus.status === status
+        );
       }
       setOrders(result);
+      updateOrderCounts(result);
       console.log(result);
       // Lưu ý: cần cập nhật orderDetails tương ứng ở đây nếu cần
       result.forEach(async (order) => {
@@ -46,6 +51,15 @@ function Order() {
     }
   };
 
+  const updateOrderCounts = (orders) => {
+    const counts = {};
+    orders.forEach((order) => {
+      const status = order.orderStatus.status;
+      counts[status] = (counts[status] || 0) + 1;
+    });
+    setOrderCounts(counts);
+  };
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const offset = (currentPage - 1) * itemsPerPage;
@@ -54,8 +68,6 @@ function Order() {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected + 1);
   };
-
- 
 
   return (
     <div className="bg-white max-w-4xl shadow overflow-hidden sm:rounded-lg">
@@ -68,128 +80,135 @@ function Order() {
             <FilterOrder
               handleFilterChange={handleFilterChange}
               selectedFilter={selectedFilter}
+              Orders={Orders}
             />
           </div>
-          <div className="overflow-x-auto px-4">
-            <table className="w-full min-w-full divide-y divide-gray-200">
-              <thead>
-                <tr className="bg-[#FFD16B] rounded-lg text-left text-xs font-semibold uppercase tracking-widest text-white">
-                  <th className="px-2 py-3">Mã đơn hàng</th>
-                  <th className="px-2 py-3">Sản phẩm</th>
-                  <th className="px-2 py-3">Tổng tiền</th>
-                  <th className="px-2 py-3">Ngày tạo</th>
-                  <th className="px-2 py-3">Trạng thái</th>
-                </tr>
-              </thead>
-              <tbody className="text-gray-500 bg-white divide-y divide-gray-200">
-                {orders?.slice(offset, offset + itemsPerPage).map((order) => {
-                  // Tính tổng số lượng cho mỗi đơn hàng
-                  let totalQuantity = 0;
-                  orderDetails[order.id]?.forEach((detail) => {
-                    totalQuantity += detail.quantity;
-                  });
-                  let bookNames = [];
-                  orderDetails[order.id]?.forEach((detail) => {
-                    bookNames.push(detail.book.name);
-                  });
-                  let displayNames = bookNames.slice(0, 2);
-                  let moreNamesCount = bookNames.length - 2;
+          {orders?.length > 0 ? (
+            <div className="overflow-x-auto px-4">
+              <table className="w-full min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr className="bg-[#FFD16B] rounded-lg text-left text-xs font-semibold uppercase tracking-widest text-white">
+                    <th className="px-2 py-3">Mã đơn hàng</th>
+                    <th className="px-2 py-3">Sản phẩm</th>
+                    <th className="px-2 py-3">Tổng tiền</th>
+                    <th className="px-2 py-3">Ngày tạo</th>
+                    <th className="px-2 py-3">Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody className="text-gray-500 bg-white divide-y divide-gray-200">
+                  {orders?.slice(offset, offset + itemsPerPage).map((order) => {
+                    // Tính tổng số lượng cho mỗi đơn hàng
+                    let totalQuantity = 0;
+                    orderDetails[order.id]?.forEach((detail) => {
+                      totalQuantity += detail.quantity;
+                    });
+                    let bookNames = [];
+                    orderDetails[order.id]?.forEach((detail) => {
+                      bookNames.push(detail.book.name);
+                    });
+                    let displayNames = bookNames.slice(0, 2);
+                    let moreNamesCount = bookNames.length - 2;
 
-                  return (
-                    <tr
-                      key={order.id}
-                      className="hover:bg-gray-200 cursor-pointer transition duration-150 border-b border-gray-200 text-left border-gray-200 bg-white px-5 py-5 text-sm"
-                    >
-                      <td className="border-b  text-left border-gray-200 bg-white px-5 py-5 text-sm">
-                        <Link
-                          to={`/account/orders/${order.id}`}
-                          state={{ dataOrder: order }}
-                        >
-                          <p className="whitespace-no-wrap">{order.id}</p>
-                        </Link>
-                      </td>
-                      <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                        <Link
-                          to={`/account/orders/${order.id}`}
-                          state={{ dataOrder: order }}
-                        >
-                          <div className="flex items-center">
-                            <div className="h-32 w-32 flex-shrink-0">
-                              {/* Hiển thị hình ảnh chỉ cho chi tiết đầu tiên */}
-                              {orderDetails[order.id]?.[0] && (
-                                <img
-                                  className="h-full w-full "
-                                  src={orderDetails[order.id][0].book.img}
-                                  alt=""
-                                />
-                              )}
-                            </div>
-                            <div className="ml-3">
-                              <p className="whitespace-no-wrap text-left">
-                                {/* Hiển thị tên sách của chi tiết đầu tiên */}
-                                {/* Hiển thị tối đa hai tên sách */}
-                                {displayNames.map((name, index) => (
-                                  <p
-                                    key={index}
-                                    className="whitespace-no-wrap text-left"
-                                  >
-                                    {name}
-                                  </p>
-                                ))}
-                                {/* Nếu có nhiều hơn hai tên sách, hiển thị dấu '...' */}
-                                {moreNamesCount > 0 && (
-                                  <p className="whitespace-no-wrap text-left">
-                                    ...
-                                  </p>
+                    return (
+                      <tr
+                        key={order.id}
+                        className="hover:bg-gray-200 cursor-pointer transition duration-150 border-b border-gray-200 text-left border-gray-200 bg-white px-5 py-5 text-sm"
+                      >
+                        <td className="border-b  text-left border-gray-200 bg-white px-5 py-5 text-sm">
+                          <Link
+                            to={`/account/orders/${order.id}`}
+                            state={{ dataOrder: order }}
+                          >
+                            <p className="whitespace-no-wrap">{order.id}</p>
+                          </Link>
+                        </td>
+                        <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                          <Link
+                            to={`/account/orders/${order.id}`}
+                            state={{ dataOrder: order }}
+                          >
+                            <div className="flex items-center">
+                              <div className="h-32 w-32 flex-shrink-0">
+                                {/* Hiển thị hình ảnh chỉ cho chi tiết đầu tiên */}
+                                {orderDetails[order.id]?.[0] && (
+                                  <img
+                                    className="h-full w-full "
+                                    src={orderDetails[order.id][0].book.img}
+                                    alt=""
+                                  />
                                 )}
-                              </p>
-                              <p className="text-left">
-                                {/* Hiển thị tổng số lượng */}
-                                Tổng số lượng: {totalQuantity}
-                              </p>
+                              </div>
+                              <div className="ml-3">
+                                <p className="whitespace-no-wrap text-left">
+                                  {/* Hiển thị tên sách của chi tiết đầu tiên */}
+                                  {/* Hiển thị tối đa hai tên sách */}
+                                  {displayNames.map((name, index) => (
+                                    <p
+                                      key={index}
+                                      className="whitespace-no-wrap text-left"
+                                    >
+                                      {name}
+                                    </p>
+                                  ))}
+                                  {/* Nếu có nhiều hơn hai tên sách, hiển thị dấu '...' */}
+                                  {moreNamesCount > 0 && (
+                                    <p className="whitespace-no-wrap text-left">
+                                      ...
+                                    </p>
+                                  )}
+                                </p>
+                                <p className="text-left">
+                                  {/* Hiển thị tổng số lượng */}
+                                  Tổng số lượng: {totalQuantity}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        </Link>
-                      </td>
-                      <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">
-                        <p className="whitespace-no-wrap">
-                          {formatPrice(order.amount + order.shipping)}
-                        </p>
-                      </td>
-                      <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">
-                        <p className="whitespace-no-wrap">
-                          {formatDate(order.orderDate)}
-                        </p>
-                      </td>
-                      <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">
-                        <span className="rounded-full bg-green-200 px-3 py-1 text-xs font-semibold text-green-900">
-                          {order.orderStatus.status}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          <div className="flex items-center justify-center border-t bg-white px-5 py-5 sm:flex-row sm:justify-center">
-            <ReactPaginate
-              previousLabel={"Prev"}
-              nextLabel={"Next"}
-              pageCount={pageCount}
-              onPageChange={handlePageChange}
-              containerClassName={
-                "pagination flex justify-between items-center"
-              }
-              activeClassName={"active"}
-              previousClassName={
-                "inline-flex justify-center items-center h-12 w-12 rounded-full border text-sm font-semibold text-gray-600 transition duration-150 hover:bg-gray-100"
-              }
-              nextClassName={
-                "inline-flex justify-center items-center h-12 w-12 rounded-full border text-sm font-semibold text-gray-600 transition duration-150 hover:bg-gray-100"
-              }
-            />
-          </div>
+                          </Link>
+                        </td>
+                        <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">
+                          <p className="whitespace-no-wrap">
+                            {formatPrice(order.amount + order.shipping)}
+                          </p>
+                        </td>
+                        <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">
+                          <p className="whitespace-no-wrap">
+                            {formatDate(order.orderDate)}
+                          </p>
+                        </td>
+                        <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">
+                          <span className="rounded-full bg-green-200 px-3 py-1 text-xs font-semibold text-green-900">
+                            {order.orderStatus.status}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <div className="flex items-center justify-center border-t bg-white px-5 py-5 sm:flex-row sm:justify-center">
+                <ReactPaginate
+                  previousLabel={"Prev"}
+                  nextLabel={"Next"}
+                  pageCount={pageCount}
+                  onPageChange={handlePageChange}
+                  containerClassName={
+                    "pagination flex justify-between items-center"
+                  }
+                  activeClassName={"active"}
+                  previousClassName={
+                    "inline-flex justify-center items-center h-12 w-12 rounded-full border text-sm font-semibold text-gray-600 transition duration-150 hover:bg-gray-100"
+                  }
+                  nextClassName={
+                    "inline-flex justify-center items-center h-12 w-12 rounded-full border text-sm font-semibold text-gray-600 transition duration-150 hover:bg-gray-100"
+                  }
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-96">
+              <p>Không có đơn hàng nào</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
