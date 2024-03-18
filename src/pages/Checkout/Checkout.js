@@ -1,16 +1,29 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import images from "~/assets/images";
 import AddressList from "~/components/AddressList/AddressList";
 import AuthContext from "~/context/AuthProvider";
-import { useAddress } from "~/hooks";
+import { useAddress, useOrder } from "~/hooks";
 import { formatPrice } from "~/utils/formatPrice";
 
 function Checkout() {
   const [allAddress, setAllAddress] = useState([]);
   const [addressChecked, setAddressChecked] = useState("");
+
+  const { deleteOrderById } = useOrder();
+  const location = useLocation();
+  // const { orderData } = location.state;
+  const orderData = location.state && location.state.orderData;
+  const orderId = location.state && location.state.orderId;
+
+  useEffect(() => {
+    console.log(orderData, orderId);
+  }, []);
+  console.log(orderData);
+
   const [items, setItems] = useState(
-    JSON.parse(localStorage.getItem("dataCheckOut")) || []
+    JSON.parse(localStorage.getItem("dataCheckOut")) || orderData || []
   );
   const { cartId, userCurrent } = useContext(AuthContext);
   console.log(items);
@@ -77,7 +90,10 @@ function Checkout() {
         paymentRequest
       );
       console.log(response.data);
-      // setPayment(response.data);
+      if (orderData) {
+        await deleteOrderById(orderId);
+      }
+      localStorage.removeItem("dataCheckOut");
       // Redirect to the approval URL
       window.location.href = response.data.links
         .map((link) => {

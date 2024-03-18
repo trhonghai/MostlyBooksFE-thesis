@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { Link, useLocation } from "react-router-dom";
+import config from "~/config";
 import { useOrder } from "~/hooks";
 import { formatPrice } from "~/utils/formatPrice";
 
@@ -27,11 +28,12 @@ function OrderDetail() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   useEffect(() => {
     if (order) {
       fetchOrderDetail();
-      console.log(orderDetails);
     }
+    console.log(orderDetails);
   }, [order]);
 
   const fetchOrderDetail = async () => {
@@ -52,6 +54,8 @@ function OrderDetail() {
     }
     await fetchOrderDetail();
   };
+
+  const PaymentAgain = () => {};
 
   return (
     <div className="bg-white max-w-4xl shadow overflow-hidden sm:rounded-lg">
@@ -266,12 +270,17 @@ function OrderDetail() {
                         </Modal>
                       </div>
                     ) : order.orderStatus.status === "CANCELLED" ? (
-                      <button
-                        // onClick={() => PaymentAgain(order.id)}
-                        className="transition duration-300 ease-in-out mb-4 hover:bg-[#FBA31A] dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
+                      <Link
+                        to={config.routes.checkout}
+                        state={{ orderData: orderDetails, orderId: order.id }}
                       >
-                        Thanh toán lại
-                      </button>
+                        <button
+                          // onClick={() => PaymentAgain(order.id)}
+                          className="transition duration-300 ease-in-out mb-4 hover:bg-[#FBA31A] dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
+                        >
+                          Thanh toán lại
+                        </button>
+                      </Link>
                     ) : order.orderStatus.status === "REFUNDED" ? (
                       <button
                         disabled

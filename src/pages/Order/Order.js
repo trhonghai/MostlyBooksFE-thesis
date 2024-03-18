@@ -30,18 +30,16 @@ function Order() {
     try {
       let result;
       if (status === "all") {
-        // Gọi API để lấy tất cả các đơn hàng khi trạng thái được chọn là "tất cả"
         result = await Orders();
       } else {
-        // Gọi API để lấy các đơn hàng dựa trên trạng thái
-        result = await Orders().filter(
+        // Lấy tất cả đơn hàng từ API và lọc lại trên client-side
+        const allOrders = await Orders();
+        result = allOrders.filter(
           (order) => order.orderStatus.status === status
         );
       }
-      setOrders(result);
       updateOrderCounts(result);
-      console.log(result);
-      // Lưu ý: cần cập nhật orderDetails tương ứng ở đây nếu cần
+      setOrders(result);
       result.forEach(async (order) => {
         const orderDetailData = await OrderDetails(order.id);
         setOrderDetails((prev) => ({ ...prev, [order.id]: orderDetailData }));

@@ -89,7 +89,7 @@ function useOrder() {
     } catch (error) {
       console.error("Lấy danh mục thất bại:", error.message);
     }
-  }
+  };
 
   const deleteOrderById = async (orderId) => {
     try {
@@ -101,7 +101,7 @@ function useOrder() {
     } catch (error) {
       console.error("Lấy danh mục thất bại:", error.message);
     }
-  }
+  };
 
   return {
     Orders,
@@ -111,7 +111,7 @@ function useOrder() {
     fetchOrderByStatus,
     Cancelled,
     Refunded,
-    deleteOrderById
+    deleteOrderById,
   };
 }
 
