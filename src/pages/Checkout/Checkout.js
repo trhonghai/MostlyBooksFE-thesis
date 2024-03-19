@@ -10,6 +10,7 @@ import { formatPrice } from "~/utils/formatPrice";
 function Checkout() {
   const [allAddress, setAllAddress] = useState([]);
   const [addressChecked, setAddressChecked] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("paypal");
 
   const { deleteOrderById } = useOrder();
   const location = useLocation();
@@ -85,24 +86,31 @@ function Checkout() {
     });
     console.log(paymentRequest);
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/paypal/orders/create",
-        paymentRequest
-      );
-      console.log(response.data);
-      if (orderData) {
-        await deleteOrderById(orderId);
+      if (paymentMethod === "paypal") {
+        const response = await axios.post(
+          "http://localhost:8080/api/paypal/orders/create",
+          paymentRequest
+        );
+        console.log(response.data);
+        if (orderData) {
+          await deleteOrderById(orderId);
+        }
+        localStorage.removeItem("dataCheckOut");
+        // Redirect to the approval URL
+        window.location.href = response.data.links
+          .map((link) => {
+            if (link.rel === "approve") return link.href;
+          })
+          .filter((item) => {
+            return item !== undefined;
+          })
+          .join("");
+      } else {
+        // Call API for cash on delivery
+        // Example:
+        // const response = await axios.post("your_cash_on_delivery_api", paymentRequest);
+        console.log("Call API for cash on delivery");
       }
-      localStorage.removeItem("dataCheckOut");
-      // Redirect to the approval URL
-      window.location.href = response.data.links
-        .map((link) => {
-          if (link.rel === "approve") return link.href;
-        })
-        .filter((item) => {
-          return item !== undefined;
-        })
-        .join("");
     } catch (error) {
       console.error("Error creating payment:", error);
     }
@@ -160,7 +168,8 @@ function Checkout() {
                   <input
                     type="radio"
                     class="form-radio h-5 w-5 text-indigo-600"
-                    checked
+                    checked={paymentMethod === "paypal"}
+                    onChange={() => setPaymentMethod("paypal")}
                   ></input>
                   <img className="h-14 w-14" src={images.Paypal} />
                   <span>Paypal</span>
@@ -169,6 +178,8 @@ function Checkout() {
                   <input
                     type="radio"
                     class="form-radio h-5 w-5 text-indigo-600"
+                    checked={paymentMethod === "cash_on_delivery"}
+                    onChange={() => setPaymentMethod("cash_on_delivery")}
                   ></input>
                   <img className="ml-2 h-10 w-10" src={images.Money} />
                   <span className="ml-2">
