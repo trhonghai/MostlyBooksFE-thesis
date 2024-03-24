@@ -2,8 +2,9 @@ import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import { faCirclePlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "@mui/material";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
+import AuthContext from "~/context/AuthProvider";
 import { useAddress } from "~/hooks";
 
 function AddressList({ data, addressChecked, setAddressChecked }) {
@@ -15,9 +16,11 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
     getAllProvinces,
     getWards,
     deleteAddress,
+    updateDefaultAddress,
   } = useAddress();
 
   const [mode, setMode] = useState("add");
+  const { userCurrent } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -54,7 +57,9 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
     console.log(isModalOpen);
   };
 
-  const handleCheckAddress = (address_id) => {
+  const handleCheckAddress = async (address_id) => {
+    console.log(address_id);
+    await updateDefaultAddress(address_id, userCurrent);
     setAddressChecked(address_id);
   };
   const fetchWards = async (districtId) => {

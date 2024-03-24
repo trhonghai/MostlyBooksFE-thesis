@@ -1,7 +1,5 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useContext } from "react";
+import { all } from "axios";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import config from "~/config";
 import AuthContext from "~/context/AuthProvider";
@@ -10,46 +8,42 @@ function FilterOrder({
   handleFilterChange,
   selectedFilter,
   Orders,
+  orderCounts,
 }) {
   const { isAdmin } = useContext(AuthContext);
-  const [orderCounts, setOrderCounts] = useState({
-    all: 0,
-    PENDING: 0,
-    CAPTURED: 0,
-    DELIVERED: 0,
-    CANCELLED: 0,
-    REFUNDED: 0,
-  });
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
-  const fetchOrders = async () => {
-    try {
-      const result = await Orders();
-      const counts = {
-        all: result.length,
-        PENDING: result.filter(
-          (order) => order.orderStatus.status === "PENDING"
-        ).length,
-        CAPTURED: result.filter(
-          (order) => order.orderStatus.status === "CAPTURED"
-        ).length,
-        DELIVERED: result.filter(
-          (order) => order.orderStatus.status === "DELIVERED"
-        ).length,
-        CANCELLED: result.filter(
-          (order) => order.orderStatus.status === "CANCELLED"
-        ).length,
-        REFUNDED: result.filter(
-          (order) => order.orderStatus.status === "REFUNDED"
-        ).length,
-      };
-      setOrderCounts(counts);
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-    }
-  };
+    // fetchOrders();
+    console.log(orderCounts);
+  }, [Orders]);
+  console.log(Orders);
+
+  // const fetchOrders = async () => {
+  //   try {
+  //     const counts = {
+  //       all: Orders.length,
+  //       PENDING: Orders.filter(
+  //         (order) => order.orderStatus?.status === "PENDING"
+  //       ).length,
+  //       CAPTURED: Orders.filter(
+  //         (order) => order.orderStatus?.status === "CAPTURED"
+  //       ).length,
+  //       DELIVERED: Orders.filter(
+  //         (order) => order.orderStatus?.status === "DELIVERED"
+  //       ).length,
+  //       CANCELLED: Orders.filter(
+  //         (order) => order.orderStatus?.status === "CANCELLED"
+  //       ).length,
+  //       REFUNDED: Orders.filter(
+  //         (order) => order.orderStatus?.status === "REFUNDED"
+  //       ).length,
+  //     };
+  //     setOrderCounts(counts);
+  //   } catch (error) {
+  //     console.error("Error fetching orders:", error);
+  //   }
+  // };
+
   const filterOrderStatus = [
     {
       status: "all",
@@ -80,9 +74,11 @@ function FilterOrder({
   return (
     <div className="flex justify-around my-4 space-x-4 border-b pb-2">
       {filterOrderStatus.map((status, index) => (
-        <Link to={isAdmin ? config.routes.adminOrders : config.routes.order}>
+        <Link
+          key={index}
+          to={isAdmin ? config.routes.adminOrders : config.routes.order}
+        >
           <button
-            key={index}
             onClick={() => handleFilterChange(status.status)}
             className={`relative ${
               selectedFilter === status.status

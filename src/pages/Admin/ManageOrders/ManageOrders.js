@@ -13,6 +13,14 @@ function ManageOders() {
 
   const { getAllOrders, OrderDetails, fetchOrderByStatus } = useOrder();
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [orderCounts, setOrderCounts] = useState({
+    all: 0,
+    PENDING: 0,
+    CAPTURED: 0,
+    DELIVERED: 0,
+    CANCELLED: 0,
+    REFUNDED: 0,
+  });
 
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
@@ -20,32 +28,50 @@ function ManageOders() {
     // Thực hiện các hành động khác tương ứng với việc thay đổi bộ lọc ở đây
   };
   useEffect(() => {
-    // fetchOrders();
-    fetchOrdersByStatus(selectedFilter);
+    fetchOrders(selectedFilter);
   }, [selectedFilter]);
 
-  console.log(selectedFilter);
+  console.log(orders);
 
-  const fetchOrdersByStatus = async (status) => {
+  const fetchOrders = async (status) => {
     try {
       let result;
       if (status === "all") {
         // Gọi API để lấy tất cả các đơn hàng khi trạng thái được chọn là "tất cả"
         result = await getAllOrders();
+        updateOrderCounts(result);
       } else {
         // Gọi API để lấy các đơn hàng dựa trên trạng thái
         result = await fetchOrderByStatus(status);
       }
-      setOrders(result);
-      console.log(result);
-      // Lưu ý: cần cập nhật orderDetails tương ứng ở đây nếu cần
-      result.forEach(async (order) => {
+      const updatedOrders = [...result];
+      const orderDetailsMap = {};
+      for (const order of result) {
         const orderDetailData = await OrderDetails(order.id);
-        setOrderDetails((prev) => ({ ...prev, [order.id]: orderDetailData }));
-      });
+        orderDetailsMap[order.id] = orderDetailData;
+      }
+      setOrders(updatedOrders);
+      setOrderDetails(orderDetailsMap);
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
+  };
+
+  const updateOrderCounts = (orders) => {
+    const counts = {
+      all: orders.length,
+      PENDING: 0,
+      CAPTURED: 0,
+      DELIVERED: 0,
+      CANCELLED: 0,
+      REFUNDED: 0,
+    };
+
+    orders.forEach((order) => {
+      const status = order.orderStatus.status;
+      counts[status]++;
+    });
+    setOrderCounts(counts);
   };
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,14 +88,15 @@ function ManageOders() {
       <div className="mx-auto max-w-screen-xl">
         <div className=" rounded-lg mx-4 ">
           <div className="flex items-center justify-between py-5 ">
-            <h3 className="text-lg text-left leading-6 font-medium text-gray-900">
+            <h3 className="text-lg  text-left leading-6 font-medium text-gray-900">
               QUẢN LÝ ĐƠN HÀNG
             </h3>
           </div>
           <FilterOrder
             handleFilterChange={handleFilterChange}
             selectedFilter={selectedFilter}
-            Orders={getAllOrders}
+            Orders={orders}
+            orderCounts={orderCounts}
           />
           {orders.length > 0 ? (
             <div className="overflow-x-auto">

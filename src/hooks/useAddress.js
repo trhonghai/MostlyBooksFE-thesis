@@ -87,6 +87,17 @@ function useAddress() {
       console.log(error);
     }
   };
+  const updateDefaultAddress = async (addressId, customerId) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/provinces/${addressId}/setDefaultForShopping?customerId=${customerId}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return {
     Address,
@@ -96,6 +107,7 @@ function useAddress() {
     getDistricts,
     getWards,
     deleteAddress,
+    updateDefaultAddress,
   };
 }
 

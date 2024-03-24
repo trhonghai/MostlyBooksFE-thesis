@@ -1,6 +1,7 @@
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import {
   faBagShopping,
+  faBook,
   faHome,
   faUserAlt,
 } from "@fortawesome/free-solid-svg-icons";
@@ -21,7 +22,6 @@ function Sidebar({ isSidebarOpen }) {
       <div className="w-full flex items-center justify-center h-36 border-b flex px-4 items-center mb-8">
         <img className="w-52 h-36" src={images.Logo} />
       </div>
-
       <div className="mb-4 px-4">
         <div className="w-full flex items-center text-[#FFD16B] h-10 pl-4  hover:bg-white rounded-lg cursor-pointer">
           <FontAwesomeIcon icon={faHome} className="mr-4" />
@@ -37,14 +37,16 @@ function Sidebar({ isSidebarOpen }) {
         <Link to={config.routes.adminOrders}>
           <div className="w-full mt-2 flex items-center text-[#FFD16B] h-10 pl-4  hover:bg-white rounded-lg cursor-pointer">
             <FontAwesomeIcon icon={faBagShopping} className="mr-4" />
-  
             <span className="text-gray-700">Đơn hàng</span>
           </div>
         </Link>
-        {/* Các mục menu khác */}
+        <Link to={config.routes.adminBooks}>
+          <div className="w-full mt-2 flex items-center text-[#FFD16B] h-10 pl-4  hover:bg-white rounded-lg cursor-pointer">
+            <FontAwesomeIcon icon={faBook} className="mr-4" />
+            <span className="text-gray-700">Sách</span>
+          </div>
+        </Link>
       </div>
-
-      {/* Các phần menu khác */}
     </div>
   );
 }

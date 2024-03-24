@@ -14,8 +14,8 @@ function ManageUsers() {
   const [mode, setMode] = useState("add");
 
   const [userCurrent, setUserCurrent] = useState({
-    name: "",
-    username: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     roles: [],

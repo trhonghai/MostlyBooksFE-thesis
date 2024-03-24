@@ -13,16 +13,16 @@ function UserForm({
   mode,
 }) {
   const [createUser, setCreateUser] = useState({
-    name: "",
-    username: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     // photos: "",
   });
 
   const [data, setData] = useState({
-    name: "",
-    username: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     photos: "",
@@ -32,7 +32,7 @@ function UserForm({
 
   const [roles, setRoles] = useState([]);
   const [selectedRoles, setSelectedRoles] = useState([]);
-  const { name, username, email, password } = createUser;
+  const { firstName, lastName, email, password } = createUser;
   const [isEmailTaken, setIsEmailTaken] = useState("");
   const [enabled, setEnabled] = useState(false);
 
@@ -42,8 +42,10 @@ function UserForm({
       setSelectedRoles(userCurrent.roles.map((role) => role.id));
       setData(userCurrent);
       setEnabled(userCurrent.enabled);
-      // setFile(userCurrent.photos);
+      setFile(userCurrent.photos);
+      setThumbnailSrc(userCurrent.photos);
     }
+    console.log(file);
   }, [userCurrent]);
 
   const loadRoles = async () => {
@@ -79,8 +81,8 @@ function UserForm({
       console.log(newUser, file);
       onSave(newUser, file);
       setCreateUser({
-        name: "",
-        username: "",
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         // enabled: false,
@@ -167,11 +169,11 @@ function UserForm({
                 </label>
                 <div className="mt-2 relative rounded-md shadow-sm">
                   <input
-                    name="name"
+                    name="firstName"
                     placeholder="Nhập đầy đủ họ tên"
                     type="text"
                     required
-                    value={userCurrent ? data.name : name}
+                    value={userCurrent ? data.firstName : firstName}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                     onChange={(e) => handleChange(e)}
                   />
@@ -183,11 +185,11 @@ function UserForm({
                 </label>
                 <div className="mt-2 relative rounded-md shadow-sm">
                   <input
-                    name="username"
+                    name="lastName"
                     placeholder="Nhập tên người dùng"
                     type="text"
                     required=""
-                    value={userCurrent ? data.username : username}
+                    value={userCurrent ? data.lastName : lastName}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                     onChange={(e) => handleChange(e)}
                   />

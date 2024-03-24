@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import images from "~/assets/images";
 import AddressList from "~/components/AddressList/AddressList";
 import AuthContext from "~/context/AuthProvider";
@@ -14,23 +14,15 @@ function Checkout() {
 
   const { deleteOrderById } = useOrder();
   const location = useLocation();
-  // const { orderData } = location.state;
   const orderData = location.state && location.state.orderData;
   const orderId = location.state && location.state.orderId;
-
-  useEffect(() => {
-    console.log(orderData, orderId);
-  }, []);
-  console.log(orderData);
 
   const [items, setItems] = useState(
     JSON.parse(localStorage.getItem("dataCheckOut")) || orderData || []
   );
   const { cartId, userCurrent } = useContext(AuthContext);
-  console.log(items);
 
   const orderDetailsId = items.map((item) => item.id);
-  console.log(orderDetailsId);
 
   const DeleteItemsFromCart = async () => {
     try {
@@ -51,8 +43,6 @@ function Checkout() {
     customerId: userCurrent,
     orderDetailsId: orderDetailsId,
   });
-  console.log(items);
-  console.log(paymentRequest);
 
   const { Address } = useAddress();
 
@@ -64,8 +54,6 @@ function Checkout() {
     const result = await Address();
     setAllAddress(result);
     setAddressChecked(result.find((item) => item.defaultForShopping)?.id || "");
-    console.log(addressChecked);
-    console.log(allAddress);
   };
 
   const calculateTotalPrice = () => {
@@ -84,19 +72,17 @@ function Checkout() {
       currency: "USD",
       description: "Payment description",
     });
-    console.log(paymentRequest);
     try {
       if (paymentMethod === "paypal") {
         const response = await axios.post(
           "http://localhost:8080/api/paypal/orders/create",
           paymentRequest
         );
-        console.log(response.data);
         if (orderData) {
           await deleteOrderById(orderId);
         }
         localStorage.removeItem("dataCheckOut");
-        // Redirect to the approval URL
+
         window.location.href = response.data.links
           .map((link) => {
             if (link.rel === "approve") return link.href;
@@ -106,9 +92,6 @@ function Checkout() {
           })
           .join("");
       } else {
-        // Call API for cash on delivery
-        // Example:
-        // const response = await axios.post("your_cash_on_delivery_api", paymentRequest);
         console.log("Call API for cash on delivery");
       }
     } catch (error) {

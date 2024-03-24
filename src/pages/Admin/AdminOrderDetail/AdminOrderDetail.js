@@ -4,7 +4,7 @@ import {
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Box, Button, Modal } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import { useContext, useState } from "react";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
@@ -20,22 +20,11 @@ function AdminOrderDetail() {
   const { OrderDetails, CaptureOrder, Refunded, deleteOrderById } = useOrder();
   const [orderDetails, setOrderDetails] = useState([]);
   const { userRole } = useContext(AuthContext);
-  const [isCancelled, setIsCancelled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  console.log("order", order);
 
   useEffect(() => {
     if (order) {
       fetchOrderDetail();
-      console.log(orderDetails);
     }
   }, [order]);
 
@@ -46,8 +35,7 @@ function AdminOrderDetail() {
 
   const CaptureOrderHandler = async (orderCode) => {
     try {
-      const result = await CaptureOrder(orderCode);
-      console.log(result);
+      await CaptureOrder(orderCode);
       await fetchOrderDetail();
       toast.success("Xác nhận đơn hàng thành công");
     } catch (error) {
@@ -56,18 +44,8 @@ function AdminOrderDetail() {
     }
   };
 
-  // const CancelledOrder = async (orderId) => {
-  //   try {
-  //     await Cancelled(orderId);
-  //     setIsCancelled(true);
-  //     // fetchOrdersByStatus(selectedFilter);
-  //   } catch (error) {
-  //     console.error("Error fetching orders:", error);
-  //   }
-  //   await fetchOrderDetail();
-  // };
-
   const deleteOrder = async (orderId) => {
+    console.log(orderId);
     try {
       await deleteOrderById(orderId);
       toast.success("Xóa đơn hàng thành công");
@@ -80,14 +58,23 @@ function AdminOrderDetail() {
   };
 
   const RefundOrderHandler = async (captureId) => {
-    console.log(captureId);
     try {
       await Refunded(captureId);
       await fetchOrderDetail();
+      toast.success("Hoàn tiền đơn hàng thành công");
     } catch (error) {
       console.error("Error fetching orders:", error);
+      toast.error("Hoàn tiền đơn hàng thất bại");
     }
-    await fetchOrderDetail();
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+    console.log(isModalOpen);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -108,7 +95,7 @@ function AdminOrderDetail() {
           </div>
           <div class="px-4 py-2 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
             <div class="flex flex-col justify-start items-start w-full space-y-2 md:space-y-2 xl:space-y-8">
-              {orderDetails.map((orderDetail) => (
+              {orderDetails?.map((orderDetail) => (
                 <div class="flex flex-col justify-start items-start dark:bg-gray-900 bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
                   <div class=" md:mt-2 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
                     <div class="pb-4 md:pb-8 w-full md:w-40">
@@ -285,7 +272,56 @@ function AdminOrderDetail() {
                           </button>
                         </div>
                       )}
-
+                    <Modal
+                      open={isModalOpen}
+                      onClose={closeModal}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description"
+                    >
+                      <Box className="fixed z-10 inset-0 overflow-y-auto">
+                        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                          <div className="fixed inset-0 transition-opacity">
+                            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                          </div>
+                          <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
+                          &#8203;
+                          <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                              <h2
+                                id="modal-modal-title"
+                                className="text-lg font-medium text-gray-900"
+                              >
+                                Xác nhận
+                              </h2>
+                              <div className="mt-3 sm:mt-0  sm:text-left">
+                                <p
+                                  id="modal-modal-description"
+                                  className="text-sm text-gray-500"
+                                >
+                                  Bạn có chắc chắn muốn xóa đơn hàng không?
+                                </p>
+                              </div>
+                            </div>
+                            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                              <button
+                                onClick={() => deleteOrder(order.id)}
+                                type="button"
+                                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                              >
+                                Xóa
+                              </button>
+                              <button
+                                onClick={closeModal}
+                                type="button"
+                                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                              >
+                                Hủy
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </Box>
+                    </Modal>
                     {userRole &&
                       userRole.includes("Admin") &&
                       order.orderStatus.status === "CANCELLED" && (
@@ -296,57 +332,6 @@ function AdminOrderDetail() {
                           >
                             Xóa đơn hàng
                           </button>
-                          <Modal
-                            open={isModalOpen}
-                            onClose={closeModal}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                          >
-                            <Box className="fixed z-10 inset-0 overflow-y-auto">
-                              <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                <div className="fixed inset-0 transition-opacity">
-                                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                                </div>
-                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
-                                &#8203;
-                                <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                    <h2
-                                      id="modal-modal-title"
-                                      className="text-lg font-medium text-gray-900"
-                                    >
-                                      Xác nhận
-                                    </h2>
-                                    <div className="mt-3 sm:mt-0  sm:text-left">
-                                      <p
-                                        id="modal-modal-description"
-                                        className="text-sm text-gray-500"
-                                      >
-                                        Bạn có chắc chắn muốn xóa đơn hàng
-                                        không?
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                    <button
-                                      onClick={() => deleteOrder(order.id)}
-                                      type="button"
-                                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-                                    >
-                                      Xóa
-                                    </button>
-                                    <button
-                                      onClick={closeModal}
-                                      type="button"
-                                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                                    >
-                                      Hủy
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </Box>
-                          </Modal>
                         </div>
                       )}
                   </div>

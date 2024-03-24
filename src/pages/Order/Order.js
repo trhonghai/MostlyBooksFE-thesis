@@ -11,7 +11,14 @@ function Order() {
   const [orderDetails, setOrderDetails] = useState({});
   const { Orders, OrderDetails, fetchOrderByStatus } = useOrder();
   const [selectedFilter, setSelectedFilter] = useState("all");
-  const [orderCounts, setOrderCounts] = useState({});
+  const [orderCounts, setOrderCounts] = useState({
+    all: 0,
+    PENDING: 0,
+    CAPTURED: 0,
+    DELIVERED: 0,
+    CANCELLED: 0,
+    REFUNDED: 0,
+  });
 
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
@@ -24,21 +31,17 @@ function Order() {
     // updateOrderCounts(orders);
   }, [selectedFilter]);
 
-  console.log(selectedFilter);
+  console.log(orderCounts);
 
   const fetchOrdersByStatus = async (status) => {
     try {
       let result;
       if (status === "all") {
         result = await Orders();
+        updateOrderCounts(result);
       } else {
-        // Lấy tất cả đơn hàng từ API và lọc lại trên client-side
-        const allOrders = await Orders();
-        result = allOrders.filter(
-          (order) => order.orderStatus.status === status
-        );
+        result = await fetchOrderByStatus(status);
       }
-      updateOrderCounts(result);
       setOrders(result);
       result.forEach(async (order) => {
         const orderDetailData = await OrderDetails(order.id);
@@ -50,10 +53,18 @@ function Order() {
   };
 
   const updateOrderCounts = (orders) => {
-    const counts = {};
+    const counts = {
+      all: orders.length,
+      PENDING: 0,
+      CAPTURED: 0,
+      DELIVERED: 0,
+      CANCELLED: 0,
+      REFUNDED: 0,
+    };
+
     orders.forEach((order) => {
       const status = order.orderStatus.status;
-      counts[status] = (counts[status] || 0) + 1;
+      counts[status]++;
     });
     setOrderCounts(counts);
   };
@@ -78,7 +89,8 @@ function Order() {
             <FilterOrder
               handleFilterChange={handleFilterChange}
               selectedFilter={selectedFilter}
-              Orders={Orders}
+              Orders={orders}
+              orderCounts={orderCounts}
             />
           </div>
           {orders?.length > 0 ? (
