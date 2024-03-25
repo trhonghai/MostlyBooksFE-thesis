@@ -7,12 +7,11 @@ import UseCategory from "~/hooks/useCategory";
 import { useRef } from "react";
 import useAuthour from "~/hooks/useAuthour";
 
-function BookForm({ open, onClose, mode }) {
+function BookForm({ open, onClose, mode, bookCurrent }) {
   const [fileSizeError, setFileSizeError] = useState(null);
   const [thumbnailSrc, setThumbnailSrc] = useState("");
-  //   const [file, setFile] = useState(null);
   const [images, setImages] = useState([]);
-  const { createBook } = useBook();
+  const { createBook, updateBook } = useBook();
   const { category } = UseCategory();
   const { getPublishers } = usePublisher();
   const { getAllAuthours } = useAuthour();
@@ -59,13 +58,13 @@ function BookForm({ open, onClose, mode }) {
   const [bookData, setBookData] = useState({
     name: "",
     description: "",
-    price: 0, // Đảm bảo giá trị số, không phải chuỗi
-    pages: 0, // Đảm bảo giá trị số, không phải chuỗi
+    price: 0,
+    pages: 0,
     isbn_10: "",
     isbn_13: "",
     dimensions: "",
-    weight: 0, // Đảm bảo giá trị số, không phải chuỗi
-    inventory: 0, // Đảm bảo giá trị số, không phải chuỗi
+    weight: 0,
+    inventory: 0,
     authour: {
       id: "",
     },
@@ -78,11 +77,44 @@ function BookForm({ open, onClose, mode }) {
     issue: "",
   });
 
+  const [dataUpdate, setDataUpdate] = useState({
+    name: "",
+    description: "",
+    price: 0,
+    pages: 0,
+    isbn_10: "",
+    isbn_13: "",
+    dimensions: "",
+    weight: 0,
+    inventory: 0,
+    authour: {
+      id: "",
+    },
+    category: {
+      id: "",
+    },
+    publisher: {
+      id: "",
+    },
+    issue: "",
+  });
+
+  useEffect(() => {
+    if (bookCurrent) {
+      setDataUpdate(bookCurrent);
+      setThumbnailSrc(bookCurrent.img);
+    }
+  }, [bookCurrent]);
+
   const handleChange = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     console.log(name, value);
     setBookData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    setDataUpdate((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -109,8 +141,6 @@ function BookForm({ open, onClose, mode }) {
         authour: { id: selectedAuthour.id },
       }));
     }
-
-    // Kiểm tra nếu trường dữ liệu đang thay đổi là trường input hình ảnh
   };
 
   const handleFileChange = (e) => {
@@ -121,7 +151,6 @@ function BookForm({ open, onClose, mode }) {
       if (fileSize > 1048576) {
         setFileSizeError("You must choose an image less than 1MB!");
         setFile(null);
-        // setThumbnailSrc(null);
       } else {
         setFileSizeError(null);
         setFile(selectedFile);
@@ -138,9 +167,14 @@ function BookForm({ open, onClose, mode }) {
     if (mode === "add") {
       console.log(dataRequest, file);
       await createBook(dataRequest, file);
-      
     } else {
-      //
+      if (file) {
+        // Nếu có, thực hiện cập nhật cả thông tin sách và hình ảnh mới
+        await updateBook(dataRequest, file, bookCurrent.id);
+      } else {
+        // Nếu không, chỉ cập nhật thông tin sách
+        await updateBook(dataRequest, null, bookCurrent.id);
+      }
     }
   };
 
@@ -154,7 +188,6 @@ function BookForm({ open, onClose, mode }) {
       } else {
         setFileSizeError(null);
         setImages((prevImages) => [...prevImages, file]);
-        // showImageThumbnail(file);
       }
     });
   };
@@ -162,9 +195,7 @@ function BookForm({ open, onClose, mode }) {
   const showImageThumbnail = (file) => {
     const reader = new FileReader();
     reader.onload = function (e) {
-      // Do something with the image data, e.g., display it
       const thumbnailSrc = e.target.result;
-      // You can use thumbnailSrc to display the image in your UI
       setThumbnailSrc(thumbnailSrc);
     };
 
@@ -188,7 +219,7 @@ function BookForm({ open, onClose, mode }) {
           <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                Thêm sách
+                {mode === "add" ? "Thêm sách" : "Cập nhật thông tin sách"}
               </h2>
               <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <div class="grid gap-6 sm:grid-cols-2 sm:gap-6">
@@ -203,6 +234,7 @@ function BookForm({ open, onClose, mode }) {
                       type="text"
                       name="name"
                       id="name"
+                      value={bookCurrent ? dataUpdate.name : bookData.name}
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Nhập tên sách"
                       required=""
@@ -224,6 +256,7 @@ function BookForm({ open, onClose, mode }) {
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="120.000đ"
                       required=""
+                      value={bookCurrent ? dataUpdate.price : bookData.price}
                       onChange={handleChange}
                     />
                   </div>
@@ -237,6 +270,7 @@ function BookForm({ open, onClose, mode }) {
                     <select
                       id="category"
                       name="category"
+                      value={bookCurrent ? dataUpdate.category.name : ""}
                       onChange={handleChange}
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     >
@@ -259,6 +293,7 @@ function BookForm({ open, onClose, mode }) {
                       id="authour"
                       name="authour"
                       onChange={handleChange}
+                      value={bookCurrent ? dataUpdate.authour.name : ""}
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     >
                       <option selected="">Chọn danh mục</option>
@@ -279,6 +314,7 @@ function BookForm({ open, onClose, mode }) {
                       name="publisher"
                       ref={publisherRef}
                       onChange={handleChange}
+                      value={bookCurrent ? dataUpdate.publisher.name : ""}
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     >
                       <option selected="">Chọn danh mục</option>
@@ -303,6 +339,7 @@ function BookForm({ open, onClose, mode }) {
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="12"
                       required=""
+                      value={bookCurrent ? dataUpdate.weight : bookData.weight}
                       onChange={handleChange}
                     />
                   </div>
@@ -320,6 +357,7 @@ function BookForm({ open, onClose, mode }) {
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="256"
                       required=""
+                      value={bookCurrent ? dataUpdate.pages : bookData.pages}
                       onChange={handleChange}
                     />
                   </div>
@@ -337,6 +375,7 @@ function BookForm({ open, onClose, mode }) {
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="2024"
                       required=""
+                      value={bookCurrent ? dataUpdate.issue : bookData.issue}
                       onChange={handleChange}
                     />
                   </div>
@@ -354,6 +393,9 @@ function BookForm({ open, onClose, mode }) {
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Nhập ISBN"
                       required=""
+                      value={
+                        bookCurrent ? dataUpdate.isbn_10 : bookData.isbn_10
+                      }
                       onChange={handleChange}
                     />
                   </div>
@@ -371,6 +413,9 @@ function BookForm({ open, onClose, mode }) {
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Nhập ISBN"
                       required=""
+                      value={
+                        bookCurrent ? dataUpdate.isbn_13 : bookData.isbn_13
+                      }
                       onChange={handleChange}
                     />
                   </div>
@@ -388,6 +433,11 @@ function BookForm({ open, onClose, mode }) {
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="20 x 14.5 cm"
                       required=""
+                      value={
+                        bookCurrent
+                          ? dataUpdate.dimensions
+                          : bookData.dimensions
+                      }
                       onChange={handleChange}
                     />
                   </div>
@@ -405,6 +455,9 @@ function BookForm({ open, onClose, mode }) {
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="12"
                       required=""
+                      value={
+                        bookCurrent ? dataUpdate.inventory : bookData.inventory
+                      }
                       onChange={handleChange}
                     />
                   </div>
@@ -422,6 +475,7 @@ function BookForm({ open, onClose, mode }) {
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Bìa mềm"
                       required=""
+                      value={bookCurrent ? dataUpdate.cover : bookData.cover}
                       onChange={handleChange}
                     />
                   </div>
@@ -447,7 +501,7 @@ function BookForm({ open, onClose, mode }) {
                       <img
                         src={thumbnailSrc}
                         alt="Thumbnail"
-                        className="max-w-100"
+                        className="max-w-100 max-h-48"
                       />
                     )}
                   </div>
@@ -493,6 +547,11 @@ function BookForm({ open, onClose, mode }) {
                     id="description"
                     name="description"
                     rows="8"
+                    value={
+                      bookCurrent
+                        ? dataUpdate.description
+                        : bookData.description
+                    }
                     onChange={handleChange}
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Your description here"

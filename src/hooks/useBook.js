@@ -27,8 +27,36 @@ function useBook() {
       console.error("Error creating book:", error);
     }
   };
+  const getAbook = async (bookId) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/books/${bookId}`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {}
+  };
 
-  return { getAllBook, createBook };
+  const updateBook = async (updateData, file, id) => {
+    try {
+      const fromData = new FormData();
+      fromData.append("bookUpdate", JSON.stringify(updateData));
+      fromData.append("image", file);
+      console.log(updateData, file, id);
+      const response = await axios.put(
+        `http://localhost:8080/books/update/${id}`,
+        fromData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating book:", error);
+    }
+  };
+
+  return { getAllBook, createBook, getAbook, updateBook };
 }
 
 export default useBook;

@@ -8,10 +8,32 @@ import useBook from "~/hooks/useBook";
 import BookForm from "./BookForm";
 
 function ManageBook() {
-  const { getAllBook } = useBook();
+  const { getAllBook, getAbook } = useBook();
   const [books, setBooks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [mode, setMode] = useState("add");
+  const [bookCurrent, setBookCurrent] = useState({
+    name: "",
+    description: "",
+    price: 0,
+    pages: 0,
+    isbn_10: "",
+    isbn_13: "",
+    dimensions: "",
+    weight: 0,
+    inventory: 0,
+    authour: {
+      id: "",
+    },
+    category: {
+      id: "",
+    },
+    publisher: {
+      id: "",
+    },
+    issue: "",
+  });
 
   const openModal = (mode) => {
     setIsModalOpen(true);
@@ -20,8 +42,27 @@ function ManageBook() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const closeModalEdit = () => {
+    setIsModalEditOpen(false);
+  };
+
+  const openModalEdit = (bookId, mode) => {
+    fetchAbook(bookId);
+    setIsModalEditOpen(true);
+    setMode(mode);
+  };
+
+  const fetchAbook = async (bookId) => {
+    try {
+      const result = await getAbook(bookId);
+      setBookCurrent(result);
+    } catch (error) {
+      console.error("Error fetching book:", error);
+    }
+  };
   useEffect(() => {
     fetchBooks();
+
   }, []);
 
   const fetchBooks = async () => {
@@ -75,7 +116,10 @@ function ManageBook() {
                     <td className="px-2 py-4">{book.issue}</td>
                     <td className="px-2 py-4">{book.inventory}</td>
                     <td className="px-2 py-4">
-                      <button className="px-4 py-2 font-medium text-white bg-[#FFD16B] rounded-md hover:bg-[#FBA31A] focus:outline-none focus:shadow-outline-blue active:bg-blue-600 transition duration-150 ease-in-out">
+                      <button
+                        onClick={() => openModalEdit(book.id, "edit")}
+                        className="px-4 py-2 font-medium text-white bg-[#FFD16B] rounded-md hover:bg-[#FBA31A] focus:outline-none focus:shadow-outline-blue active:bg-blue-600 transition duration-150 ease-in-out"
+                      >
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
 
@@ -85,6 +129,12 @@ function ManageBook() {
                     </td>
                   </tr>
                 ))}
+                <BookForm
+                  open={isModalEditOpen}
+                  onClose={closeModalEdit}
+                  bookCurrent={bookCurrent}
+                  mode={mode}
+                />
               </tbody>
             </table>
           </div>
