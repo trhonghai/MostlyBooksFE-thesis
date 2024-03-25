@@ -6,8 +6,9 @@ import useBook from "~/hooks/useBook";
 import UseCategory from "~/hooks/useCategory";
 import { useRef } from "react";
 import useAuthour from "~/hooks/useAuthour";
+import toast from "react-hot-toast";
 
-function BookForm({ open, onClose, mode, bookCurrent }) {
+function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
   const [fileSizeError, setFileSizeError] = useState(null);
   const [thumbnailSrc, setThumbnailSrc] = useState("");
   const [images, setImages] = useState([]);
@@ -167,15 +168,23 @@ function BookForm({ open, onClose, mode, bookCurrent }) {
     if (mode === "add") {
       console.log(dataRequest, file);
       await createBook(dataRequest, file);
+
+      toast.success("Thêm sách thành công!");
     } else {
       if (file) {
         // Nếu có, thực hiện cập nhật cả thông tin sách và hình ảnh mới
-        await updateBook(dataRequest, file, bookCurrent.id);
+        await updateBook(dataUpdate, file, bookCurrent.id);
+        toast.success("Cập nhật sách thành công!");
       } else {
         // Nếu không, chỉ cập nhật thông tin sách
-        await updateBook(dataRequest, null, bookCurrent.id);
+        await updateBook(dataUpdate, null, bookCurrent.id);
+        toast.success("Cập nhật sách thành công!");
+
+        console.log(dataUpdate);
       }
     }
+    onClose();
+    fetchBooks();
   };
 
   const handleFileDetailImageChange = (e) => {

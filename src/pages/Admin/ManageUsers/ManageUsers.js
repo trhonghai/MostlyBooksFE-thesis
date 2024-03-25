@@ -21,6 +21,7 @@ function ManageUsers() {
     roles: [],
     // photos: "",
     enabled: false,
+    phones: "",
   });
 
   useEffect(() => {
@@ -28,27 +29,30 @@ function ManageUsers() {
   }, []);
 
   const loadUserCurrent = async (id) => {
-    const result = await axios.get(`http://localhost:8080/users/${id}`);
-    setUserCurrent(result.data);
+    const response = await axios.get(`http://localhost:8080/users/${id}`);
+    setUserCurrent(response.data);
   };
 
   const onSubmit = async (newUser, file) => {
+    const formData = new FormData();
+
+    formData.append("newUser", JSON.stringify(newUser));
+    formData.append("image", file);
     if (mode === "add") {
-      // console.log(newUser);
-      const formData = new FormData();
+      console.log(formData);
 
-      formData.append("newUser", JSON.stringify(newUser));
-      formData.append("image", file);
-
-      await axios.post("http://localhost:8080/users", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      loadUsers();
-      alert("User created successfully!");
+      // await axios.post("http://localhost:8080/users", formData, {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //   },
+      // });
+      // loadUsers();
+      // alert("User created successfully!");
     } else {
-      await axios.put(`http://localhost:8080/users/${userCurrent.id}`, newUser);
+      await axios.put(
+        `http://localhost:8080/users/${userCurrent.id}`,
+        formData
+      );
       loadUsers();
     }
   };

@@ -62,7 +62,6 @@ function ManageBook() {
   };
   useEffect(() => {
     fetchBooks();
-
   }, []);
 
   const fetchBooks = async () => {
@@ -89,7 +88,12 @@ function ManageBook() {
             >
               Thêm sách
             </button>
-            <BookForm open={isModalOpen} onClose={closeModal} mode={mode} />
+            <BookForm
+              open={isModalOpen}
+              onClose={closeModal}
+              mode={mode}
+              fetchBooks={fetchBooks}
+            />
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -134,6 +138,7 @@ function ManageBook() {
                   onClose={closeModalEdit}
                   bookCurrent={bookCurrent}
                   mode={mode}
+                  fetchBooks={fetchBooks}
                 />
               </tbody>
             </table>

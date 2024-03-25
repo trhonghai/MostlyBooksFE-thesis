@@ -17,6 +17,7 @@ function UserForm({
     lastName: "",
     email: "",
     password: "",
+    phone: "",
     // photos: "",
   });
 
@@ -26,13 +27,14 @@ function UserForm({
     email: "",
     password: "",
     photos: "",
+    phone: "",
     enabled: false,
   });
   console.log(userCurrent);
 
   const [roles, setRoles] = useState([]);
   const [selectedRoles, setSelectedRoles] = useState([]);
-  const { firstName, lastName, email, password } = createUser;
+  const { firstName, lastName, email, password, phone } = createUser;
   const [isEmailTaken, setIsEmailTaken] = useState("");
   const [enabled, setEnabled] = useState(false);
 
@@ -95,7 +97,15 @@ function UserForm({
         enabled: enabled,
         roles: selectedRoles,
       };
-      onSave(newUser);
+
+      if (file) {
+        // Nếu có, thực hiện cập nhật cả thông tin sách và hình ảnh mới
+        onSave(newUser, file);
+      } else {
+        // Nếu không, chỉ cập nhật thông tin sách
+        onSave(newUser, null);
+        console.log(newUser);
+      }
       onRequestClose();
     }
   };
@@ -209,6 +219,22 @@ function UserForm({
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                     onChange={(e) => handleChange(e)}
                     onBlur={checkEmailAvailability}
+                  />
+                </div>
+              </div>
+              <div className="mt-2">
+                <label className="block text-sm font-medium leading-5  text-gray-700">
+                  Số điện thoại
+                </label>
+                <div className="mt-1 relative rounded-md shadow-sm">
+                  <input
+                    name="phone"
+                    placeholder="user@example.com"
+                    type="phone"
+                    required=""
+                    value={userCurrent ? data.phone : phone}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                    onChange={(e) => handleChange(e)}
                   />
                 </div>
               </div>
