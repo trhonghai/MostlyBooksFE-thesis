@@ -40,10 +40,10 @@ function Books() {
                 Lọc theo:
               </h2>
               {Object.keys(filter).map((key) => (
-                <div className="flex items-center text-left justify-center w-32 h-10 ml-2 bg-[#fef4e8] rounded-md text-[#FFD16B]">
+                <div className="flex items-center text-left justify-center w-auto h-10 ml-2 bg-[#fef4e8] rounded-md text-[#FFD16B]">
                   {/* <span className="font-semibold">{key}:</span>{" "} */}
-                  <span className="font-normal mr-4">{filter[key]}</span>
-                  <button>
+                  <span className="font-normal  px-4 py-4">{filter[key]}</span>
+                  <button className=" px-4 py-4">
                     <FontAwesomeIcon icon={faX} size="xs" color="#f79520" />
                   </button>
                 </div>

@@ -62,6 +62,7 @@ function useBook() {
     categoryName,
     publisherName
   ) => {
+    console.log(minPrice, maxPrice, categoryName, publisherName);
     try {
       let url = `http://localhost:8080/books/filter?`;
 
@@ -73,11 +74,11 @@ function useBook() {
         url += `maxPrice=${maxPrice}&`;
       }
       if (categoryName !== null) {
-        url += `categoryId=${categoryName}&`;
+        url += `categoryName=${categoryName}&`;
       }
 
       if (publisherName !== null) {
-        url += `publisherId=${publisherName}&`;
+        url += `publisherName=${publisherName}&`;
       }
 
       const response = await axios.get(url.slice(0, -1)); // Loại bỏ dấu '&' cuối cùng
