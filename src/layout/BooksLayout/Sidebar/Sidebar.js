@@ -7,6 +7,11 @@ import { useCategory, usePublisher } from "~/hooks";
 function Sidebar() {
   const [categories, setCategories] = useState([]);
   const [publishers, setPublishers] = useState([]);
+  const priceRanges = [
+    { min: 0, max: 100000, label: "0đ - 100.000đ" },
+    { min: 100000, max: 150000, label: "100.000đ - 150.000đ" },
+    { min: 150000, max: 200000, label: "150.000đ - 200.000đ" },
+  ];
 
   const { category } = useCategory();
   const { getPublishers } = usePublisher();
@@ -26,7 +31,7 @@ function Sidebar() {
     fetchPublisher();
   }, []);
 
-  const { updateFilter } = useFilter();
+  const { updateFilter, filter } = useFilter();
 
   const handleCategoryClick = (categoryName) => {
     updateFilter({ categoryName });
@@ -34,6 +39,10 @@ function Sidebar() {
 
   const handlePublisherClick = (publisherName) => {
     updateFilter({ publisherName });
+  };
+
+  const handlePriceRangeClick = (minPrice, maxPrice) => {
+    updateFilter({ minPrice, maxPrice });
   };
 
   return (
@@ -69,7 +78,11 @@ function Sidebar() {
                 key={index}
                 className="flex border-b pl-4 block text-left py-2 text-gray-600 "
               >
-                <input type="checkbox" className="mr-2" />
+                <input
+                  type="checkbox"
+                  checked={filter.publisherName === publisher.name}
+                  className="mr-2"
+                />
                 <label for="1">{publisher.name}</label>
               </li>
             </Link>
@@ -79,21 +92,28 @@ function Sidebar() {
 
       <div class="bg-white rounded-lg shadow-md p-6 mb-4">
         <ul className=" w-full text-sm text-gray-700 dark:text-gray-200">
-          <li className=" flex border-b pl-4 block text-left text-2xl w-full font-medium py-2 text-gray-600 ">
-            Giá
-          </li>
-          <li className="flex border-b pl-4 block text-left py-2 text-gray-600 ">
-            <input type="checkbox" className="mr-2" />
-            <label for="1">0đ - 100.000đ</label>
-          </li>
-          <li className="flex border-b pl-4 block text-left py-2 text-gray-600 ">
-            <input type="checkbox" className="mr-2" />
-            <label for="1">100.000đ - 150.000đ</label>
-          </li>{" "}
-          <li className="flex border-b pl-4 block text-left py-2 text-gray-600 ">
-            <input type="checkbox" className="mr-2" />
-            <label for="1">150.000đ - 200.000đ</label>
-          </li>{" "}
+          {priceRanges.map((range, index) => (
+            <li
+              key={index}
+              className="flex border-b pl-4 block text-left py-2 text-gray-600"
+            >
+              <input
+                type="checkbox"
+                className="mr-2"
+                checked={
+                  (filter.minPrice === range.min ||
+                    (filter.minPrice === 0 && range.min === 0)) &&
+                  filter.maxPrice === range.max
+                }
+                onChange={() => handlePriceRangeClick(range.min, range.max)}
+              />
+              <label
+                onClick={() => handlePriceRangeClick(range.min, range.max)}
+              >
+                {range.label}
+              </label>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

@@ -80,7 +80,7 @@ function useBook() {
       if (publisherName !== null) {
         url += `publisherName=${publisherName}&`;
       }
-
+      console.log(url);
       const response = await axios.get(url.slice(0, -1)); // Loại bỏ dấu '&' cuối cùng
       console.log(response.data);
       return response.data;

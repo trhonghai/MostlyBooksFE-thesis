@@ -22,9 +22,13 @@ export const FilterProvider = ({ children }) => {
   }, [filter]);
 
   const fetchBooks = async () => {
+    // Kiểm tra và xử lý giá trị minPrice và maxPrice
+    const minPrice = filter.minPrice !== undefined ? filter.minPrice : null;
+    const maxPrice = filter.maxPrice !== undefined ? filter.maxPrice : null;
+
     const data = await filterBooks(
-      filter.minPrice || null,
-      filter.maxPrice || null,
+      minPrice,
+      maxPrice,
       filter.categoryName || null,
       filter.publisherName || null
     );

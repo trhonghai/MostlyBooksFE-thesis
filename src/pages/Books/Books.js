@@ -8,24 +8,41 @@ import { useFilter } from "~/context/FilterProvider";
 import { useBook } from "~/hooks";
 
 function Books() {
-  const { filter, bookData } = useFilter();
+  const { filter, bookData, updateFilter } = useFilter();
   console.log(filter);
 
   const [books, setBooks] = useState([]);
-  const { getAllBook } = useBook();
+  const { getAllBook, filterBooks } = useBook();
 
   useEffect(() => {
     const fetchBooks = async () => {
-      if (bookData.length > 0) {
-        setBooks(bookData);
+      let data;
+      if (Object.keys(filter).length > 0) {
+        // Nếu đã áp dụng bộ lọc
+        data = await filterBooks(
+          filter.minPrice || null,
+          filter.maxPrice || null,
+          filter.categoryName || null,
+          filter.publisherName || null
+        );
       } else {
-        const data = await getAllBook();
-        setBooks(data);
-        console.log(data);
+        // Nếu chưa áp dụng bộ lọc
+        data = await getAllBook();
       }
+      setBooks(data);
     };
     fetchBooks();
-  }, [bookData]);
+  }, [filter]);
+
+  const clearFilter = (key) => {
+    if (key === "minPrice") {
+      updateFilter({ minPrice: undefined, maxPrice: undefined }); // Xóa cả minPrice và maxPrice
+    } else if (key === "maxPrice") {
+      updateFilter({ maxPrice: undefined }); // Xóa maxPrice
+    } else {
+      updateFilter({ [key]: undefined }); // Xóa bộ lọc theo key được chỉ định
+    }
+  };
 
   return (
     <div className="bg-white w-full shadow-lg overflow-hidden sm:rounded-lg">
@@ -39,21 +56,58 @@ function Books() {
               <h2 className="text-base ml-4 text-left leading-6 text-gray-900">
                 Lọc theo:
               </h2>
-              {Object.keys(filter).map((key) => (
-                <div className="flex items-center text-left justify-center w-auto h-10 ml-2 bg-[#fef4e8] rounded-md text-[#FFD16B]">
-                  {/* <span className="font-semibold">{key}:</span>{" "} */}
-                  <span className="font-normal  px-4 py-4">{filter[key]}</span>
-                  <button className=" px-4 py-4">
-                    <FontAwesomeIcon icon={faX} size="xs" color="#f79520" />
-                  </button>
-                </div>
-              ))}
+              {Object.keys(filter).map((key) => {
+                if (key === "minPrice" && filter["maxPrice"] !== undefined) {
+                  return (
+                    <div
+                      key={key}
+                      className="flex items-center text-left justify-center w-auto h-10 ml-2 bg-[#fef4e8] rounded-md text-[#FFD16B]"
+                    >
+                      <span className="font-normal px-4 py-2">{`Giá: ${filter[key]}đ - ${filter["maxPrice"]}đ`}</span>
+                      <button
+                        onClick={() => clearFilter(key)}
+                        className="px-4 py-2"
+                      >
+                        <FontAwesomeIcon icon={faX} size="xs" color="#f79520" />
+                      </button>
+                    </div>
+                  );
+                } else if (
+                  key === "maxPrice" &&
+                  filter["minPrice"] !== undefined
+                ) {
+                  return null;
+                } else {
+                  return (
+                    <div
+                      key={key}
+                      className="flex items-center text-left justify-center w-auto h-10 ml-2 bg-[#fef4e8] rounded-md text-[#FFD16B]"
+                    >
+                      <span className="font-normal px-4 py-2">
+                        {filter[key]}
+                      </span>
+                      <button
+                        className="px-4 py-2"
+                        onClick={() => clearFilter(key)}
+                      >
+                        <FontAwesomeIcon icon={faX} size="xs" color="#f79520" />
+                      </button>
+                    </div>
+                  );
+                }
+              })}
             </div>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-            {books.map((book) => (
-              <Book data={book} key={book.id} />
-            ))}
+            {books.length > 0 ? (
+              books.map((book) => <Book data={book} key={book.id} />)
+            ) : (
+              <div className="flex items-center justify-center h-96 w">
+                <span className="text-gray-500 text-lg font-semibold">
+                  Khồn tìm thấy sản phẩm
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
