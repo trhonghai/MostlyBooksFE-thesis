@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import config from "~/config";
 import { useCategory } from "~/hooks";
 
 function CategoryNav() {
@@ -121,9 +122,11 @@ function CategoryNav() {
           </div>
         )}
 
-        <div className="flex font-medium text-sm text-black w-32 h-6 justify-center items-center pl-3 pr-6 text-gray-600  underline-offset-4 decoration-[1px] hover:text-[#FFD16B] md:border-r-[2px] border-r-[#FFD16B] duration-200 last:border-r-0">
-          TẤT CẢ SÁCH
-        </div>
+        <Link to={config.routes.books}>
+          <div className="flex font-medium text-sm text-black w-32 h-6 justify-center items-center pl-3 pr-6 text-gray-600  underline-offset-4 decoration-[1px] hover:text-[#FFD16B] md:border-r-[2px] border-r-[#FFD16B] duration-200 last:border-r-0">
+            TẤT CẢ SÁCH
+          </div>
+        </Link>
         <div className="flex font-medium text-sm text-black w-32 h-6 justify-center items-center pl-3 pr-6 text-gray-600  underline-offset-4 decoration-[1px] hover:text-[#FFD16B] md:border-r-[2px] border-r-[#FFD16B] duration-200 last:border-r-0">
           SÁCH MỚI
         </div>

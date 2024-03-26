@@ -19,6 +19,8 @@ import AdminLoginLayout from "~/layout/AdminLoginLayout";
 import AdminLogin from "~/pages/AdminLogin";
 import ManageOrders from "~/pages/Admin/ManageOrders";
 import AdminOrderDetail from "~/pages/Admin/AdminOrderDetail";
+import Books from "~/pages/Books";
+import BooksLayout from "~/layout/BooksLayout";
 
 const routes = [
   { path: config.routes.home, component: Home, layout: DefaultLayout },
@@ -28,6 +30,7 @@ const routes = [
     layout: DefaultLayout,
     unnecessary: true,
   },
+  { path: config.routes.books, component: Books, layout: BooksLayout },
   {
     path: config.routes.register,
     component: Register,

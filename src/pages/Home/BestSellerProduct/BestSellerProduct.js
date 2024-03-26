@@ -41,9 +41,9 @@ function BestSellerProductS() {
   }, []);
 
   return (
-    <div className=" w-full  mt-10 flex justify-center items-center">
+    <div className=" w-full mt-10 flex justify-center items-center">
       <div className="container w-10/12 rounded-lg overflow-hidden bg-white">
-        <h2 class="text-xl pl-10 text-left font-sans hover:text-[#FFD16B] sm:text-3xl">
+        <h2 class="text-xl pl-10 mt-4 text-left font-bold sm:text-2xl">
           Sản phẩm bán chạy tháng này
         </h2>
         <Carousel responsive={responsive}>

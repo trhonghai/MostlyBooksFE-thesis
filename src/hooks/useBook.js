@@ -56,7 +56,39 @@ function useBook() {
     }
   };
 
-  return { getAllBook, createBook, getAbook, updateBook };
+  const filterBooks = async (
+    minPrice,
+    maxPrice,
+    categoryName,
+    publisherName
+  ) => {
+    try {
+      let url = `http://localhost:8080/books/filter?`;
+
+      if (minPrice !== null) {
+        url += `minPrice=${minPrice}&`;
+      }
+
+      if (maxPrice !== null) {
+        url += `maxPrice=${maxPrice}&`;
+      }
+      if (categoryName !== null) {
+        url += `categoryId=${categoryName}&`;
+      }
+
+      if (publisherName !== null) {
+        url += `publisherId=${publisherName}&`;
+      }
+
+      const response = await axios.get(url.slice(0, -1)); // Loại bỏ dấu '&' cuối cùng
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error filtering books:", error);
+    }
+  };
+
+  return { getAllBook, createBook, getAbook, updateBook, filterBooks };
 }
 
 export default useBook;
