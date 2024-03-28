@@ -4,7 +4,7 @@ const routes = {
   register: "/register",
   adminUsers: "/AdminUsers",
   adminCategories: "/categories",
-  adminBooks: "/books",
+  adminBooks: "/AdminBooks",
   adminLogin: "/adminLogin",
   adminOrders: "/adminOrders",
   adminOrdersDetail: "/adminOrders/:id",

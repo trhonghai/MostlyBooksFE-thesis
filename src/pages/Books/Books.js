@@ -1,6 +1,6 @@
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion, AccordionActions } from "@mui/material";
+import { Accordion, AccordionActions, Pagination } from "@mui/material";
 import { useContext, useState } from "react";
 import { useEffect } from "react";
 import Book from "~/components/Book";
@@ -13,15 +13,19 @@ function Books() {
 
   const [books, setBooks] = useState([]);
   const { getAllBook, filterBooks } = useBook();
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchBooks = async () => {
       let data;
       if (Object.keys(filter).length > 0) {
         // Nếu đã áp dụng bộ lọc
+        const minPrice = filter.minPrice !== undefined ? filter.minPrice : null;
+        const maxPrice = filter.maxPrice !== undefined ? filter.maxPrice : null;
+
         data = await filterBooks(
-          filter.minPrice || null,
-          filter.maxPrice || null,
+          minPrice,
+          maxPrice,
           filter.categoryName || null,
           filter.publisherName || null
         );
@@ -30,6 +34,7 @@ function Books() {
         data = await getAllBook();
       }
       setBooks(data);
+      setTotalPages(data.totalPages);
     };
     fetchBooks();
   }, [filter]);
@@ -42,6 +47,15 @@ function Books() {
     } else {
       updateFilter({ [key]: undefined }); // Xóa bộ lọc theo key được chỉ định
     }
+  };
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const offset = (currentPage - 1) * itemsPerPage;
+  const pageCount = Math.ceil(bookData.length / itemsPerPage);
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected + 1);
   };
 
   return (
@@ -110,6 +124,14 @@ function Books() {
             )}
           </div>
         </div>
+      </div>
+      <div className="flex items-center justify-center py-4">
+        <Pagination
+          count={1} // tổng số trang
+          shape="rounded"
+          page={pageCount}
+          onChange={handlePageChange}
+        />
       </div>
     </div>
   );

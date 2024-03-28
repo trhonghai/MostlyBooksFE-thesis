@@ -41,7 +41,6 @@ function BookDetails() {
         data
       );
       console.log(response);
-      // fetchCartItem();
     } catch (error) {
       console.error("Thêm sản phẩm thất bại:", error.message);
     }
@@ -50,7 +49,6 @@ function BookDetails() {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
-  // Hàm giảm số lượng
   const decreaseQuantity = () => {
     if (quantity > 1) {
       setQuantity((prevQuantity) => prevQuantity - 1);
@@ -60,52 +58,6 @@ function BookDetails() {
   return (
     <section class="pt-2 justify-center bg-gray-100">
       <div class="container w-9/12 mx-auto px-4 bg-white rounded-lg">
-        {/* <nav class="flex">
-          <ol role="list" class="flex items-center">
-            <li class="text-left">
-              <div class="-m-1">
-                <a
-                  href="#"
-                  class="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
-                >
-                  {" "}
-                  Home{" "}
-                </a>
-              </div>
-            </li>
-
-            <li class="text-left">
-              <div class="flex items-center">
-                <span class="mx-2 text-gray-400">/</span>
-                <div class="-m-1">
-                  <a
-                    href="#"
-                    class="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
-                  >
-                    {" "}
-                    Products{" "}
-                  </a>
-                </div>
-              </div>
-            </li>
-
-            <li class="text-left">
-              <div class="flex items-center">
-                <span class="mx-2 text-gray-400">/</span>
-                <div class="-m-1">
-                  <a
-                    href="#"
-                    class="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
-                    aria-current="page"
-                  >
-                    {" "}
-                    Coffee{" "}
-                  </a>
-                </div>
-              </div>
-            </li>
-          </ol>
-        </nav> */}
         <div class="lg:col-gap-12 xl:col-gap-16 mt-4 grid grid-cols-1 gap-12 lg:grid-cols-4 lg:gap-16">
           <div class="lg:col-span-2 lg:row-end-1 mt-4">
             <div class="lg:flex lg:items-start">

@@ -78,7 +78,7 @@ function CategoryNav() {
         {isOpen && (
           <div
             id="dropdown"
-            className="z-999 w-60 absolute top-10 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
+            className="z-50 w-60 absolute top-10 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
           >
             <ul
               className=" text-sm text-gray-700 dark:text-gray-200"

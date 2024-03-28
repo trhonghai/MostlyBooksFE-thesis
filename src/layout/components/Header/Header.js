@@ -23,6 +23,8 @@ import CategoryNav from "./CategoryNav";
 import images from "~/assets/images";
 import { useState } from "react";
 import { useLogout } from "~/hooks";
+import axios from "axios";
+import BookOnSearch from "~/components/BookOnSearch";
 
 export const userMenu = [
   {
@@ -60,6 +62,32 @@ function Header() {
   ];
   const { logout } = useLogout();
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearch = async () => {
+    try {
+      // setLoading(true);
+      const response = await axios.get(
+        `http://localhost:8080/books/search?query=${searchQuery}`
+      );
+      console.log(response.data);
+      setSearchResults(response.data);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+  const handleChange = (event) => {
+    setSearchQuery(event.target.value); // Cập nhật query tìm kiếm mỗi khi người dùng thay đổi
+    if (event.target.value.trim() !== "") {
+      // Kiểm tra xem có nội dung tìm kiếm không trống
+      handleSearch(); // Nếu có, gọi hàm tìm kiếm
+    } else {
+      setSearchResults([]); // Nếu không, xóa kết quả tìm kiếm
+    }
+  };
 
   const currentUser = localStorage.getItem("refresh_token");
 
@@ -68,6 +96,11 @@ function Header() {
   const handleLogout = async () => {
     await logout();
     navigate("/");
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    setSearchResults([]);
   };
 
   return (
@@ -82,23 +115,45 @@ function Header() {
             className="h-14 w-48 cursor-pointer object-cover"
           />
         </NavLink>
-        <div className="relative w-full hidden lg:inline-flex lg:w-[600px] h-10 text-base text-primeColor border-[2px] border-[#FFD16B] items-center gap-2 justify-between px-6 rounded-md">
-          <input
-            type="text"
-            placeholder="Tìm kiếm sản phẩm"
-            className="flex-1 h-full outline-none bg-transparent placeholder:text-gray-600"
-            // onChange={(e) => setSearchQuery(e.target.value)}
-            // value={searchQuery}
-          />
-          {/* {searchQuery ? ( */}
-          <IoCloseOutline
-            // onClick={() => setSearchQuery("")}
-            className="w-5 h-5 hover:text-red-500 duration-200 hover:cursor-pointer"
-          />
-          {/* ) : ( */}
-          <FaSearch className="w-5 h-5 hover:cursor-pointer " color="#FFD16B" />
-          {/* )} */}
+        <div className="relative">
+          <div className="w-full hidden lg:inline-flex lg:w-[600px] h-10 text-base text-primeColor border-[2px] border-[#FFD16B] items-center gap-2 justify-between px-6 rounded-md">
+            <input
+              type="text"
+              placeholder="Tìm kiếm sản phẩm"
+              className="flex-1 h-full outline-none bg-transparent placeholder:text-gray-600"
+              onChange={handleChange}
+              value={searchQuery}
+            />
+            {searchResults.length > 0 && (
+              <IoCloseOutline
+                onClick={handleClearSearch}
+                className="w-5 h-5 hover:text-red-500 duration-200 hover:cursor-pointer"
+              />
+            )}
+            <FaSearch
+              onClick={handleSearch}
+              className="w-5 h-5 hover:cursor-pointer "
+              color="#FFD16B"
+            />
+            {searchResults.length > 0 && (
+              <div className="absolute flex flex-wrap top-full z-10 bg-white border-[2px] border-[#FFD16B] w-full left-0 mt-2 p-2 rounded-md overflow-auto max-h-80">
+                <ul className="grid grid-cols-2 gap-4">
+                  {searchResults.map((result) => (
+                    <Link to={`/books/${result.id}`}>
+                      <li
+                        key={result.id}
+                        className="w-full p-2 cursor-pointer transition duration-300 ease-in-out transform hover:shadow-lg hover:-translate-y-1 hover:scale-105"
+                      >
+                        <BookOnSearch data={result} />
+                      </li>
+                    </Link>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
+
         <div className="hidden md:inline-flex  gap-2">
           {currentUser ? (
             <>
