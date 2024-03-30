@@ -15,8 +15,9 @@ function useRegister() {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       console.log(response.data);
+      return Promise.resolve(response.data);
     } catch (error) {
-      console.error("Đăng ký thất bại:", error.message);
+      return Promise.reject(error);
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import images from "~/assets/images";
 import config from "~/config";
@@ -8,6 +9,7 @@ function Login() {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
   const { login } = useLogin();
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -16,15 +18,16 @@ function Login() {
 
     setData((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       await login(data);
-      alert("Đăng nhập thành công");
+      toast.success("Đăng nhập thành công");
       navigate(config.routes.home);
     } catch (error) {
-      console.log(error);
+      setError("Sai tài khoản hoặc mặt khẩu!");
     }
   };
   return (
@@ -69,6 +72,7 @@ function Login() {
                 required
               />
             </div>
+            {error && <div style={{ color: "red" }}>{error}</div>}
 
             <div className="text-right mt-2">
               <a

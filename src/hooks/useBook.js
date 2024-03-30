@@ -89,7 +89,18 @@ function useBook() {
     }
   };
 
-  return { getAllBook, createBook, getAbook, updateBook, filterBooks };
+  const getDiscountByBookId = async (bookId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/discount/${bookId}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error getting discount:", error);
+    }
+  };
+
+  return { getAllBook, createBook, getAbook, updateBook, filterBooks,getDiscountByBookId };
 }
 
 export default useBook;

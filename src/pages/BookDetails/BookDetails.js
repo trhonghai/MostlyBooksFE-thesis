@@ -9,11 +9,14 @@ import RelateProduct from "../Home/RelateProduct";
 import DesCriptionBook from "./DescriptionBook/DescriptionBook";
 import FlashSale from "./FlashSale";
 import Reviews from "./Reviews";
+import { useBook } from "~/hooks";
 
 function BookDetails() {
   const { id } = useParams();
   const [book, setBook] = useState();
+  const [discounts, setDiscounts] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const { getDiscountByBookId } = useBook();
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -23,6 +26,14 @@ function BookDetails() {
     };
     fetchBook();
   }, []);
+
+  useEffect(() => {
+    const fetchFlashSale = async () => {
+      const result = await getDiscountByBookId(id);
+      setDiscounts(result);
+    };
+    fetchFlashSale();
+  }, [id, getDiscountByBookId]);
 
   const AddtoCart = async (id, price, quantity) => {
     const cartId = localStorage.getItem("cartId");
@@ -110,11 +121,17 @@ function BookDetails() {
                 Thể loại:{" "}
                 <Link className="text-[#FBA31A]">{book?.category.name}</Link>
               </h2>
-              <div class="mt-2 w-24 h-8 bg-[#00CC66] ml-12 text-white rounded-lg flex items-center justify-center ">
-                Còn hàng
-              </div>
+              {book?.inventory === 0 ? (
+                <h2 class="mt-2 w-24 h-8 bg-[#ff3535] ml-12 text-white rounded-lg flex items-center justify-center ">
+                  Hết hàng
+                </h2>
+              ) : (
+                <div class="mt-2 w-24 h-8 bg-[#00CC66] ml-12 text-white rounded-lg flex items-center justify-center ">
+                  Còn hàng
+                </div>
+              )}
             </div>
-            <FlashSale />
+            {discounts?.length > 0 && <FlashSale discounts={discounts} />}
             <div class="mt-5 flex items-center">
               <div class="flex items-center">
                 <svg
@@ -207,15 +224,29 @@ function BookDetails() {
             <div className="mt-4 flex justify-items-start">
               <button
                 type="button"
-                onClick={() => AddtoCart(book.id, book.price, quantity)}
-                class="inline-flex items-center w-full justify-center rounded-md border-2 border-transparent bg-[#FBA31A] bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-[#faaf00]"
+                onClick={() => {
+                  if (book.inventory > 0) {
+                    AddtoCart(book.id, book.price, quantity);
+                  }
+                }}
+                disabled={book?.inventory === 0}
+                className={`inline-flex items-center w-full justify-center rounded-md border-2 border-transparent ${
+                  book?.inventory === 0
+                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                    : "bg-[#FBA31A] bg-none"
+                } px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-[#faaf00]`}
               >
                 <FontAwesomeIcon icon={faShoppingBag} className="mr-2" />
                 Thêm vào giỏ hàng
               </button>
               <button
                 type="button"
-                class=" ml-4 w-full inline-flex items-center justify-center rounded-md border-2 border-transparent bg-[#FBA31A] bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-[#faaf00]"
+                disabled={book?.inventory === 0}
+                className={`ml-4 w-full inline-flex items-center justify-center rounded-md border-2 border-transparent ${
+                  book?.inventory === 0
+                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                    : "bg-[#FBA31A] bg-none"
+                } px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-[#faaf00]`}
               >
                 Mua ngay
               </button>

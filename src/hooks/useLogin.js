@@ -16,7 +16,6 @@ function useLogin() {
         data
       );
       setLogin(response.data);
-
       console.log("Đăng nhập thành công:", response.data);
       const { access_token, refresh_token } = response.data;
       console.log(refresh_token);
@@ -25,8 +24,9 @@ function useLogin() {
       localStorage.setItem("cartId", response.data.cartId);
       localStorage.setItem("userId", response.data.userId);
       localStorage.setItem("roles", JSON.stringify(response.data.roles));
+      return Promise.resolve(response.data);
     } catch (error) {
-      console.error("Đăng nhập thất bại:", error.message);
+      return Promise.reject(error);
     } finally {
       setLoading(false);
     }

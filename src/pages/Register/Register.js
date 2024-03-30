@@ -1,4 +1,6 @@
+import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import images from "~/assets/images";
 import { useRegister } from "~/hooks";
@@ -31,6 +33,8 @@ function Register() {
     sex: "",
   });
 
+  const [isEmailTaken, setIsEmailTaken] = useState("");
+
   const { register } = useRegister();
 
   const handleChange = (e) => {
@@ -49,24 +53,53 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { password, cPassword } = data;
-    if (password !== cPassword) {
-      setError((prev) => ({ ...prev, cPassword: "Mật khẩu không khớp" }));
-      return;
-    } else {
-      setError((prev) => ({ ...prev, cPassword: "" }));
-    }
-    const dataToSend = {
-      ...data,
-      date_of_birth: data.dateOfBirth
-        ? new Date(data.dateOfBirth).toISOString()
-        : "", 
-    };
+
     try {
-      await register(dataToSend);
-      alert("Đăng ký thành công");
-      navigate("/login");
+      // Kiểm tra khả dụng của email trước khi tiếp tục
+      await checkEmailAvailability();
+      console.log(isEmailTaken);
+
+      // Kiểm tra nếu email đã tồn tại
+
+      // Kiểm tra mật khẩu và mật khẩu xác nhận có khớp nhau không
+      if (password !== cPassword) {
+        setError((prev) => ({ ...prev, cPassword: "Mật khẩu không khớp" }));
+        return;
+      } else {
+        setError((prev) => ({ ...prev, cPassword: "" }));
+      }
+
+      // Tạo dữ liệu để gửi đến hàm đăng ký
+      const dataToSend = {
+        ...data,
+        date_of_birth: data.dateOfBirth
+          ? new Date(data.dateOfBirth).toISOString()
+          : "",
+      };
+
+      if (isEmailTaken === "Duplicated") {
+        setError((prev) => ({ ...prev, email: "Email đã tồn tại" }));
+        toast.error("Email đã tồn tại");
+      } else {
+        await register(dataToSend);
+        toast.success("Đăng ký tài khoản thành công");
+        navigate("/login");
+      }
+      // Thực hiện đăng ký
     } catch (error) {
-      console.log(error);
+      console.log(error); // Xử lý lỗi nếu có
+    }
+  };
+
+  const checkEmailAvailability = async () => {
+    console.log(data.email);
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/users/check_email?email=${data.email}`
+      );
+      setIsEmailTaken(response.data);
+    } catch (error) {
+      console.error("Error checking email:", error);
     }
   };
 
@@ -122,11 +155,12 @@ function Register() {
                 value={data.email}
                 placeholder="Nhập vào email"
                 onChange={handleChange}
+                onBlur={checkEmailAvailability}
                 className="w-full h-10 px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                 required
               />
             </div>
-
+            {error.email && <div style={{ color: "red" }}>{error.email}</div>}
             <div>
               <label className="block mt-2 text-left text-gray-700">
                 Mật khẩu
@@ -159,6 +193,9 @@ function Register() {
                 required
               />
             </div>
+            {error.cPassword && (
+              <div style={{ color: "red" }}>{error.cPassword}</div>
+            )}
             <div>
               <label className="block mt-2 text-left text-gray-700">
                 Ngày sinh
@@ -231,7 +268,7 @@ function Register() {
               className="w-full block bg-gray-800 hover:bg-gray-400 focus:bg-blue-400 text-white font-semibold rounded-lg
                 px-4 py-3 mt-2"
             >
-              Log In
+              Đăng ký
             </button>
           </form>
         </div>

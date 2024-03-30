@@ -25,6 +25,7 @@ import { useState } from "react";
 import { useLogout } from "~/hooks";
 import axios from "axios";
 import BookOnSearch from "~/components/BookOnSearch";
+import toast from "react-hot-toast";
 
 export const userMenu = [
   {
@@ -95,7 +96,9 @@ function Header() {
 
   const handleLogout = async () => {
     await logout();
+
     navigate("/");
+    toast.success("Đăng xuất thành công");
   };
 
   const handleClearSearch = () => {
