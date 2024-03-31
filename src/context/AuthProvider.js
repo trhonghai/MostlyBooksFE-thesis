@@ -1,4 +1,5 @@
 // AuthContext.js
+import axios from "axios";
 import React, { createContext, useState } from "react";
 import { useEffect } from "react";
 
@@ -57,6 +58,22 @@ export const AuthProvider = ({ children }) => {
     }
   }, [userCurrent]);
 
+  const [totalCartItems, setTotalCartItems] = useState(0);
+
+  const getTotalCartItems = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/user-cart/get-total-cart?cart=${localStorage.getItem(
+          "cartId"
+        )}`
+      );
+      setTotalCartItems(response.data);
+      console.log("Total cart items updated:", response.data);
+    } catch (error) {
+      console.error("Error updating total cart items:", error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -67,6 +84,8 @@ export const AuthProvider = ({ children }) => {
         setLogin,
         isAdmin,
         cartId,
+        totalCartItems,
+        getTotalCartItems,
       }}
     >
       {children}

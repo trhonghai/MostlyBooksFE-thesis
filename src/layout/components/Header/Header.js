@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
 import { FaSearch } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
@@ -26,6 +26,7 @@ import { useLogout } from "~/hooks";
 import axios from "axios";
 import BookOnSearch from "~/components/BookOnSearch";
 import toast from "react-hot-toast";
+import AuthContext from "~/context/AuthProvider";
 
 export const userMenu = [
   {
@@ -65,6 +66,9 @@ function Header() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [totalCartItems, setTotalCartItems] = useState(0);
+  // const { totalCartItems } = useContext(AuthContext);
+  console.log(totalCartItems);
 
   const handleSearch = async () => {
     try {
@@ -104,6 +108,23 @@ function Header() {
   const handleClearSearch = () => {
     setSearchQuery("");
     setSearchResults([]);
+  };
+  useEffect(() => {
+    getTotalCartItem();
+  }, []);
+
+  const getTotalCartItem = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/user-cart/get-total-cart?cart=${localStorage.getItem(
+          "cartId"
+        )}`
+      );
+      setTotalCartItems(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
   };
 
   return (
@@ -243,7 +264,7 @@ function Header() {
 
           <NavLink
             to="/cartItem"
-            className="pl-8 pr-28 flex items-center text-gray-500 hover:text-[#FFD16B] transition-colors duration-300"
+            className="pl-8 pr-28 flex items-center text-gray-500 hover:text-[#FFD16B] transition-colors duration-300 relative"
           >
             <div className="grid">
               <FontAwesomeIcon
@@ -252,6 +273,11 @@ function Header() {
               />
               <span className="text-xs text-gray-500">Giỏ hàng</span>
             </div>
+            {totalCartItems > 0 && (
+              <span className="absolute -top-2 right-28 bg-red-500 text-white text-xs font-bold rounded-full px-1">
+                {totalCartItems}
+              </span>
+            )}
           </NavLink>
         </div>
         <HiMenuAlt2 className="inline-flex md:hidden cursor-pointer" />

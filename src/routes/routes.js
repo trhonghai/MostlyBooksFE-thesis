@@ -21,6 +21,8 @@ import ManageOrders from "~/pages/Admin/ManageOrders";
 import AdminOrderDetail from "~/pages/Admin/AdminOrderDetail";
 import Books from "~/pages/Books";
 import BooksLayout from "~/layout/BooksLayout";
+import ManagePublisher from "~/pages/Admin/ManagePublisher";
+import ManageAuthours from "~/pages/Admin/ManageAuthours";
 
 const routes = [
   { path: config.routes.home, component: Home, layout: DefaultLayout },
@@ -103,6 +105,19 @@ const routes = [
     layout: AdminLayout,
     onlyAdmin: true,
   },
+  {
+    path: config.routes.adminPublishers,
+    component: ManagePublisher,
+    layout: AdminLayout,
+    onlyAdmin: true,
+  },
+  {
+    path: config.routes.adminAuthors,
+    component: ManageAuthours,
+    layout: AdminLayout,
+    onlyAdmin: true,
+  },
+
   {
     path: config.routes.adminBooks,
     component: ManageProducts,

@@ -10,7 +10,6 @@ import { formatPrice } from "~/utils/formatPrice";
 function CartItem() {
   const [cartItem, setCartItem] = useState([]);
   const [selectAllItems, setSelectAllItems] = useState(false);
- 
 
   const cartId = localStorage.getItem("cartId");
 
@@ -199,10 +198,7 @@ function CartItem() {
                   {formatPrice(calculateSubtotal())}
                 </span>
               </div>
-              <Link
-                to="/checkout"
-               
-              >
+              <Link to="/checkout">
                 <button class="bg-[#FFD16B] text-white py-2 px-4 rounded-lg mt-4 w-full">
                   Thanh toán
                 </button>

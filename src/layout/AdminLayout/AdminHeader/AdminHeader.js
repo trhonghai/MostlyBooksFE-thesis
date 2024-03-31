@@ -1,10 +1,30 @@
+import {
+  faArrowRightFromBracket,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Tippy from "@tippyjs/react/headless";
 import React, { useState } from "react";
+import { useContext } from "react";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import AuthContext from "~/context/AuthProvider";
+import { useLogout } from "~/hooks";
 
 function AdminHeader({ hanldeSidebar }) {
   const [dropDownOpen, setDropDownOpen] = useState(false); // Sử dụng useState để quản lý trạng thái của dropdown menu
+  const { userCurrent } = useContext(AuthContext);
+  const { logout } = useLogout();
+  const navigate = useNavigate();
 
   const handleDropDownToggle = () => {
     setDropDownOpen(!dropDownOpen); // Toggle trạng thái của dropdown menu
+  };
+  const handleLogout = async () => {
+    await logout();
+
+    navigate("/adminLogin");
+    toast.success("Đăng xuất thành công");
   };
 
   return (
@@ -58,22 +78,80 @@ function AdminHeader({ hanldeSidebar }) {
           </div>
         </div>
         {/* right navbar */}
-        <div className="flex items-center relative">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24"
-            viewBox="0 0 24 24"
-            width="24"
-            className="fill-current mr-3 hover:text-blue-500"
+
+        <div className="hidden md:inline-flex  gap-2">
+          <Tippy
+            interactive
+            // visible
+            // disabled={false}
+            placement="bottom-end"
+            render={(attrs) => (
+              <div
+                className="w-60 h-auto bg-white border rounded-lg  z-999"
+                tabIndex="-1"
+                {...attrs}
+              >
+                <ul className=" w-full text-sm text-gray-700 dark:text-gray-200">
+                  <li className=" flex hover:scale-105 transition duration-400 ease-in-out pl-4 block text-left w-full font-medium py-2 text-gray-600 hover:bg-[#FFD16B] hover:rounded-lg dark:hover:bg-gray-600 hover:text-white">
+                    <div className=" flex w-10 h-10 rounded-full overflow-hidden">
+                      <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwr8JOGWLBh31dNoWlGXqynbrZRyFTTvV8wg&usqp=CAU"
+                        alt="Customer Avatar"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+
+                    <div className="grid">
+                      <span className="ml-2 text-gray-700 dark:text-gray-200">
+                        Trương Hồng Hải
+                      </span>
+                      <span className="ml-2 text-xs text-gray-500 dark:text-gray-200">
+                        Thành viên
+                      </span>
+                    </div>
+                  </li>
+                  <li className="hover:scale-105 transition duration-400 ease-in-out pl-4 block text-left w-full font-medium py-2 text-gray-600 hover:bg-[#FFD16B] hover:rounded-lg dark:hover:bg-gray-600 hover:text-white">
+                    <Link className="">
+                      <FontAwesomeIcon icon={faUser} size="xl" />
+                      <span className="ml-2">Thông tin tài khoản</span>
+                    </Link>
+                  </li>
+
+                  <li>
+                    {" "}
+                    <Link
+                      // to="/logout"
+                      onClick={handleLogout}
+                      className=" pl-4 block text-left w-full font-medium py-2 text-gray-500 hover:bg-[#FFD16B] hover:rounded-lg dark:hover:bg-gray-600 hover:text-white"
+                    >
+                      <FontAwesomeIcon
+                        icon={faArrowRightFromBracket}
+                        size="xl"
+                      />
+                      <span className="ml-2">Đăng xuất</span>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
           >
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z" />
-          </svg>
-          <img
-            src="https://a7sas.net/wp-content/uploads/2019/07/4060.jpeg"
-            className="w-12 h-12 rounded-full shadow-lg"
-            onClick={handleDropDownToggle}
-          />
+            <div className="flex items-center relative">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24"
+                viewBox="0 0 24 24"
+                width="24"
+                className="fill-current mr-3 hover:text-blue-500"
+              >
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z" />
+              </svg>
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwr8JOGWLBh31dNoWlGXqynbrZRyFTTvV8wg&usqp=CAU"
+                className="w-12 h-12 rounded-full shadow-lg"
+              />
+            </div>
+          </Tippy>
         </div>
         {/* dropdown menu */}
         <div

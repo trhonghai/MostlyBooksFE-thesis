@@ -1,7 +1,7 @@
 import { faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import DescriptionText from "./DescriptionText/DescriptionText";
@@ -10,6 +10,8 @@ import DesCriptionBook from "./DescriptionBook/DescriptionBook";
 import FlashSale from "./FlashSale";
 import Reviews from "./Reviews";
 import { useBook } from "~/hooks";
+import toast from "react-hot-toast";
+import AuthContext from "~/context/AuthProvider";
 
 function BookDetails() {
   const { id } = useParams();
@@ -17,7 +19,7 @@ function BookDetails() {
   const [discounts, setDiscounts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const { getDiscountByBookId } = useBook();
-
+  const { getTotalCartItems, totalCartItems } = useContext(AuthContext);
   useEffect(() => {
     const fetchBook = async () => {
       const response = await axios.get(`http://localhost:8080/books/${id}`);
@@ -25,7 +27,7 @@ function BookDetails() {
       setBook(response.data);
     };
     fetchBook();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     const fetchFlashSale = async () => {
@@ -33,11 +35,13 @@ function BookDetails() {
       setDiscounts(result);
     };
     fetchFlashSale();
-  }, [id, getDiscountByBookId]);
+  }, []);
 
+  useEffect(() => {
+    getTotalCartItems();
+  }, [totalCartItems]);
   const AddtoCart = async (id, price, quantity) => {
     const cartId = localStorage.getItem("cartId");
-
     try {
       const data = {
         cartId: cartId,
@@ -51,9 +55,10 @@ function BookDetails() {
         "http://localhost:8080/user-cart/add-to-cart",
         data
       );
+      toast.success("Thêm sản phẩm thành công");
       console.log(response);
     } catch (error) {
-      console.error("Thêm sản phẩm thất bại:", error.message);
+      toast.error("Thêm sản phẩm thất bại");
     }
   };
   const increaseQuantity = () => {
