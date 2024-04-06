@@ -1,8 +1,34 @@
 import { Rating } from "@mui/material";
+import axios from "axios";
+import { useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { formatPrice } from "~/utils/formatPrice";
 
 function Book({ data }) {
+  const [discount, setDiscount] = useState([]);
+  console.log(data);
+
+  useEffect(() => {
+    const getDiscountByBook = async (bookId) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/discount/${bookId}`
+        );
+        console.log(response.data);
+        setDiscount(response.data);
+      } catch (error) {
+        console.error("Error getting discount:", error);
+      }
+    };
+    getDiscountByBook(data.id);
+  }, []);
+  const maxLength = 22; // Độ dài tối đa cho tên sách
+  let truncatedName =
+    data.name.length > maxLength
+      ? data.name.substring(0, maxLength - 3) + "..."
+      : data.name;
+
   return (
     <Link to={`/books/${data.id}`}>
       <div key={data.id} className="relative w-full p-4  h-full">
@@ -18,26 +44,32 @@ function Book({ data }) {
           <div className="flex flex-col  mt-2 space-y-1">
             <p className="text-xs text-left font-sans sm:text-sm md:text-base">
               <a href="#" title="">
-                {data.name}
+                {truncatedName}
                 <span className="absolute inset-0" aria-hidden="true"></span>
               </a>
             </p>
 
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-1 px-2 py-1">
               <p className="text-xs font-sans sm:text-sm md:text-base">
                 {formatPrice(data.price)}
               </p>
-              <div className="bg-red-500 text-white px-2 py-1 rounded-lg">
-                -20%
-              </div>
+              {discount.length > 0 && (
+                <div className="bg-red-400 text-white px-1  rounded-lg">
+                  {discount.map((item) => {
+                    return <span>-{item.discountPercentage}%</span>;
+                  })}
+                </div>
+              )}
             </div>
 
-            <del className="text-xs font-bold text-gray-500">129.000đ</del>
+            <del className="text-xs text-left font-bold text-gray-500">
+              129.000đ
+            </del>
 
             <div className="flex items-center space-x-1">
               <Rating
                 name="simple-controlled"
-                value="3"
+                value={data.rating}
                 size="small"
                 // onChange={handleRatingChange}
               />

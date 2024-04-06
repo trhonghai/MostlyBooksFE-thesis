@@ -289,12 +289,21 @@ function OrderDetail() {
                         Đã hoàn tiền
                       </button>
                     ) : (
-                      <button
-                        disabled
-                        className="transition duration-300 ease-in-out hover:bg-[#FBA31A] dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
-                      >
-                        Đã giao hàng
-                      </button>
+                      <div>
+                        <button
+                          disabled
+                          className="transition duration-300 ease-in-out hover:bg-[#FBA31A] dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
+                        >
+                          Đang chờ giao hàng
+                        </button>
+
+                        <button
+                          // onClick={() => RefundOrderHandler(order.captureId)}
+                          className="transition mt-2 12 duration-300 ease-in-out mb-4 hover:bg-red-500 hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-red-600 text-base font-medium leading-4 text-white"
+                        >
+                          Hủy đơn hàng / Hoàn tiền
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>

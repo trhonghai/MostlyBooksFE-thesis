@@ -61,20 +61,6 @@ const Banner = () => {
         ))}
       </Slider>
     </div>
-    // <div class="relative flex items-center justify-center h-screen mb-12 overflow-hidden">
-    //   <video
-    //     autoplay
-    //     loop
-    //     muted
-    //     class="absolute z-10 w-auto min-w-full min-h-full max-w-none"
-    //   >
-    //     <source
-    //       src="https://mostly-books.co.uk/wp-content/uploads/2023/04/mb_loop_fade.m4v-Original.mp4"
-    //       type="video/mp4"
-    //     />
-    //     Your browser does not support the video tag.
-    //   </video>
-    // </div>
   );
 };
 

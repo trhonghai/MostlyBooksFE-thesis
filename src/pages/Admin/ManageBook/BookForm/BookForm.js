@@ -126,10 +126,18 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
         ...prevState,
         publisher: { id: selectedPublisher.id },
       }));
+      setDataUpdate((prevState) => ({
+        ...prevState,
+        publisher: { id: selectedPublisher.id },
+      }));
     }
     const selectedCategory = categories.find((cat) => cat.name === value);
     if (selectedCategory) {
       setBookData((prevState) => ({
+        ...prevState,
+        category: { id: selectedCategory.id },
+      }));
+      setDataUpdate((prevState) => ({
         ...prevState,
         category: { id: selectedCategory.id },
       }));
@@ -138,6 +146,10 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
     const selectedAuthour = authours.find((authour) => authour.name === value);
     if (selectedAuthour) {
       setBookData((prevState) => ({
+        ...prevState,
+        authour: { id: selectedAuthour.id },
+      }));
+      setDataUpdate((prevState) => ({
         ...prevState,
         authour: { id: selectedAuthour.id },
       }));
@@ -168,7 +180,6 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
     if (mode === "add") {
       console.log(dataRequest, file);
       await createBook(dataRequest, file);
-
       toast.success("Thêm sách thành công!");
     } else {
       if (file) {
@@ -176,6 +187,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
         await updateBook(dataUpdate, file, bookCurrent.id);
         toast.success("Cập nhật sách thành công!");
       } else {
+        console.log(dataUpdate);
         // Nếu không, chỉ cập nhật thông tin sách
         await updateBook(dataUpdate, null, bookCurrent.id);
         toast.success("Cập nhật sách thành công!");

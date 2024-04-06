@@ -10,7 +10,7 @@ function Home() {
     <div className="pt-4 bg-gray-100 ">
       <HomeSlide />
 
-      <div className="flex items-center">
+      <div className="flex pb-4 items-center">
         <BestSellerProduct />
       </div>
     </div>

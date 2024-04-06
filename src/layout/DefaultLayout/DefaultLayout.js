@@ -6,7 +6,7 @@ function DefaultLayout({ children }) {
   return (
     <div className="flex-col min-h-screen bg-white">
       <Header />
-      <div className="flex-1 justify-center align-center items-center">
+      <div className="flex-1  justify-center align-center items-center">
         {children}
       </div>
       <Footer />

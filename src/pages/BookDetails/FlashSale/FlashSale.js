@@ -1,6 +1,6 @@
 import { faClockFour } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import images from "~/assets/images";
 import { useCountdown } from "~/hooks/useCountDown";
 
@@ -9,6 +9,24 @@ function FlashSale({ discounts }) {
   const endDate = discounts?.map((discount) => discount.endDate);
   const [timeLeftDays, timeLeftHours, timeLeftMinutes, timeLeftSeconds] =
     useCountdown(startDate, endDate);
+  const [saleEnded, setSaleEnded] = useState(false);
+
+  useEffect(() => {
+    if (new Date() > new Date(endDate)) {
+      setSaleEnded(true);
+    }
+  }, [endDate]);
+
+  if (saleEnded) {
+    return (
+      <div className="mt-2 w-auto bg-[#FDE1DF] flex items-center justiy-center rounded-md">
+        <img src={images.FlashSale} alt="book" />
+        <div className="text-xl text-gray-500 ml-4">
+          Thời gian ưu đãi đã kết thúc.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-2 w-auto bg-[#FDE1DF] flex rounded-md">

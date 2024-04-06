@@ -12,6 +12,8 @@ import Reviews from "./Reviews";
 import { useBook } from "~/hooks";
 import toast from "react-hot-toast";
 import AuthContext from "~/context/AuthProvider";
+import { Rating } from "@mui/material";
+import { formatPrice } from "~/utils/formatPrice";
 
 function BookDetails() {
   const { id } = useParams();
@@ -19,12 +21,14 @@ function BookDetails() {
   const [discounts, setDiscounts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const { getDiscountByBookId } = useBook();
+  const [rating, setRating] = useState(0);
   const { getTotalCartItems, totalCartItems } = useContext(AuthContext);
   useEffect(() => {
     const fetchBook = async () => {
       const response = await axios.get(`http://localhost:8080/books/${id}`);
       console.log(response.data);
       setBook(response.data);
+      setRating(response.data.rating);
     };
     fetchBook();
   }, [id]);
@@ -138,72 +142,16 @@ function BookDetails() {
             </div>
             {discounts?.length > 0 && <FlashSale discounts={discounts} />}
             <div class="mt-5 flex items-center">
-              <div class="flex items-center">
-                <svg
-                  class="block h-4 w-4 align-middle text-yellow-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                    class=""
-                  ></path>
-                </svg>
-                <svg
-                  class="block h-4 w-4 align-middle text-yellow-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                    class=""
-                  ></path>
-                </svg>
-                <svg
-                  class="block h-4 w-4 align-middle text-yellow-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                    class=""
-                  ></path>
-                </svg>
-                <svg
-                  class="block h-4 w-4 align-middle text-yellow-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                    class=""
-                  ></path>
-                </svg>
-                <svg
-                  class="block h-4 w-4 align-middle text-yellow-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                    class=""
-                  ></path>
-                </svg>
-              </div>
+              <Rating name="simple-controlled" value={rating} size="small" />
+
               <p class="ml-2 text-sm font-medium text-gray-500">
-                (12 đánh giá)
+                ({book?.reviewCount} đánh giá)
               </p>
             </div>
 
             <div class="mt-4 flex flex-col items-center justify-between b text-[#F7941D] space-y-4  sm:flex-row sm:space-y-0">
               <div class="flex items-end">
-                <h1 class="text-3xl font-bold">{book?.price}</h1>
-                <span class="text-base">đ</span>
+                <h1 class="text-3xl font-bold">{formatPrice(book?.price)}</h1>
               </div>
             </div>
             <div class=" flex mt-4 justify-start ">
@@ -260,7 +208,7 @@ function BookDetails() {
         </div>
       </div>
       <div class="container w-9/12 mx-auto px-4 bg-white rounded-lg">
-        <RelateProduct />
+        <RelateProduct bookId={book?.id} />
       </div>
       <div className="container w-9/12 mx-auto px-4 bg-white rounded-lg">
         <DesCriptionBook data={book} />

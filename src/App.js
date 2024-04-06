@@ -2,18 +2,21 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Navigate } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import routes from "./routes";
 import config from "./config";
 import Wrapper from "./Wrapper";
 import { useContext } from "react";
 import AuthContext from "./context/AuthProvider";
+import { Helmet } from "react-helmet";
+import images from "./assets/images";
 
 function App() {
   const { userCurrent, userRole, isAdmin } = useContext(AuthContext);
   console.log(userCurrent);
   console.log(userRole);
   console.log(isAdmin);
+  
   const renderRoutes = (routes) => {
     return routes.map((route, index) => {
       const Layout = route.layout || React.Fragment;
@@ -73,6 +76,11 @@ function App() {
 
   return (
     <Router>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>MostlyBooks Shop</title>
+        <link rel="icon" href="/assets/images/Mostly.png" />
+      </Helmet>
       <div className="App">
         <Toaster position="top right" gutter={10} />
         <Wrapper>{renderRoutes(routes)}</Wrapper>

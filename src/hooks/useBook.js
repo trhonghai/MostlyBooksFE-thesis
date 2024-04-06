@@ -41,6 +41,7 @@ function useBook() {
       fromData.append("bookUpdate", JSON.stringify(updateData));
       fromData.append("image", file);
       console.log(updateData, file, id);
+      console.log(updateData, file, id);
       const response = await axios.put(
         `http://localhost:8080/books/update/${id}`,
         fromData,
@@ -100,7 +101,14 @@ function useBook() {
     }
   };
 
-  return { getAllBook, createBook, getAbook, updateBook, filterBooks,getDiscountByBookId };
+  return {
+    getAllBook,
+    createBook,
+    getAbook,
+    updateBook,
+    filterBooks,
+    getDiscountByBookId,
+  };
 }
 
 export default useBook;

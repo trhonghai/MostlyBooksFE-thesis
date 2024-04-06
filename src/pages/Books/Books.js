@@ -1,6 +1,6 @@
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion, AccordionActions, Pagination } from "@mui/material";
+import { Pagination } from "@mui/material"; // Thay đổi từ @mui/lab sang @mui/material
 import { useContext, useState } from "react";
 import { useEffect } from "react";
 import Book from "~/components/Book";
@@ -13,13 +13,11 @@ function Books() {
 
   const [books, setBooks] = useState([]);
   const { getAllBook, filterBooks } = useBook();
-  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchBooks = async () => {
       let data;
       if (Object.keys(filter).length > 0) {
-        // Nếu đã áp dụng bộ lọc
         const minPrice = filter.minPrice !== undefined ? filter.minPrice : null;
         const maxPrice = filter.maxPrice !== undefined ? filter.maxPrice : null;
 
@@ -30,33 +28,35 @@ function Books() {
           filter.publisherName || null
         );
       } else {
-        // Nếu chưa áp dụng bộ lọc
         data = await getAllBook();
       }
       setBooks(data);
-      setTotalPages(data.totalPages);
     };
     fetchBooks();
   }, [filter]);
 
   const clearFilter = (key) => {
     if (key === "minPrice") {
-      updateFilter({ minPrice: undefined, maxPrice: undefined }); // Xóa cả minPrice và maxPrice
+      updateFilter({ minPrice: undefined, maxPrice: undefined });
     } else if (key === "maxPrice") {
-      updateFilter({ maxPrice: undefined }); // Xóa maxPrice
+      updateFilter({ maxPrice: undefined });
     } else {
-      updateFilter({ [key]: undefined }); // Xóa bộ lọc theo key được chỉ định
+      updateFilter({ [key]: undefined });
     }
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const offset = (currentPage - 1) * itemsPerPage;
-  const pageCount = Math.ceil(bookData.length / itemsPerPage);
+  const [page, setPage] = useState(1);
+  const PER_PAGE = 12;
 
-  const handlePageChange = ({ selected }) => {
-    setCurrentPage(selected + 1);
+  const count = Math.ceil(books.length / PER_PAGE);
+
+  const handleChange = (event, value) => {
+    setPage(value);
   };
+
+  const startIndex = (page - 1) * PER_PAGE;
+  const endIndex = startIndex + PER_PAGE;
+  const currentBooks = books.slice(startIndex, endIndex);
 
   return (
     <div className="bg-white w-full shadow-lg overflow-hidden sm:rounded-lg">
@@ -113,12 +113,12 @@ function Books() {
             </div>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-            {books.length > 0 ? (
-              books.map((book) => <Book data={book} key={book.id} />)
+            {currentBooks.length > 0 ? (
+              currentBooks.map((book) => <Book data={book} key={book.id} />)
             ) : (
               <div className="flex items-center justify-center h-96 w">
                 <span className="text-gray-500 text-lg font-semibold">
-                  Khồn tìm thấy sản phẩm
+                  Không tìm thấy sản phẩm
                 </span>
               </div>
             )}
@@ -127,10 +127,12 @@ function Books() {
       </div>
       <div className="flex items-center justify-center py-4">
         <Pagination
-          count={1} // tổng số trang
+          count={count}
+          page={page}
+          onChange={handleChange}
+          size="large"
+          variant="outlined"
           shape="rounded"
-          page={pageCount}
-          onChange={handlePageChange}
         />
       </div>
     </div>
