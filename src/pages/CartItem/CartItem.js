@@ -15,7 +15,7 @@ function CartItem() {
 
   useEffect(() => {
     fetchCartItem();
-  }, []);
+  }, [cartItem]);
 
   const fetchCartItem = async () => {
     try {
@@ -100,15 +100,15 @@ function CartItem() {
   };
 
   return (
-    <div class="bg-gray-100 min-h-screen py-8">
-      <div class="container md:w-4/5 mx-auto px-4">
-        <div class="flex flex-col md:flex-row gap-4 ">
-          <div class="md:w-2/3">
-            <div class="bg-white rounded-lg shadow-md p-6 mb-4">
-              <table class="w-full">
+    <div className="bg-gray-100 min-h-screen py-8">
+      <div className="container md:w-4/5 mx-auto px-4">
+        <div className="flex flex-col md:flex-row gap-4 ">
+          <div className="md:w-2/3">
+            <div className="bg-white rounded-lg shadow-md p-6 mb-4">
+              <table className="w-full">
                 <thead>
                   <tr className=" border-1 border-b pb-4">
-                    <th class="text-left font-semibold">
+                    <th className="text-left font-semibold">
                       <input
                         type="checkbox"
                         id="select-all-checkbox"
@@ -117,13 +117,13 @@ function CartItem() {
                       />
                     </th>
 
-                    <th class=" ml-2 text-left font-semibold">
+                    <th className=" ml-2 text-left font-semibold">
                       {" "}
                       Chọn tất cả sản phẩm
                     </th>
-                    <th class="text-left font-semibold">Price</th>
-                    <th class="text-center font-semibold">Quantity</th>
-                    <th class="text-center font-semibold">Xóa</th>
+                    <th className="text-left font-semibold">Price</th>
+                    <th className="text-center font-semibold">Quantity</th>
+                    <th className="text-center font-semibold">Xóa</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -137,37 +137,39 @@ function CartItem() {
                           onChange={() => handleSelectChange(item.id)}
                         />
                       </td>
-                      <td class="py-4">
-                        <div class="flex items-center">
+                      <td className="py-4">
+                        <div className="flex items-center">
                           <img
-                            class="h-32 w-32 mr-4"
+                            className="h-32 w-32 mr-4"
                             src={item.book.img}
                             alt="Product image"
                           />
-                          <span class="font-semibold">{item.book.name}</span>
+                          <span className="font-semibold">
+                            {item.book.name}
+                          </span>
                         </div>
                       </td>
-                      <td class="text-left">{formatPrice(item.book.price)}</td>
-                      <td class="py-4">
-                        <div class="flex ml-10 h-8 items-stretch text-gray-600">
+                      <td className="text-left">{formatPrice(item.price)}</td>
+                      <td className="py-4">
+                        <div className="flex ml-10 h-8 items-stretch text-gray-600">
                           <button
                             onClick={() => updateQuantity(item.id, "decrease")}
-                            class="flex items-center justify-center rounded-l-md bg-gray-200 px-4 transition hover:bg-black hover:text-white"
+                            className="flex items-center justify-center rounded-l-md bg-gray-200 px-4 transition hover:bg-black hover:text-white"
                           >
                             -
                           </button>
-                          <div class="flex  items-center justify-center bg-gray-100 px-4 text-xs uppercase transition">
+                          <div className="flex  items-center justify-center bg-gray-100 px-4 text-xs uppercase transition">
                             {item.quantity}
                           </div>
                           <button
                             onClick={() => updateQuantity(item.id, "increase")}
-                            class="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-black hover:text-white"
+                            className="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-black hover:text-white"
                           >
                             +
                           </button>
                         </div>
                       </td>
-                      <td class="">
+                      <td className="">
                         <button
                           className="cusor-pointer"
                           onClick={() => deleteCartItem(item.id)}
@@ -181,25 +183,25 @@ function CartItem() {
               </table>
             </div>
           </div>
-          <div class="md:w-1/3">
-            <div class="bg-white rounded-lg shadow-md p-6">
-              <div class="flex justify-between mb-2">
+          <div className="md:w-1/3">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="flex justify-between mb-2">
                 <span>Thành tiền</span>
                 <span>{formatPrice(calculateSubtotal())}</span>
               </div>
 
-              {/* <div class="flex justify-between mb-2">
+              {/* <div className="flex justify-between mb-2">
                 <span>Vận chuyển</span>
                 <span>{formatPrice(5000)}</span>
               </div> */}
-              <div class="flex justify-between mb-2 border-1 border-b pb-2">
-                <span class="font-semibold text-xl">Tổng số tiền</span>
-                <span class="font-semibold">
+              <div className="flex justify-between mb-2 border-1 border-b pb-2">
+                <span className="font-semibold text-xl">Tổng số tiền</span>
+                <span className="font-semibold">
                   {formatPrice(calculateSubtotal())}
                 </span>
               </div>
               <Link to="/checkout">
-                <button class="bg-[#FFD16B] text-white py-2 px-4 rounded-lg mt-4 w-full">
+                <button className="bg-[#FFD16B] text-white py-2 px-4 rounded-lg mt-4 w-full">
                   Thanh toán
                 </button>
               </Link>

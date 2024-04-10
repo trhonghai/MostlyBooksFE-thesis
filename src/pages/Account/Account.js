@@ -83,18 +83,17 @@ function Account() {
   };
 
   return (
-    <div class="bg-white max-w-4xl shadow overflow-hidden sm:rounded-lg">
-      
-      <div class="px-4 py-5 sm:px-6">
-        <h3 class="text-lg leading-6 font-medium text-gray-900">
+    <div className="bg-white max-w-4xl shadow overflow-hidden sm:rounded-lg">
+      <div className="px-4 py-5 sm:px-6">
+        <h3 className="text-lg leading-6 font-medium text-gray-900">
           THÔNG TIN TÀI KHOẢN
         </h3>
       </div>
-      <div class="border-t border-gray-200">
+      <div className="border-t border-gray-200">
         <form onSubmit={handleSubmit}>
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Họ</dt>
-            <div class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">Họ</dt>
+            <div className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <input
                 type="text"
                 name="firstName"
@@ -105,9 +104,9 @@ function Account() {
               />
             </div>
           </div>
-          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Tên</dt>
-            <div class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">Tên</dt>
+            <div className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <input
                 type="text"
                 name="lastName"
@@ -118,9 +117,9 @@ function Account() {
               />
             </div>
           </div>
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Số điện thoại</dt>
-            <div class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">Số điện thoại</dt>
+            <div className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <input
                 type="text"
                 name="phone"
@@ -130,9 +129,9 @@ function Account() {
               />
             </div>
           </div>
-          <div class=" px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Email</dt>
-            <div class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <div className=" px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">Email</dt>
+            <div className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <input
                 type="text"
                 name="email"
@@ -142,9 +141,9 @@ function Account() {
               />
             </div>
           </div>
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Giới tính</dt>
-            <div class="flex items-center mt-1 text-sm text-gray-900 sm:mt-0 text-left">
+          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">Giới tính</dt>
+            <div className="flex items-center mt-1 text-sm text-gray-900 sm:mt-0 text-left">
               <input
                 spellCheck={false}
                 type="radio"
@@ -153,9 +152,9 @@ function Account() {
                 value={Sex.male}
                 checked={customerData.sex == Sex.male}
                 onChange={handleChange}
-                class="items-center mr-1 form-radio text-blue-500 h-4 w-4"
+                className="items-center mr-1 form-radio text-blue-500 h-4 w-4"
               />
-              <label for="gender_male" class=" mr-8 text-sm text-gray-700">
+              <label for="gender_male" className=" mr-8 text-sm text-gray-700">
                 Nam
               </label>
 
@@ -167,16 +166,16 @@ function Account() {
                 value={Sex.female}
                 checked={customerData.sex == Sex.female}
                 onChange={handleChange}
-                class=" mr-1 form-radio text-pink-500 h-4 w-4"
+                className=" mr-1 form-radio text-pink-500 h-4 w-4"
               />
-              <label for="gender_female" class="text-sm text-gray-700">
+              <label for="gender_female" className="text-sm text-gray-700">
                 Nữ
               </label>
             </div>
           </div>
-          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Ngày sinh</dt>
-            <div class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">Ngày sinh</dt>
+            <div className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <input
                 type="date"
                 value={customerData.dateOfBirth}
@@ -187,11 +186,11 @@ function Account() {
               />
             </div>
           </div>
-          <div class=" flex justify-center bg-gray-50 px-4 py-5 sm:grid  sm:gap-4 sm:px-6">
-            <div class="flex items-center justify-center">
+          <div className=" flex justify-center bg-gray-50 px-4 py-5 sm:grid  sm:gap-4 sm:px-6">
+            <div className="flex items-center justify-center">
               <button
                 type="submit"
-                class="bg-[#FFD16B] hover:bg-[#] text-white font-bold py-2 px-4 rounded"
+                className="bg-[#FFD16B] hover:bg-[#] text-white font-bold py-2 px-4 rounded"
               >
                 Lưu thay đổi
               </button>

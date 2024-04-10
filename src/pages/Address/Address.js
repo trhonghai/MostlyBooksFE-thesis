@@ -110,41 +110,6 @@ function Address() {
       [name]: value,
     }));
   };
-  // const handleChange = async (e) => {
-  //   const { name, value, checked, type } = e.target;
-  //   let newValue = value;
-
-  //   if (type === "checkbox") {
-  //     newValue = checked;
-  //   } else if (name === "sex") {
-  //     newValue = Number(value);
-  //   }
-
-  //   setAddressData((prevState) => ({
-  //     ...prevState,
-  //     [name]: newValue,
-  //   }));
-
-  //   if (name === "city") {
-  //     const selectedCity = provinces.find(
-  //       (province) => province.name === value
-  //     );
-  //     const selectedCityId = selectedCity ? selectedCity.code : null;
-  //     if (selectedCityId) {
-  //       await fetchDistricts(selectedCityId);
-  //     }
-  //   } else if (name === "district") {
-  //     const selectedDistrict = districts.find(
-  //       (district) => district.name === value
-  //     );
-  //     const selectedDistrictId = selectedDistrict
-  //       ? selectedDistrict.code
-  //       : null;
-  //     if (selectedDistrictId) {
-  //       await fetchWards(selectedDistrictId);
-  //     }
-  //   }
-  // };
 
   const fetchWards = async (districtId) => {
     const result = await getWards(districtId);
@@ -190,17 +155,19 @@ function Address() {
   };
 
   return (
-    <div class="bg-white max-w-4xl shadow overflow-hidden sm:rounded-lg">
-      <div class=" flex justify-between items-center px-4 py-5 sm:px-6">
-        <h3 class="text-lg leading-6 font-medium text-gray-900">SỔ ĐỊA CHỈ</h3>
+    <div className="bg-white max-w-4xl shadow overflow-hidden sm:rounded-lg">
+      <div className=" flex justify-between items-center px-4 py-5 sm:px-6">
+        <h3 className="text-lg leading-6 font-medium text-gray-900">
+          SỔ ĐỊA CHỈ
+        </h3>
         <button
           onClick={() => handleShowModal("add")}
-          class="bg-[#FFD16B] hover:bg-[#] text-white font-bold py-2 px-4 rounded"
+          className="bg-[#FFD16B] hover:bg-[#] text-white font-bold py-2 px-4 rounded"
         >
           THÊM ĐỊA CHỈ
         </button>
       </div>
-      <div class="grid m:grid sm:grid-cols-1 sm:grid-rows-1 mb-4 ml-4 mr-4 sm:gap-2  border-t border-gray-200">
+      <div className="grid m:grid sm:grid-cols-1 sm:grid-rows-1 mb-4 ml-4 mr-4 sm:gap-2  border-t border-gray-200">
         {allAddress.length > 0 ? (
           allAddress
             .sort((a, b) => {
@@ -276,14 +243,14 @@ function Address() {
         aria-describedby="modal-modal-description"
       >
         {mode !== "delete" ? (
-          <div class="min-h-screen p-6 flex items-center justify-center ">
-            <div class="container max-w-xl  ">
-              <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
-                <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-2">
-                  <div class="lg:col-span-2">
+          <div className="min-h-screen p-6 flex items-center justify-center ">
+            <div className="container max-w-xl  ">
+              <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+                <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-2">
+                  <div className="lg:col-span-2">
                     <form onSubmit={handleSubmit}>
-                      <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
-                        <div class="md:col-span-5">
+                      <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+                        <div className="md:col-span-5">
                           <h2 className="text-xl mb-4 ">
                             {mode === "add"
                               ? "Thêm địa chỉ"
@@ -294,55 +261,55 @@ function Address() {
                             type="text"
                             name="firstName"
                             id="firstName"
-                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.firstName}
                             onChange={handleChange}
                           />
                         </div>
 
-                        <div class="md:col-span-5">
+                        <div className="md:col-span-5">
                           <label for="email">Tên</label>
                           <input
                             type="text"
                             name="lastName"
                             id="lastName"
-                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.lastName}
                             onChange={handleChange}
                           />
                         </div>
 
-                        <div class="md:col-span-5">
+                        <div className="md:col-span-5">
                           <label for="email">Số điện thoại</label>
                           <input
                             type="text"
                             name="phoneNumber"
                             id="phoneNumber"
-                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.phoneNumber}
                             onChange={handleChange}
                           />
                         </div>
 
-                        <div class="md:col-span-3">
+                        <div className="md:col-span-3">
                           <label for="address">Địa chỉ cụ thể</label>
                           <input
                             type="text"
                             name="address"
                             id="address"
-                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.address}
                             placeholder=""
                             onChange={handleChange}
                           />
                         </div>
 
-                        <div class="md:col-span-2">
+                        <div className="md:col-span-2">
                           <label for="city">Thành phố</label>
                           <select
                             name="city"
                             id="city"
-                            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            classNameName="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.city}
                             onChange={handleChange}
                           >
@@ -361,12 +328,12 @@ function Address() {
                           </select>
                         </div>
 
-                        <div class="md:col-span-2">
+                        <div className="md:col-span-2">
                           <label for="district">Quận/Huyện</label>
                           <select
                             name="district"
                             id="district"
-                            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            classNameName="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.district}
                             onChange={handleChange}
                           >
@@ -385,12 +352,12 @@ function Address() {
                           </select>
                         </div>
 
-                        <div class="md:col-span-2">
+                        <div className="md:col-span-2">
                           <label for="ward">Phường/Xã</label>
                           <select
                             name="ward"
                             id="ward"
-                            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            classNameName="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.ward}
                             onChange={handleChange}
                           >
@@ -411,7 +378,7 @@ function Address() {
                             ))}
                           </select>
                         </div>
-                        <div class="flex items-center md:col-span-2">
+                        <div className="flex items-center md:col-span-2">
                           <input
                             className="w-4 h-4 "
                             name="defaultForShopping"
@@ -447,29 +414,29 @@ function Address() {
             </div>
           </div>
         ) : (
-          <div class="min-h-screen p-6 flex items-center justify-center ">
-            <div class="container max-w-xl  ">
-              <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
-                <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-2">
-                  <div class="lg:col-span-2">
+          <div className="min-h-screen p-6 flex items-center justify-center ">
+            <div className="container max-w-xl  ">
+              <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+                <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-2">
+                  <div className="lg:col-span-2">
                     <form onSubmit={handleSubmit}>
-                      <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
-                        <div class="md:col-span-5">
+                      <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+                        <div className="md:col-span-5">
                           <h2 className="text-xl mb-4 ">
                             Bạn có chắc chắn muốn xóa địa chỉ này không?
                           </h2>
                         </div>
-                        <div class="md:col-span-5 flex mt-2 items-center justify-center">
-                          <div class="inline-flex items-end">
+                        <div className="md:col-span-5 flex mt-2 items-center justify-center">
+                          <div className="inline-flex items-end">
                             <button
                               type="submit"
-                              class="mr-2 bg-[#FFD16B] hover:transition text-white font-bold py-2 px-4 rounded"
+                              className="mr-2 bg-[#FFD16B] hover:transition text-white font-bold py-2 px-4 rounded"
                             >
                               Xóa
                             </button>
                             <button
                               onClick={handleCancel}
-                              class="bg-[#FFD16B] hover:transition text-white font-bold py-2 px-4 rounded"
+                              className="bg-[#FFD16B] hover:transition text-white font-bold py-2 px-4 rounded"
                             >
                               Hủy
                             </button>

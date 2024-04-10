@@ -110,14 +110,14 @@ function PubForm({ open, onClose, mode, publisherCurrent, fetchPubs }) {
           &#8203;
           <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+              <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
                 {mode === "add" ? "Thêm nhà xuất bản" : "Cập nhật nhà xuất bản"}
               </h2>
               <form onSubmit={handleSubmit} encType="multipart/form-data">
-                <div class="w-full">
+                <div className="w-full">
                   <label
                     for="price"
-                    class="block text-lg font-medium text-gray-900 dark:text-white"
+                    className="block text-lg font-medium text-gray-900 dark:text-white"
                   >
                     Tên nhà xuất bản
                   </label>
@@ -129,15 +129,15 @@ function PubForm({ open, onClose, mode, publisherCurrent, fetchPubs }) {
                         ? dataUpdate.name
                         : data.name
                     }
-                    class="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                    className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
                     placeholder="Tên nhà xuất bản"
                     onChange={handleChange}
                   />
                 </div>
-                <div class="w-full mt-2">
+                <div className="w-full mt-2">
                   <label
                     for="price"
-                    class="block text-lg font-medium text-gray-900 dark:text-white"
+                    className="block text-lg font-medium text-gray-900 dark:text-white"
                   >
                     Email
                   </label>
@@ -149,15 +149,15 @@ function PubForm({ open, onClose, mode, publisherCurrent, fetchPubs }) {
                         ? dataUpdate.email
                         : data.email
                     }
-                    class="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                    className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
                     placeholder="Email"
                     onChange={handleChange}
                   />
                 </div>
-                <div class="w-full mt-2">
+                <div className="w-full mt-2">
                   <label
                     for="price"
-                    class="block text-lg font-medium text-gray-900 dark:text-white"
+                    className="block text-lg font-medium text-gray-900 dark:text-white"
                   >
                     Số điện thoại
                   </label>
@@ -169,15 +169,15 @@ function PubForm({ open, onClose, mode, publisherCurrent, fetchPubs }) {
                         ? dataUpdate.phone
                         : data.phone
                     }
-                    class="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                    className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
                     placeholder="Số điện thoại"
                     onChange={handleChange}
                   />
                 </div>
-                <div class="w-full mt-2">
+                <div className="w-full mt-2">
                   <label
                     for="price"
-                    class="block text-lg font-medium text-gray-900 dark:text-white"
+                    className="block text-lg font-medium text-gray-900 dark:text-white"
                   >
                     Địa chỉ
                   </label>
@@ -189,7 +189,7 @@ function PubForm({ open, onClose, mode, publisherCurrent, fetchPubs }) {
                         ? dataUpdate.address
                         : data.address
                     }
-                    class="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                    className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
                     placeholder="Địa chỉ"
                     onChange={handleChange}
                   />
@@ -224,13 +224,13 @@ function PubForm({ open, onClose, mode, publisherCurrent, fetchPubs }) {
                 <div className="flex items-center justify-center">
                   <button
                     type="submit"
-                    class="inline-flex w-48 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#FFD16B] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+                    className="inline-flex w-48 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#FFD16B] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
                   >
                     {mode === "add" ? "Thêm" : "Cập nhật"}
                   </button>
                   <button
                     onClick={onClose}
-                    class="inline-flex ml-4 w-48 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#FFD16B] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+                    className="inline-flex ml-4 w-48 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#FFD16B] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
                   >
                     Hủy
                   </button>

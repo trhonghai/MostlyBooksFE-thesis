@@ -239,15 +239,15 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
           &#8203;
           <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+              <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
                 {mode === "add" ? "Thêm sách" : "Cập nhật thông tin sách"}
               </h2>
               <form onSubmit={handleSubmit} encType="multipart/form-data">
-                <div class="grid gap-6 sm:grid-cols-2 sm:gap-6">
-                  <div class="sm:col-span-2">
+                <div className="grid gap-6 sm:grid-cols-2 sm:gap-6">
+                  <div className="sm:col-span-2">
                     <label
                       for="name"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Tên sách
                     </label>
@@ -256,17 +256,17 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       name="name"
                       id="name"
                       value={bookCurrent ? dataUpdate.name : bookData.name}
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Nhập tên sách"
                       required=""
                       onChange={handleChange}
                     />
                   </div>
 
-                  <div class="w-full">
+                  <div className="w-full">
                     <label
                       for="price"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Price
                     </label>
@@ -274,7 +274,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       type="text"
                       name="price"
                       id="price"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="120.000đ"
                       required=""
                       value={bookCurrent ? dataUpdate.price : bookData.price}
@@ -284,7 +284,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                   <div>
                     <label
                       for="category"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Danh mục
                     </label>
@@ -293,7 +293,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       name="category"
                       value={bookCurrent ? dataUpdate.category.name : ""}
                       onChange={handleChange}
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     >
                       <option selected="">Chọn danh mục</option>
                       {categories?.map((category) => (
@@ -306,7 +306,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                   <div>
                     <label
                       for="authour"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Tác giả
                     </label>
@@ -315,7 +315,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       name="authour"
                       onChange={handleChange}
                       value={bookCurrent ? dataUpdate.authour.name : ""}
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     >
                       <option selected="">Chọn tác giả</option>
                       {authours?.map((authour) => (
@@ -326,7 +326,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                   <div>
                     <label
                       for="publisher"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Nhà xuất bản
                     </label>
@@ -336,7 +336,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       ref={publisherRef}
                       onChange={handleChange}
                       value={bookCurrent ? dataUpdate.publisher.name : ""}
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     >
                       <option selected="">Chọn danh mục</option>
                       {publisher?.map((pub) => (
@@ -349,7 +349,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                   <div>
                     <label
                       for="weight"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Trọng lượng (gr)
                     </label>
@@ -357,17 +357,17 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       type="number"
                       name="weight"
                       id="weight"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="12"
                       required=""
                       value={bookCurrent ? dataUpdate.weight : bookData.weight}
                       onChange={handleChange}
                     />
                   </div>
-                  <div class="w-full">
+                  <div className="w-full">
                     <label
                       for="pages"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Số trang
                     </label>
@@ -375,17 +375,17 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       type="text"
                       name="pages"
                       id="pages"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="256"
                       required=""
                       value={bookCurrent ? dataUpdate.pages : bookData.pages}
                       onChange={handleChange}
                     />
                   </div>
-                  <div class="w-full">
+                  <div className="w-full">
                     <label
                       for="issue"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Năm xuất bản
                     </label>
@@ -393,17 +393,17 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       type="text"
                       name="issue"
                       id=""
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="2024"
                       required=""
                       value={bookCurrent ? dataUpdate.issue : bookData.issue}
                       onChange={handleChange}
                     />
                   </div>
-                  <div class="w-full">
+                  <div className="w-full">
                     <label
                       for="isbn_10"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       ISBN 10
                     </label>
@@ -411,7 +411,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       type="text"
                       name="isbn_10"
                       id=""
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Nhập ISBN"
                       required=""
                       value={
@@ -420,10 +420,10 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       onChange={handleChange}
                     />
                   </div>
-                  <div class="w-full">
+                  <div className="w-full">
                     <label
                       for="isbn_13"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       ISBN 13
                     </label>
@@ -431,7 +431,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       type="text"
                       name="isbn_13"
                       id=""
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Nhập ISBN"
                       required=""
                       value={
@@ -440,10 +440,10 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       onChange={handleChange}
                     />
                   </div>
-                  <div class="w-full">
+                  <div className="w-full">
                     <label
                       for="dimensions"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Kích thước
                     </label>
@@ -451,7 +451,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       type="text"
                       name="dimensions"
                       id=""
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="20 x 14.5 cm"
                       required=""
                       value={
@@ -462,10 +462,10 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       onChange={handleChange}
                     />
                   </div>
-                  <div class="w-full">
+                  <div className="w-full">
                     <label
                       for="inventory"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Tồn kho
                     </label>
@@ -473,7 +473,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       type="text"
                       name="inventory"
                       id=""
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="12"
                       required=""
                       value={
@@ -482,10 +482,10 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       onChange={handleChange}
                     />
                   </div>
-                  <div class="w-full">
+                  <div className="w-full">
                     <label
                       for="cover"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Hình thức
                     </label>
@@ -493,7 +493,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                       type="text"
                       name="cover"
                       id=""
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Bìa mềm"
                       required=""
                       value={bookCurrent ? dataUpdate.cover : bookData.cover}
@@ -557,10 +557,10 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                   </div>
                 </div> */}
 
-                <div class="sm:col-span-2 ">
+                <div className="sm:col-span-2 ">
                   <label
                     for="description"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Mô tả
                   </label>
@@ -574,20 +574,20 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                         : bookData.description
                     }
                     onChange={handleChange}
-                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Your description here"
                   ></textarea>
                 </div>
                 <div className="flex items-center justify-center">
                   <button
                     type="submit"
-                    class="inline-flex w-48 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#FFD16B] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+                    className="inline-flex w-48 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#FFD16B] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
                   >
                     Thêm
                   </button>
                   <button
                     onClick={onClose}
-                    class="inline-flex ml-4 w-48 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#FFD16B] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+                    className="inline-flex ml-4 w-48 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#FFD16B] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
                   >
                     Hủy
                   </button>

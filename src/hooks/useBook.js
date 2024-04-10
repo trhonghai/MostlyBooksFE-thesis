@@ -93,7 +93,7 @@ function useBook() {
   const getDiscountByBookId = async (bookId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/discount/${bookId}`
+        `http://localhost:8080/discounts/${bookId}`
       );
       return response.data;
     } catch (error) {

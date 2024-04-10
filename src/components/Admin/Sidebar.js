@@ -49,6 +49,11 @@ function Sidebar({ isSidebarOpen }) {
       title: "Nhà xuất bản",
       link: config.routes.adminPublishers,
     },
+    {
+      icon: faUser,
+      title: "Khuyến mãi",
+      link: config.routes.adminDiscounts,
+    },
   ];
   return (
     <div

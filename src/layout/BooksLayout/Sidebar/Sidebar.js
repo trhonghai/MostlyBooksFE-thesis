@@ -47,7 +47,7 @@ function Sidebar() {
 
   return (
     <div>
-      <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-4">
         <ul className=" w-full text-sm text-gray-700 dark:text-gray-200">
           <li className=" flex border-b pl-4 block text-left text-2xl w-full font-medium py-2 text-gray-600 ">
             Danh mục
@@ -67,7 +67,7 @@ function Sidebar() {
           ))}
         </ul>
       </div>
-      <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-4">
         <ul className=" w-full text-sm text-gray-700 dark:text-gray-200">
           <li className=" flex border-b pl-4 block text-left text-2xl w-full font-medium py-2 text-gray-600 ">
             Nhà xuất bản
@@ -90,7 +90,7 @@ function Sidebar() {
         </ul>
       </div>
 
-      <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-4">
         <ul className=" w-full text-sm text-gray-700 dark:text-gray-200">
           {priceRanges.map((range, index) => (
             <li

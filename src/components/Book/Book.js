@@ -13,7 +13,7 @@ function Book({ data }) {
     const getDiscountByBook = async (bookId) => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/discount/${bookId}`
+          `http://localhost:8080/discounts/${bookId}`
         );
         console.log(response.data);
         setDiscount(response.data);
@@ -51,19 +51,28 @@ function Book({ data }) {
 
             <div className="flex items-center space-x-1 px-2 py-1">
               <p className="text-xs font-sans sm:text-sm md:text-base">
-                {formatPrice(data.price)}
+                {formatPrice(data.discountedPrice)}
               </p>
               {discount.length > 0 && (
-                <div className="bg-red-400 text-white px-1  rounded-lg">
+                <div className="bg-red-400 text-white px-1 rounded-lg">
                   {discount.map((item) => {
-                    return <span>-{item.discountPercentage}%</span>;
+                    const currentDate = new Date();
+                    const startDate = new Date(item.startDate);
+                    const endDate = new Date(item.endDate);
+
+                    // Kiểm tra xem thời hạn ưu đãi đã hết hạn chưa
+                    if (currentDate >= startDate && currentDate <= endDate) {
+                      return <span>-{item.discountPercentage}%</span>;
+                    } else {
+                      return null; // Không hiển thị nếu ưu đãi đã hết hạn
+                    }
                   })}
                 </div>
               )}
             </div>
 
             <del className="text-xs text-left font-bold text-gray-500">
-              129.000đ
+              {formatPrice(data.price)}
             </del>
 
             <div className="flex items-center space-x-1">

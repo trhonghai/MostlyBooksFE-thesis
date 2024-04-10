@@ -10,6 +10,7 @@ const routes = {
   adminPublishers: "/adminPublishers",
   adminAuthors: "/adminAuthors",
   adminOrdersDetail: "/adminOrders/:id",
+  adminDiscounts: "/adminDiscounts",
   brands: "/brands",
   book: "/books/:id",
   books: "/books",
