@@ -58,6 +58,10 @@ function FilterOrder({
       name: "Giao hàng",
     },
     {
+      status: "SHIPPED",
+      name: "Đang giao hàng",
+    },
+    {
       status: "DELIVERED",
       name: "Đã giao hàng",
     },

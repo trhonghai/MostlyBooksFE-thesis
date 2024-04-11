@@ -17,7 +17,8 @@ import { formatPrice } from "~/utils/formatPrice";
 function AdminOrderDetail() {
   const location = useLocation();
   const order = location.state ? location.state.dataOrder : null;
-  const { OrderDetails, CaptureOrder, Refunded, deleteOrderById } = useOrder();
+  const { OrderDetails, CaptureOrder, Refunded, deleteOrderById, shipped } =
+    useOrder();
   const [orderDetails, setOrderDetails] = useState([]);
   const { userRole } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,6 +76,17 @@ function AdminOrderDetail() {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const ShipOrderHandler = async (orderId) => {
+    try {
+      await shipped(orderId);
+      await fetchOrderDetail();
+      toast.success("Vận chuyển đơn hàng thành công");
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      toast.error("Vận chuyển đơn hàng thất bại");
+    }
   };
 
   return (
@@ -240,10 +252,21 @@ function AdminOrderDetail() {
 
                     {userRole &&
                       userRole.includes("Admin") &&
+                      order.orderStatus.status === "SHIPPED" && (
+                        <button
+                          onClick={() => CaptureOrderHandler(order.orderCode)}
+                          className="transition duration-300 ease-in-out mb-4 hover:bg-[#FFD16B] hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
+                        >
+                          Đã vận chuyển
+                        </button>
+                      )}
+
+                    {userRole &&
+                      userRole.includes("Admin") &&
                       order.orderStatus.status === "CAPTURED" && (
                         <div>
                           <button
-                            // onClick={() => ShipOrderHandler(order.orderCode)}
+                            onClick={() => ShipOrderHandler(order.id)}
                             className="transition duration-300 ease-in-out mb-4 hover:bg-[#FFD16B] hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
                           >
                             Vận chuyển đơn hàng

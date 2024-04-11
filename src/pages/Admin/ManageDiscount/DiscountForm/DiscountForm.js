@@ -1,19 +1,125 @@
 import { Box, Modal } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useBook, useDiscount } from "~/hooks";
+import { Select, Tag } from "antd";
+import toast from "react-hot-toast";
 
 function DiscountForm({
   open,
   onClose,
   mode,
   discountCurrent,
-  fecthDiscounts,
+  fetchDiscounts,
 }) {
   const [data, setData] = useState({
-    name: "",
+    discountName: "",
+    discountCode: "",
+    discountPercentage: "",
+    startDate: "",
+    endDate: "",
+    bookIds: [],
   });
   const [dataUpdate, setDataUpdate] = useState({
-    name: "",
+    discountName: "",
+    discountCode: "",
+    discountPercentage: "",
+    startDate: "",
+    endDate: "",
+    bookIds: [],
   });
+
+  const [books, setBooks] = useState([]);
+  const { getAllBook } = useBook();
+  const { updateDiscount, createDiscount, deleteDiscount } = useDiscount();
+
+  useEffect(() => {
+    fetchAllBooks();
+  }, []);
+
+  useEffect(() => {
+    if (discountCurrent) {
+      setDataUpdate({
+        ...discountCurrent,
+        bookIds: [discountCurrent.book.id],
+      });
+    }
+  }, [discountCurrent]);
+
+  const fetchAllBooks = async () => {
+    try {
+      const result = await getAllBook();
+      setBooks(result.map((item) => ({ value: item.id, label: item.name })));
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
+  };
+
+  const handleSelectChange = (value) => {
+    setDataUpdate({ ...dataUpdate, bookIds: value });
+    setData({ ...data, bookIds: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (mode === "add") {
+      try {
+        await createDiscount(data);
+        setData({
+          discountName: "",
+          discountCode: "",
+          discountPercentage: "",
+          startDate: "",
+          endDate: "",
+          bookIds: [],
+        });
+        fetchDiscounts();
+        toast.success("Thêm khuyến mãi thành công");
+      } catch (error) {
+        toast.error("Thêm khuyến mãi thất bại!");
+      }
+      onClose();
+    } else if (mode === "edit") {
+      try {
+        await updateDiscount(dataUpdate, discountCurrent.id);
+        setDataUpdate({
+          discountName: "",
+          discountCode: "",
+          discountPercentage: "",
+          startDate: "",
+          endDate: "",
+          bookIds: [],
+        });
+        fetchDiscounts();
+        toast.success("Cập nhật khuyến mãi thành công");
+      } catch (error) {
+        toast.error("Cập nhật khuyến mãi thất bại!");
+      }
+      onClose();
+    } else {
+      try {
+        await deleteDiscount(discountCurrent.id);
+        fetchDiscounts();
+        toast.success("Xóa khuyến mãi thành công");
+      } catch (error) {
+        toast.error("Xóa khuyến mãi thất bại!");
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    console.log(name, value);
+    setData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    setDataUpdate((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   return (
     <Modal
       open={open}
@@ -33,69 +139,110 @@ function DiscountForm({
               <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
                 {mode === "add" ? "Thêm khuyến mãi" : "Cập nhật khuyến mãi"}
               </h2>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="grid gap-6 sm:grid-cols-1 sm:gap-6">
                   <div>
-                    <lable>Tên khuyến mãi</lable>
+                    <label>Tên khuyến mãi</label>
                     <input
                       type="text"
-                      name="name"
+                      name="discountName"
                       value={
-                        mode === "edit" && discountCurrent
-                          ? dataUpdate.name
-                          : data.name
+                        discountCurrent
+                          ? dataUpdate.discountName
+                          : data.discountName
                       }
                       className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
                       placeholder="Tên khuyến mãi"
-                      // onChange={handleChange}
+                      onChange={handleChange}
                     />
                   </div>
+
+                  <div className="grid gap-6 sm:grid-cols-1 sm:gap-6">
+                    <div>
+                      <label>Mã khuyến mãi</label>
+                      <input
+                        type="text"
+                        name="discountCode"
+                        value={
+                          discountCurrent
+                            ? dataUpdate.discountCode
+                            : data.discountCode
+                        }
+                        className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                        placeholder="Mã khuyến mãi"
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
                   <div>
-                    <lable>Chiết khấu</lable>
+                    <label>Chiết khấu</label>
                     <input
                       type="text"
-                      name="name"
+                      name="discountPercentage"
                       value={
-                        mode === "edit" && discountCurrent
-                          ? dataUpdate.name
-                          : data.name
+                        discountCurrent
+                          ? dataUpdate.discountPercentage
+                          : data.discountPercentage
                       }
                       className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
                       placeholder="Chiết khấu"
-                      // onChange={handleChange}
+                      onChange={handleChange}
                     />
                   </div>
                   <div>
-                    <lable>Ngày bắt đầu</lable>
-                    <input
-                      type="date"
-                      name="name"
+                    <label>Sách được giảm</label>
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      name="bookIds"
+                      placeholder="Please select"
+                      style={{ width: "100%" }}
                       value={
-                        mode === "edit" && discountCurrent
-                          ? dataUpdate.name
-                          : data.name
+                        discountCurrent ? dataUpdate.bookIds : data.bookIds
+                      }
+                      onChange={handleSelectChange}
+                      dropdownStyle={{ zIndex: 9999 }}
+                      showSearch // Cho phép tìm kiếm
+                    >
+                      {books?.map((book) => (
+                        <Select.Option
+                          style={{ zIndex: 9999 }}
+                          key={book.value}
+                          value={book.value}
+                        >
+                          {book.label}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </div>
+                  <div>
+                    <label>Ngày bắt đầu</label>
+                    <input
+                      type="datetime"
+                      name="startDate"
+                      value={
+                        discountCurrent ? dataUpdate.startDate : data.startDate
                       }
                       className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-                      placeholder="Chiết khấu"
-                      // onChange={handleChange}
+                      placeholder="Ngày bắt đầu"
+                      onChange={handleChange}
                     />
                   </div>
                   <div>
-                    <lable>Ngày kết thúc</lable>
+                    <label>Ngày kết thúc</label>
                     <input
-                      type="date"
-                      name="name"
+                      type="datetime"
+                      name="endDate"
                       value={
-                        mode === "edit" && discountCurrent
-                          ? dataUpdate.name
-                          : data.name
+                        discountCurrent ? dataUpdate.endDate : data.endDate
                       }
                       className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-                      placeholder="Chiết khấu"
-                      // onChange={handleChange}
+                      placeholder="Ngày kết thúc"
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
+
                 <div className="flex items-center justify-center">
                   <button
                     type="submit"

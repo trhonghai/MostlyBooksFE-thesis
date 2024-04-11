@@ -4,6 +4,7 @@ import {
   faBook,
   faHome,
   faList,
+  faTag,
   faUserAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -50,7 +51,7 @@ function Sidebar({ isSidebarOpen }) {
       link: config.routes.adminPublishers,
     },
     {
-      icon: faUser,
+      icon: faTag,
       title: "Khuyến mãi",
       link: config.routes.adminDiscounts,
     },

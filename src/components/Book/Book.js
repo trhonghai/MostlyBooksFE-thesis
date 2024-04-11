@@ -57,8 +57,8 @@ function Book({ data }) {
                 <div className="bg-red-400 text-white px-1 rounded-lg">
                   {discount.map((item) => {
                     const currentDate = new Date();
-                    const startDate = new Date(item.startDate);
-                    const endDate = new Date(item.endDate);
+                    const startDate = new Date(item?.startDate);
+                    const endDate = new Date(item?.endDate);
 
                     // Kiểm tra xem thời hạn ưu đãi đã hết hạn chưa
                     if (currentDate >= startDate && currentDate <= endDate) {

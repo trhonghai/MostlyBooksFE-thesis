@@ -103,6 +103,18 @@ function useOrder() {
     }
   };
 
+  const shipped = async (orderId) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/payment/delivery/${orderId}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Lấy danh mục thất bại:", error.message);
+    }
+  };
+
   return {
     Orders,
     OrderDetails,
@@ -112,6 +124,7 @@ function useOrder() {
     Cancelled,
     Refunded,
     deleteOrderById,
+    shipped,
   };
 }
 

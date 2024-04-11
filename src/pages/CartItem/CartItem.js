@@ -13,10 +13,6 @@ function CartItem() {
 
   const cartId = localStorage.getItem("cartId");
 
-  useEffect(() => {
-    fetchCartItem();
-  }, [cartItem]);
-
   const fetchCartItem = async () => {
     try {
       const response = await axios.get(
@@ -35,6 +31,10 @@ function CartItem() {
       console.error("Lấy danh mục thất bại:", error.message);
     }
   };
+
+  useEffect(() => {
+    fetchCartItem();
+  }, []);
 
   const deleteCartItem = async (id) => {
     try {

@@ -32,7 +32,9 @@ function useBook() {
       const response = await axios.get(`http://localhost:8080/books/${bookId}`);
       console.log(response.data);
       return response.data;
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error getting book:", error);
+    }
   };
 
   const updateBook = async (updateData, file, id) => {
@@ -95,6 +97,7 @@ function useBook() {
       const response = await axios.get(
         `http://localhost:8080/discounts/${bookId}`
       );
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Error getting discount:", error);

@@ -143,7 +143,10 @@ function BookDetails() {
                 </div>
               )}
             </div>
-            {discounts?.length > 0 && <FlashSale discounts={discounts} />}
+            {discounts.filter((item) => item !== null).length > 0 && (
+              <FlashSale discounts={discounts} />
+            )}
+
             <div className="mt-5 flex items-center">
               <Rating name="simple-controlled" value={rating} size="small" />
 
@@ -197,26 +200,22 @@ function BookDetails() {
                 <FontAwesomeIcon icon={faShoppingBag} className="mr-2" />
                 Thêm vào giỏ hàng
               </button>
-              <Link
+              <a
                 className={`ml-4 w-full inline-flex items-center justify-center rounded-md border-2 border-transparent ${
                   book?.inventory === 0
                     ? "bg-gray-300 text-gray-600 cursor-not-allowed"
                     : "bg-[#FBA31A] bg-none"
                 } px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-[#faaf00]`}
-                to={config.routes.cart}
+                href={config.routes.cart}
+                onClick={() => {
+                  if (book.inventory > 0) {
+                    AddtoCart(book.id, book.price, quantity);
+                  }
+                }}
+                disabled={book?.inventory === 0}
               >
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (book.inventory > 0) {
-                      AddtoCart(book.id, book.price, quantity);
-                    }
-                  }}
-                  disabled={book?.inventory === 0}
-                >
-                  Mua ngay
-                </button>
-              </Link>
+                Mua ngay
+              </a>
             </div>
           </div>
         </div>

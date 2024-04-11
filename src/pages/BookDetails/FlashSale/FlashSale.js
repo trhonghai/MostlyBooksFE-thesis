@@ -5,8 +5,8 @@ import images from "~/assets/images";
 import { useCountdown } from "~/hooks/useCountDown";
 
 function FlashSale({ discounts }) {
-  const startDate = discounts?.map((discount) => discount.startDate);
-  const endDate = discounts?.map((discount) => discount.endDate);
+  const startDate = discounts?.map((discount) => discount?.startDate);
+  const endDate = discounts?.map((discount) => discount?.endDate);
   const [timeLeftDays, timeLeftHours, timeLeftMinutes, timeLeftSeconds] =
     useCountdown(startDate, endDate);
   const [saleEnded, setSaleEnded] = useState(false);
