@@ -115,6 +115,40 @@ function useOrder() {
     }
   };
 
+  const delivered = async (orderId) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/payment/delivered/${orderId}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Lấy danh mục thất bại:", error.message);
+    }
+  };
+
+  const captureOrdercash = async (orderId) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/payment/capture-cash-on-delivery/${orderId}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Lấy danh mục thất bại:", error.message);
+    }
+  };
+  const cancleOrderCash = async (orderId) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/payment/cancel-cash-on-delivery/${orderId}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Lấy danh mục thất bại:", error.message);
+    }
+  };
   return {
     Orders,
     OrderDetails,
@@ -125,6 +159,9 @@ function useOrder() {
     Refunded,
     deleteOrderById,
     shipped,
+    delivered,
+    captureOrdercash,
+    cancleOrderCash,
   };
 }
 

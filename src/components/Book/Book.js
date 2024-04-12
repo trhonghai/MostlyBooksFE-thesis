@@ -62,7 +62,9 @@ function Book({ data }) {
 
                     // Kiểm tra xem thời hạn ưu đãi đã hết hạn chưa
                     if (currentDate >= startDate && currentDate <= endDate) {
-                      return <span>-{item.discountPercentage}%</span>;
+                      return (
+                        <span key={item.id}>-{item.discountPercentage}%</span>
+                      );
                     } else {
                       return null; // Không hiển thị nếu ưu đãi đã hết hạn
                     }

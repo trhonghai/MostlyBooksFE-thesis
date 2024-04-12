@@ -127,7 +127,10 @@ function ManageUsers() {
                   mode={mode}
                 />
                 {users.map((user) => (
-                  <tr className="hover:bg-gray-200 cursor-pointer transition duration-150 border-b border-gray-200 text-left border-gray-200 bg-white px-5 py-5 text-sm">
+                  <tr
+                    key={user.id}
+                    className="hover:bg-gray-200 cursor-pointer transition duration-150 border-b border-gray-200 text-left border-gray-200 bg-white px-5 py-5 text-sm"
+                  >
                     <td className="border-b  text-left border-gray-200 bg-white px-2 py-5 text-sm">
                       {user.firstName} {user.lastName}
                     </td>

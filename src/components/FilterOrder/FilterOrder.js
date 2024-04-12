@@ -13,36 +13,9 @@ function FilterOrder({
   const { isAdmin } = useContext(AuthContext);
 
   useEffect(() => {
-    // fetchOrders();
     console.log(orderCounts);
   }, [Orders]);
   console.log(Orders);
-
-  // const fetchOrders = async () => {
-  //   try {
-  //     const counts = {
-  //       all: Orders.length,
-  //       PENDING: Orders.filter(
-  //         (order) => order.orderStatus?.status === "PENDING"
-  //       ).length,
-  //       CAPTURED: Orders.filter(
-  //         (order) => order.orderStatus?.status === "CAPTURED"
-  //       ).length,
-  //       DELIVERED: Orders.filter(
-  //         (order) => order.orderStatus?.status === "DELIVERED"
-  //       ).length,
-  //       CANCELLED: Orders.filter(
-  //         (order) => order.orderStatus?.status === "CANCELLED"
-  //       ).length,
-  //       REFUNDED: Orders.filter(
-  //         (order) => order.orderStatus?.status === "REFUNDED"
-  //       ).length,
-  //     };
-  //     setOrderCounts(counts);
-  //   } catch (error) {
-  //     console.error("Error fetching orders:", error);
-  //   }
-  // };
 
   const filterOrderStatus = [
     {

@@ -1,3 +1,4 @@
+import { data } from "autoprefixer";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -92,6 +93,9 @@ function Checkout() {
           })
           .join("");
       } else {
+        const response = await axios.post(
+          "http://localhost:8080/api/payment/cash-on-delivery",paymentRequest
+        );
         console.log("Call API for cash on delivery");
       }
     } catch (error) {

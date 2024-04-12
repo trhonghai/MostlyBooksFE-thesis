@@ -17,8 +17,17 @@ import { formatPrice } from "~/utils/formatPrice";
 function AdminOrderDetail() {
   const location = useLocation();
   const order = location.state ? location.state.dataOrder : null;
-  const { OrderDetails, CaptureOrder, Refunded, deleteOrderById, shipped } =
-    useOrder();
+  const {
+    OrderDetails,
+    CaptureOrder,
+    Refunded,
+    deleteOrderById,
+    shipped,
+    delivered,
+    captureOrdercash,
+    Cancelled,
+    cancleOrderCash,
+  } = useOrder();
   const [orderDetails, setOrderDetails] = useState([]);
   const { userRole } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,14 +38,28 @@ function AdminOrderDetail() {
     }
   }, [order]);
 
+  const [isModalCancelOpen, setIsModalCancelOpen] = useState(false);
+  const openModalCancle = () => {
+    setIsModalCancelOpen(true);
+  };
+
+  const closeModalCancle = () => {
+    setIsModalCancelOpen(false);
+  };
+
   const fetchOrderDetail = async () => {
     const result = await OrderDetails(order.id);
     setOrderDetails(result);
   };
+  console.log(order);
 
   const CaptureOrderHandler = async (orderCode) => {
     try {
-      await CaptureOrder(orderCode);
+      if (order.payment.paymentMethod === "cash-on-delivery") {
+        await captureOrdercash(order.id);
+      } else {
+        await CaptureOrder(orderCode);
+      }
       await fetchOrderDetail();
       toast.success("Xác nhận đơn hàng thành công");
     } catch (error) {
@@ -60,12 +83,17 @@ function AdminOrderDetail() {
 
   const RefundOrderHandler = async (captureId) => {
     try {
-      await Refunded(captureId);
+      if (order.payment.paymentMethod === "cash-on-delivery") {
+        await cancleOrderCash(order.id);
+      } else {
+        await Refunded(captureId);
+      }
+
       await fetchOrderDetail();
-      toast.success("Hoàn tiền đơn hàng thành công");
+      toast.success("Hủy/Hoàn tiền đơn hàng thành công");
     } catch (error) {
       console.error("Error fetching orders:", error);
-      toast.error("Hoàn tiền đơn hàng thất bại");
+      toast.error("Hủy/Hoàn tiền đơn hàng thất bại");
     }
   };
 
@@ -89,6 +117,35 @@ function AdminOrderDetail() {
     }
   };
 
+  const deliveredHandler = async (orderId) => {
+    try {
+      await delivered(orderId);
+      await fetchOrderDetail();
+      toast.success("Giao hàng thành công");
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      toast.error("Giao hàng thất bại");
+    }
+  };
+
+  const CancelledOrder = async (orderId) => {
+    try {
+      if (order.payment.paymentMethod === "cash-on-delivery") {
+        await cancleOrderCash(order.id);
+      } else {
+        await Cancelled(orderId);
+      }
+      closeModalCancle();
+      toast.success("Hủy đơn hàng thành công");
+      await fetchOrderDetail();
+      // fetchOrdersByStatus(selectedFilter);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      toast.error("Hủy đơn hàng thất bại");
+    }
+    await fetchOrderDetail();
+  };
+
   return (
     <div className="bg-white w-full shadow overflow-hidden sm:rounded-lg">
       <div className="mx-auto max-w-screen-xl">
@@ -108,7 +165,10 @@ function AdminOrderDetail() {
           <div className="px-4 py-2 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
             <div className="flex flex-col justify-start items-start w-full space-y-2 md:space-y-2 xl:space-y-8">
               {orderDetails?.map((orderDetail) => (
-                <div className="flex flex-col justify-start items-start dark:bg-gray-900 bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
+                <div
+                  key={orderDetail?.id}
+                  className="flex flex-col justify-start items-start dark:bg-gray-900 bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full"
+                >
                   <div className=" md:mt-2 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
                     <div className="pb-4 md:pb-8 w-full md:w-40">
                       <img
@@ -242,22 +302,94 @@ function AdminOrderDetail() {
                     {userRole &&
                       userRole.includes("Admin") &&
                       order.orderStatus.status === "PENDING" && (
-                        <button
-                          onClick={() => CaptureOrderHandler(order.orderCode)}
-                          className="transition duration-300 ease-in-out mb-4 hover:bg-[#FFD16B] hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
-                        >
-                          Xác nhận đơn hàng
-                        </button>
+                        <div>
+                          <button
+                            onClick={() => CaptureOrderHandler(order.orderCode)}
+                            className="transition duration-300 ease-in-out mb-4 hover:bg-[#FFD16B] hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
+                          >
+                            Xác nhận đơn hàng
+                          </button>
+                          <button
+                            onClick={openModalCancle}
+                            className="transition duration-300 ease-in-out mb-4 hover:bg-red-500 hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-red-600 text-base font-medium leading-4 text-white"
+                          >
+                            Hủy đơn hàng
+                          </button>
+                          <Modal
+                            open={isModalCancelOpen}
+                            onClose={closeModalCancle}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box className="fixed z-10 inset-0 overflow-y-auto">
+                              <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                <div className="fixed inset-0 transition-opacity">
+                                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                                </div>
+                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
+                                &#8203;
+                                <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                    <h2
+                                      id="modal-modal-title"
+                                      className="text-lg font-medium text-gray-900"
+                                    >
+                                      Xác nhận
+                                    </h2>
+                                    <div className="mt-3 sm:mt-0  sm:text-left">
+                                      <p
+                                        id="modal-modal-description"
+                                        className="text-sm text-gray-500"
+                                      >
+                                        Bạn có chắc chắn muốn hủy đơn hàng này
+                                        không?
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                    <button
+                                      onClick={() =>
+                                        CancelledOrder(order.orderCode)
+                                      }
+                                      type="button"
+                                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                    >
+                                      Hủy đơn hàng
+                                    </button>
+                                    <button
+                                      onClick={closeModalCancle}
+                                      type="button"
+                                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                                    >
+                                      Hủy
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </Box>
+                          </Modal>
+                        </div>
                       )}
 
                     {userRole &&
                       userRole.includes("Admin") &&
                       order.orderStatus.status === "SHIPPED" && (
                         <button
-                          onClick={() => CaptureOrderHandler(order.orderCode)}
+                          onClick={() => deliveredHandler(order.id)}
                           className="transition duration-300 ease-in-out mb-4 hover:bg-[#FFD16B] hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
                         >
-                          Đã vận chuyển
+                          Giao hàng thành công
+                        </button>
+                      )}
+
+                    {userRole &&
+                      userRole.includes("Admin") &&
+                      order.orderStatus.status === "DELIVERED" && (
+                        <button
+                          // onClick={() => deliveredHandler(order.id)}
+                          className="transition duration-300 ease-in-out mb-4 hover:bg-[#FFD16B] hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
+                        >
+                          Đã hoàn thành đơn hàng
                         </button>
                       )}
 

@@ -17,7 +17,7 @@ import { formatPrice } from "~/utils/formatPrice";
 function OrderDetail() {
   const location = useLocation();
   const order = location.state ? location.state.dataOrder : null;
-  const { OrderDetails, Cancelled } = useOrder();
+  const { OrderDetails, Cancelled, cancleOrderCash, Refunded } = useOrder();
   const [orderDetails, setOrderDetails] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,11 +43,14 @@ function OrderDetail() {
 
   const CancelledOrder = async (orderId) => {
     try {
-      await Cancelled(orderId);
+      if (order.payment.paymentMethod === "cash-on-delivery") {
+        await cancleOrderCash(order.id);
+      } else {
+        await Cancelled(orderId);
+      }
       closeModal();
       toast.success("Hủy đơn hàng thành công");
       await fetchOrderDetail();
-      // fetchOrdersByStatus(selectedFilter);
     } catch (error) {
       console.error("Error fetching orders:", error);
       toast.error("Hủy đơn hàng thất bại");
@@ -55,7 +58,21 @@ function OrderDetail() {
     await fetchOrderDetail();
   };
 
-  const PaymentAgain = () => {};
+  const RefundOrderHandler = async (captureId) => {
+    try {
+      if (order.payment.paymentMethod === "cash-on-delivery") {
+        await cancleOrderCash(order.id);
+      } else {
+        await Refunded(captureId);
+      }
+
+      await fetchOrderDetail();
+      toast.success("Hủy/Hoàn tiền đơn hàng thành công");
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      toast.error("Hủy/Hoàn tiền đơn hàng thất bại");
+    }
+  };
 
   return (
     <div className="bg-white max-w-4xl shadow overflow-hidden sm:rounded-lg">
@@ -136,15 +153,15 @@ function OrderDetail() {
                   <div className="flex justify-center items-center w-full space-y-4 flex-col border-gray-200 border-b pb-4">
                     <div className="justify-between w-full">
                       <p className=" text-left text-base dark:text-white leading-4 text-gray-800">
-                        {order.address.firstName} {order.address.lastName}
+                        {order?.address.firstName} {order?.address.lastName}
                       </p>
                       <p className="mt-2 text-left text-base dark:text-white leading-4 text-gray-800">
-                        {order.address.phoneNumber}
+                        {order?.address.phoneNumber}
                       </p>
 
                       <p className="mt-2 text-left text-base dark:text-white leading-4 text-gray-800">
-                        {order.address.address} - {order.address.ward} -{" "}
-                        {order.address.district} - {order.address.city}
+                        {order?.address.address} - {order?.address.ward} -{" "}
+                        {order?.address.district} - {order?.address.city}
                       </p>
                     </div>
                   </div>
@@ -162,7 +179,7 @@ function OrderDetail() {
                   </h3>
                   <div className="flex justify-center items-center w-full space-y-4 flex-col border-gray-200 border-b pb-4">
                     <div className="justify-between w-full">
-                      {order.payment.paymentMethod === "paypal" ? (
+                      {order?.payment?.paymentMethod === "paypal" ? (
                         <p className=" text-left    text-base dark:text-white leading-4 text-gray-800">
                           Thanh toán qua Paypal
                         </p>
@@ -207,7 +224,7 @@ function OrderDetail() {
                 </div>
                 <div className="flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 dark:bg-gray-800 space-y-6">
                   <div className="w-full justify-center items-center">
-                    {order.orderStatus.status === "PENDING" ? (
+                    {order.orderStatus.status === "PENDING" && (
                       <div>
                         <button
                           onClick={openModal}
@@ -269,26 +286,26 @@ function OrderDetail() {
                           </Box>
                         </Modal>
                       </div>
-                    ) : order.orderStatus.status === "CANCELLED" ? (
+                    )}
+                    {order.orderStatus.status === "CANCELLED" && (
                       <Link
                         to={config.routes.checkout}
                         state={{ orderData: orderDetails, orderId: order.id }}
                       >
-                        <button
-                          // onClick={() => PaymentAgain(order.id)}
-                          className="transition duration-300 ease-in-out mb-4 hover:bg-[#FBA31A] dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
-                        >
+                        <button className="transition duration-300 ease-in-out mb-4 hover:bg-[#FBA31A] dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white">
                           Thanh toán lại
                         </button>
                       </Link>
-                    ) : order.orderStatus.status === "REFUNDED" ? (
+                    )}
+                    {order.orderStatus.status === "REFUNDED" && (
                       <button
                         disabled
                         className="transition duration-300 ease-in-out hover:bg-[#FBA31A] dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
                       >
                         Đã hoàn tiền
                       </button>
-                    ) : (
+                    )}
+                    {order.orderStatus.status === "CAPTURED" && (
                       <div>
                         <button
                           disabled
@@ -298,10 +315,20 @@ function OrderDetail() {
                         </button>
 
                         <button
-                          // onClick={() => RefundOrderHandler(order.captureId)}
+                          onClick={() => RefundOrderHandler(order.captureId)}
                           className="transition mt-2 12 duration-300 ease-in-out mb-4 hover:bg-red-500 hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-red-600 text-base font-medium leading-4 text-white"
                         >
                           Hủy đơn hàng / Hoàn tiền
+                        </button>
+                      </div>
+                    )}
+                    {order.orderStatus.status === "DELIVERED" && (
+                      <div>
+                        <button className="transition duration-300 ease-in-out hover:bg-[#FBA31A] dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white">
+                          Đã nhận hàng
+                        </button>
+                        <button className="transition mt-4 duration-300 ease-in-out mb-4 hover:bg-red-500 hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-red-600 text-base font-medium leading-4 text-white">
+                          Trả hàng / Hoàn tiền
                         </button>
                       </div>
                     )}
