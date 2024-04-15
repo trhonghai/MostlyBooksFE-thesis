@@ -2,16 +2,29 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect } from "react";
 import Rating from "@mui/material/Rating/Rating.js";
+import { useReview } from "~/hooks";
+import { useState } from "react";
 
 function Reviews({ data }) {
   console.log(data);
 
+  const [reviews, setReviews] = useState([]);
+  const { getReviewsByBookId } = useReview();
+  const getReviews = async () => {
+    const result = await getReviewsByBookId(data?.id);
+    setReviews(result);
+  };
+
+  useEffect(() => {
+    getReviews();
+  }, []);
+
   // Tính tổng số lượt đánh giá
-  const totalReviews = data?.reviews.length;
+  const totalReviews = reviews?.length;
 
   // Tính tổng số lượt đánh giá cho mỗi mức độ (số sao)
   const ratingsCount = {};
-  data?.reviews.forEach((review) => {
+  reviews?.forEach((review) => {
     ratingsCount[review.rating] = (ratingsCount[review.rating] || 0) + 1;
   });
 
@@ -84,7 +97,7 @@ function Reviews({ data }) {
       </div>
       <div className="">
         <ul className="">
-          {data?.reviews.map((review) => (
+          {reviews?.map((review) => (
             <li
               key={review.id}
               className="py-8 text-left border-t border-gray-400 px-4 m-2"
@@ -101,7 +114,10 @@ function Reviews({ data }) {
                   <div className="mt-5 text-base text-gray-900">
                     {review.comment}
                   </div>
-                  <FontAwesomeIcon icon={faHeart} /> 12
+                  <button>
+                    {" "}
+                    <FontAwesomeIcon icon={faHeart} /> {review.like}
+                  </button>
                 </div>
               </div>
             </li>

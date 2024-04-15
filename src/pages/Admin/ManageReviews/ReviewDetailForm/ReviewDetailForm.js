@@ -23,25 +23,87 @@ function ReviewDetailForm({ open, onClose, reviewCurrent, fetchRevirews }) {
                 Chi tiết đánh giá
               </h2>
               <form onSubmit={{}}>
-                <div className="grid gap-6 sm:grid-cols-1 sm:gap-6">
-                  <label className="text-gray-700" htmlFor="name">
-                    Tên sách
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={reviewCurrent?.book?.name}
-                    className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-                    placeholder="Tên tác giả"
-                    // onChange={handleChange}
-                  />
+                <div className="grid mb-4 gap-6 sm:grid-cols-1 sm:gap-6">
+                  <div>
+                    <label className="text-gray-700" htmlFor="name">
+                      Tên sách
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={reviewCurrent?.book?.name}
+                      className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                      placeholder="Tên tác giả"
+                      // onChange={handleChange}
+                    />
+                  </div>
                 </div>
-                <div className="flex items-center justify-center">
+                <div className="grid mb-4 gap-6 sm:grid-cols-1 sm:gap-6">
+                  <div>
+                    <label className="text-gray-700" htmlFor="name">
+                      Khách hàng
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={`${reviewCurrent.customer?.firstName} ${reviewCurrent.customer?.lastName}`}
+                      className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                      placeholder="Tên tác giả"
+                      // onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="grid gap-6 mb-4  sm:grid-cols-1 sm:gap-6">
+                  <div>
+                    <label className="text-gray-700" htmlFor="name">
+                      Rating
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={reviewCurrent.rating}
+                      className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                      placeholder="Tên tác giả"
+                      // onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="grid gap-6 mb-4 sm:grid-cols-1 sm:gap-6">
+                  <div>
+                    <label className="text-gray-700" htmlFor="name">
+                      Thời gian đánh giá
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={reviewCurrent.date}
+                      className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                      placeholder="Tên tác giả"
+                      // onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="grid gap-6 sm:grid-cols-1 sm:gap-6">
+                  <div>
+                    <label className="text-gray-700" htmlFor="name">
+                      Đánh giá
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={reviewCurrent.comment}
+                      className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                      placeholder="Tên tác giả"
+                      // onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end">
                   <button
                     onClick={onClose}
-                    className="inline-flex ml-4 w-48 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#FFD16B] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+                    className="inline-flex ml-4 w-18 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#FFD16B] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
                   >
-                    Hủy
+                    Đóng
                   </button>
                 </div>
               </form>

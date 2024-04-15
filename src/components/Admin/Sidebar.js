@@ -1,6 +1,7 @@
 import { faComment, faUser } from "@fortawesome/free-regular-svg-icons";
 import {
   faBagShopping,
+  faBars,
   faBook,
   faHome,
   faList,
@@ -46,7 +47,7 @@ function Sidebar({ isSidebarOpen }) {
       link: config.routes.adminAuthors,
     },
     {
-      icon: faUser,
+      icon: faBars,
       title: "Nhà xuất bản",
       link: config.routes.adminPublishers,
     },
