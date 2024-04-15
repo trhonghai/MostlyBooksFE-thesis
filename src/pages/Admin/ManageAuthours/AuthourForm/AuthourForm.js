@@ -8,6 +8,7 @@ function AuthourForm({ open, onClose, mode, authourCurrent, fetchAuthours }) {
   const [data, setData] = useState({
     name: "",
   });
+  console.log(onClose);
   const { createAuthour, updateAuthour, deleteAuthour } = useAuthour();
   const [dataUpdate, setDataUpdate] = useState({ name: "" });
   const handleSubmit = async (e) => {

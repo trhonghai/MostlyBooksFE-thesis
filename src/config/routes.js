@@ -11,6 +11,7 @@ const routes = {
   adminAuthors: "/adminAuthors",
   adminOrdersDetail: "/adminOrders/:id",
   adminDiscounts: "/adminDiscounts",
+  adminReviews: "/adminReviews",
   brands: "/brands",
   book: "/books/:id",
   books: "/books",

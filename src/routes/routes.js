@@ -24,6 +24,7 @@ import BooksLayout from "~/layout/BooksLayout";
 import ManagePublisher from "~/pages/Admin/ManagePublisher";
 import ManageAuthours from "~/pages/Admin/ManageAuthours";
 import ManageDiscount from "~/pages/Admin/ManageDiscount";
+import ManageReviews from "~/pages/Admin/ManageReviews";
 
 const routes = [
   { path: config.routes.home, component: Home, layout: DefaultLayout },
@@ -128,6 +129,12 @@ const routes = [
   {
     path: config.routes.adminDiscounts,
     component: ManageDiscount,
+    layout: AdminLayout,
+    onlyAdmin: true,
+  },
+  {
+    path: config.routes.adminReviews,
+    component: ManageReviews,
     layout: AdminLayout,
     onlyAdmin: true,
   },

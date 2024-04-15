@@ -1,4 +1,4 @@
-import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { faComment, faUser } from "@fortawesome/free-regular-svg-icons";
 import {
   faBagShopping,
   faBook,
@@ -54,6 +54,11 @@ function Sidebar({ isSidebarOpen }) {
       icon: faTag,
       title: "Khuyến mãi",
       link: config.routes.adminDiscounts,
+    },
+    {
+      icon: faComment,
+      title: "Đánh giá",
+      link: config.routes.adminReviews,
     },
   ];
   return (
