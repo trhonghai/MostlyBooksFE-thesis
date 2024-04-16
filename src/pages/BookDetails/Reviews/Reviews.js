@@ -1,32 +1,83 @@
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as regularFaHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as solidFaHeart } from "@fortawesome/free-solid-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect } from "react";
 import Rating from "@mui/material/Rating/Rating.js";
 import { useReview } from "~/hooks";
 import { useState } from "react";
+import { useContext } from "react";
+import AuthContext from "~/context/AuthProvider";
+import toast from "react-hot-toast";
 
 function Reviews({ data }) {
   console.log(data);
+  const { userCurrent } = useContext(AuthContext);
 
   const [reviews, setReviews] = useState([]);
-  const { getReviewsByBookId } = useReview();
+  const { getReviewsByBookId, likeReview, unlikeReview, checkLiked } =
+    useReview();
+  const [liked, setLiked] = useState(false);
+  const [likedReviews, setLikedReviews] = useState([]);
   const getReviews = async () => {
     const result = await getReviewsByBookId(data?.id);
     setReviews(result);
   };
+  const isLiked = async (reviewId, customerId) => {
+    const result = await checkLiked(reviewId, customerId);
+    console.log(result);
+    return result; // Trả về kết quả của việc kiểm tra like
+  };
 
   useEffect(() => {
-    getReviews();
-  }, []);
+    const fetchData = async () => {
+      const result = await getReviewsByBookId(data?.id);
+      setReviews(result || []); // Kiểm tra và gán mảng rỗng nếu `result` là undefined
+      const likedReviews = await Promise.all(
+        (result || []).map(async (review) => {
+          const isLiked = await checkLiked(review.id, userCurrent);
+          return { reviewId: review.id, isLiked };
+        })
+      );
+      setLikedReviews(likedReviews);
+    };
+    fetchData();
+  }, [data?.id, userCurrent]);
 
-  // Tính tổng số lượt đánh giá
   const totalReviews = reviews?.length;
 
-  // Tính tổng số lượt đánh giá cho mỗi mức độ (số sao)
   const ratingsCount = {};
   reviews?.forEach((review) => {
     ratingsCount[review.rating] = (ratingsCount[review.rating] || 0) + 1;
   });
+
+  const handleLike = async (id) => {
+    try {
+      const alreadyLiked = await isLiked(id, userCurrent);
+      console.log(alreadyLiked);
+      if (!alreadyLiked) {
+        await likeReview({ reviewId: id, customerId: userCurrent });
+
+        setLiked(true);
+        getReviews();
+      } else {
+        await unlikeReview(id);
+        setLiked(false);
+        getReviews();
+      }
+      getReviews();
+      setLikedReviews((prevLikedReviews) =>
+        prevLikedReviews.map((likedReview) =>
+          likedReview.reviewId === id
+            ? { ...likedReview, isLiked: !likedReview.isLiked }
+            : likedReview
+        )
+      );
+    } catch (error) {
+      console.error("Error handling like:", error);
+      toast.error("Đã xảy ra lỗi khi xử lý like");
+    }
+  };
 
   return (
     <div>
@@ -114,9 +165,18 @@ function Reviews({ data }) {
                   <div className="mt-5 text-base text-gray-900">
                     {review.comment}
                   </div>
-                  <button>
-                    {" "}
-                    <FontAwesomeIcon icon={faHeart} /> {review.like}
+                  <button onClick={() => handleLike(review.id)}>
+                    <FontAwesomeIcon
+                      className="text-red-500"
+                      icon={
+                        likedReviews.find(
+                          (likedReview) => likedReview.reviewId === review.id
+                        )?.isLiked
+                          ? solidFaHeart
+                          : regularFaHeart
+                      }
+                    />
+                    {review.liked}
                   </button>
                 </div>
               </div>

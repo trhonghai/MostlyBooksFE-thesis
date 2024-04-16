@@ -37,7 +37,41 @@ function useReview() {
     }
   };
 
-  return { getAllReviews, getReview, deleteReview, getReviewsByBookId };
+  const likeReview = async (data) => {
+    try {
+      await axios.post("http://localhost:8080/liked-reviews", data);
+    } catch (error) {
+      console.error("Error liking review:", error);
+    }
+  };
+
+  const unlikeReview = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8080/liked-reviews/${id}`);
+    } catch (error) {
+      console.error("Error unliking review:", error);
+    }
+  };
+  const checkLiked = async (reviewId, customerId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/liked-reviews/${reviewId}/customer/${customerId}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching liked reviews:", error);
+    }
+  };
+
+  return {
+    getAllReviews,
+    getReview,
+    deleteReview,
+    getReviewsByBookId,
+    likeReview,
+    unlikeReview,
+    checkLiked,
+  };
 }
 
 export default useReview;
