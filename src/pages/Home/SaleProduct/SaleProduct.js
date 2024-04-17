@@ -5,6 +5,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
 import images from "~/assets/images";
+import svgs from "~/assets/svg";
 import Book from "~/components/Book";
 
 function BestSellerProductS() {
@@ -45,15 +46,17 @@ function BestSellerProductS() {
 
   return (
     <div className=" w-full mt-10 flex justify-center items-center">
-      <div className="container w-10/12 rounded-lg overflow-hidden bg-white">
-        <div className="flex p-2 items-center bg-red-200">
-          <img className="w-10" src={images.BestSeller} />
-          <div>
-            <span class="text-xl pl-2 mt-4 text-left font-bold sm:text-xl">
-              Sản phẩm bán chạy tháng này
-            </span>
-          </div>
+      <div className="container w-10/12 rounded-lg overflow-hidden bg-red-500">
+        <div className=" m-4 bg-white  rounded-lg">
+          {/* <h2 className="text-xl p-4 mt-4 text-left font-bold sm:text-2xl">
+            Flash Sale
+          </h2> */}
+          <img
+            className="text-xl p-4 mt-4 text-left font-bold sm:text-2xl"
+            src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/flashsale/label-flashsale.svg?q="
+          />
         </div>
+
         <Carousel responsive={responsive}>
           {books.map((book) => (
             <Book key={book.id} data={book} />

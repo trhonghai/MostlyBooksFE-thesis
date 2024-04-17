@@ -32,7 +32,7 @@ function Book({ data }) {
   return (
     <Link to={`/books/${data.id}`}>
       <div key={data.id} className="relative w-full p-4  h-full">
-        <div className="group md:p-4 hover:border hover:rounded-lg hover:shadow-lg h-full">
+        <div className="group md:p-4 hover:border bg-white rounded-lg hover:shadow-lg h-full">
           <div className="overflow-hidden aspect-w-1 aspect-h-1">
             <img
               className="object-cover h-40 md:h-48 transition-all duration-300 group-hover:scale-105"
