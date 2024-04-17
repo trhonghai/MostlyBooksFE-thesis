@@ -26,11 +26,12 @@ function RelateProduct({ bookId }) {
   };
 
   const [books, setBooks] = useState([]);
+  const [diversity, setDiversity] = useState(false);
 
-  const fetchBookRecommendated = async () => {
+  const fetchBookRecommendated = async (diversity) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:5000/api/recommendations/${bookId}`
+        `http://127.0.0.1:5000/api/recommendations/${bookId}?diversity=${diversity}`
       );
       return response.data.recommendations.map((book) => book.id);
     } catch (error) {
@@ -39,9 +40,13 @@ function RelateProduct({ bookId }) {
     }
   };
 
+  const toggleDiversity = () => {
+    setDiversity(!diversity); // Đảo ngược giá trị diversity
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const listId = await fetchBookRecommendated();
+      const listId = await fetchBookRecommendated(diversity); // Sử dụng giá trị diversity hiện tại khi gọi hàm fetchBookRecommendated
       console.log(listId);
       try {
         const response = await axios.get(
@@ -54,7 +59,7 @@ function RelateProduct({ bookId }) {
     };
 
     fetchData();
-  }, [bookId]);
+  }, [bookId, diversity]); // Đảm bảo useEffect được gọi lại khi bookId hoặc diversity thay đổi
 
   return (
     <div className="w-full mt-10 flex justify-center items-center">
@@ -62,6 +67,30 @@ function RelateProduct({ bookId }) {
         <h2 className="text-xl pl-10 mt-4 text-left font-bold sm:text-2xl">
           Sản phẩm có thể bạn thích
         </h2>
+        <label className="inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            className="sr-only"
+            checked={diversity}
+            onChange={toggleDiversity}
+          />
+          <div
+            className={`relative w-11 h-6 ${
+              diversity ? "bg-blue-600" : "bg-gray-200"
+            } peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700`}
+          >
+            <span
+              className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-md ${
+                diversity
+                  ? "transform translate-x-full"
+                  : "transform translate-x-0"
+              } transition-transform duration-300`}
+            />
+          </div>
+          <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+            Diversity
+          </span>
+        </label>
         <Carousel responsive={responsive}>
           {books.map((book) => (
             <Book key={book.id} data={book} />
