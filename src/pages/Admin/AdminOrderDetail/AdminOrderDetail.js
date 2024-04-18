@@ -228,15 +228,15 @@ function AdminOrderDetail() {
                   <div className="flex justify-center items-center w-full space-y-4 flex-col border-gray-200 border-b pb-4">
                     <div className="justify-between w-full">
                       <p className=" text-left text-base dark:text-white leading-4 text-gray-800">
-                        {order.address.firstName} {order.address.lastName}
+                        {order?.address.firstName} {order?.address.lastName}
                       </p>
                       <p className="mt-2 text-left text-base dark:text-white leading-4 text-gray-800">
-                        {order.address.phoneNumber}
+                        {order?.address.phoneNumber}
                       </p>
 
                       <p className="mt-2 text-left text-base dark:text-white leading-4 text-gray-800">
-                        {order.address.address} - {order.address.ward} -{" "}
-                        {order.address.district} - {order.address.city}
+                        {order?.address.address} - {order?.address.ward} -{" "}
+                        {order?.address.district} - {order?.address.city}
                       </p>
                     </div>
                   </div>

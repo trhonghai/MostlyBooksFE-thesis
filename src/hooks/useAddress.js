@@ -99,6 +99,19 @@ function useAddress() {
     }
   };
 
+  const getShippingRate = async (provinceName) => {
+    console.log(provinceName);
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/shipping-rate/get?provinceName=${provinceName}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     Address,
     updateAddress,
@@ -108,6 +121,7 @@ function useAddress() {
     getWards,
     deleteAddress,
     updateDefaultAddress,
+    getShippingRate,
   };
 }
 

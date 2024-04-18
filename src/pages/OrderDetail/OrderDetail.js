@@ -200,7 +200,7 @@ function OrderDetail() {
                         Thành tiền
                       </p>
                       <p className="text-base dark:text-gray-300 leading-4 text-gray-600">
-                        {formatPrice(order.amount)}
+                        {formatPrice(order?.amount)}
                       </p>
                     </div>
 

@@ -12,15 +12,18 @@ function Checkout() {
   const [allAddress, setAllAddress] = useState([]);
   const [addressChecked, setAddressChecked] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("paypal");
+  const [shippingRate, setShippingRate] = useState(0);
 
   const { deleteOrderById } = useOrder();
   const location = useLocation();
   const orderData = location.state && location.state.orderData;
-  const orderId = location.state && location.state.orderId;
 
+  const orderId = location.state && location.state.orderId;
   const [items, setItems] = useState(
     JSON.parse(localStorage.getItem("dataCheckOut")) || orderData || []
   );
+  console.log(items);
+
   const { cartId, userCurrent } = useContext(AuthContext);
 
   const orderDetailsId = items.map((item) => item.id);
@@ -38,43 +41,69 @@ function Checkout() {
   };
 
   const [paymentRequest, setPaymentRequest] = useState({
-    amount: 10.0,
+    amount: 0,
     currency: "USD",
     description: "Payment description",
     customerId: userCurrent,
     orderDetailsId: orderDetailsId,
+    shippingFee: shippingRate,
   });
 
-  const { Address } = useAddress();
+  const { Address, getShippingRate } = useAddress();
 
   useEffect(() => {
     fetchAddress();
-  }, []);
+  }, [addressChecked]);
 
   const fetchAddress = async () => {
     const result = await Address();
     setAllAddress(result);
     setAddressChecked(result.find((item) => item.defaultForShopping)?.id || "");
+    const selectedAddress = result.find((item) => item.defaultForShopping);
+    if (selectedAddress) {
+      const province = selectedAddress.city; // Giả sử province là một đối tượng Province
+      const shippingRate = await fetchShippingRate(province); // Sử dụng đối tượng Province để truy vấn giá ship
+      setShippingRate(shippingRate.price); // Cập nhật giá ship vào state hoặc hiển thị trực tiếp trên giao diện
+    }
+  };
+
+  const fetchShippingRate = async (province) => {
+    try {
+      const response = await getShippingRate(province);
+      return response;
+    } catch (error) {
+      console.error("Error fetching shipping rate:", error);
+    }
   };
 
   const calculateTotalPrice = () => {
     let total = 0;
+    const shippingCost = 30000; // Giá tiền ship
     items.forEach((item) => {
       total += item.price * item.quantity;
     });
+    total += shippingCost; // Cộng thêm giá tiền ship vào tổng giá tiền
     return total;
   };
+  const calculateTotalPriceInUSD = () => {
+    const exchangeRate = 25000; // Tỷ giá USD/VND
+    const totalInCurrency = calculateTotalPrice(); // Gọi hàm tính tổng giá tiền
+    const totalInUSD = totalInCurrency / exchangeRate; // Chuyển đổi sang USD
+    return totalInUSD;
+  };
+  useEffect(() => {
+    const total = calculateTotalPriceInUSD();
+    setPaymentRequest((prevPaymentRequest) => ({
+      ...prevPaymentRequest,
+      amount: total,
+      shippingFee: shippingRate,
+    }));
+  }, [paymentMethod, shippingRate, items]);
 
   const createPayment = async () => {
-    const total = calculateTotalPrice();
-    setPaymentRequest({
-      ...paymentRequest,
-      amount: total,
-      currency: "USD",
-      description: "Payment description",
-    });
     try {
       if (paymentMethod === "paypal") {
+        console.log(paymentRequest);
         const response = await axios.post(
           "http://localhost:8080/api/paypal/orders/create",
           paymentRequest
@@ -83,7 +112,6 @@ function Checkout() {
           await deleteOrderById(orderId);
         }
         localStorage.removeItem("dataCheckOut");
-
         window.location.href = response.data.links
           .map((link) => {
             if (link.rel === "approve") return link.href;
@@ -94,7 +122,8 @@ function Checkout() {
           .join("");
       } else {
         const response = await axios.post(
-          "http://localhost:8080/api/payment/cash-on-delivery",paymentRequest
+          "http://localhost:8080/api/payment/cash-on-delivery",
+          paymentRequest
         );
         console.log("Call API for cash on delivery");
       }
@@ -137,7 +166,7 @@ function Checkout() {
                                 text-gray-700 "
                     for="account-option-0"
                   >
-                    Giao hàng tiêu chuẩn: 31.000đ
+                    Giao hàng tiêu chuẩn: {formatPrice(shippingRate)}
                   </label>
                 </div>
               </div>
@@ -239,12 +268,12 @@ function Checkout() {
 
                 <div className="flex justify-between mb-2">
                   <span>Vận chuyển</span>
-                  <span>{formatPrice(31000)}</span>
+                  <span>{formatPrice(shippingRate)}</span>
                 </div>
                 <div className="flex justify-between mb-2 border-1 border-b pb-2">
                   <span className="font-semibold text-xl">Tổng số tiền</span>
                   <span className="font-semibold">
-                    {formatPrice(calculateTotalPrice() + 31000)}
+                    {formatPrice(calculateTotalPrice() + shippingRate)}
                   </span>
                 </div>
                 <button

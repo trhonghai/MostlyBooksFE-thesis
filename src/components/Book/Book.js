@@ -51,7 +51,7 @@ function Book({ data }) {
 
             <div className="flex items-center space-x-1 px-2 py-1">
               <p className="text-xs font-sans sm:text-sm md:text-base">
-                {formatPrice(data.discountedPrice)}
+                {formatPrice(data.price)}
               </p>
               {discount.length > 0 && (
                 <div className="bg-red-400 text-white px-1 rounded-lg">

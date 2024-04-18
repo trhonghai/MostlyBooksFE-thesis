@@ -143,7 +143,7 @@ function BookDetails() {
                 </div>
               )}
             </div>
-            {discounts.filter((item) => item !== null).length > 0 && (
+            {discounts?.filter((item) => item !== null).length > 0 && (
               <FlashSale discounts={discounts} />
             )}
 
