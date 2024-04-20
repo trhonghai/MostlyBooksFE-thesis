@@ -26,15 +26,14 @@ function BookDetails() {
   const { getTotalCartItems, totalCartItems } = useContext(AuthContext);
 
   useEffect(() => {
-    const fetchBook = async () => {
-      const response = await axios.get(`http://localhost:8080/books/${id}`);
-      console.log(response.data);
-      setBook(response.data);
-      setRating(response.data.rating);
-    };
     fetchBook();
   }, [id]);
-
+  const fetchBook = async () => {
+    const response = await axios.get(`http://localhost:8080/books/${id}`);
+    console.log(response.data);
+    setBook(response.data);
+    setRating(response.data.rating);
+  };
   useEffect(() => {
     const fetchFlashSale = async () => {
       const result = await getDiscountByBookId(id);
@@ -230,7 +229,7 @@ function BookDetails() {
         <DescriptionText data={book} />
       </div>
       <div className="container w-9/12 mx-auto px-4 bg-white rounded-lg">
-        <Reviews data={book} />
+        <Reviews data={book} fetchBook={fetchBook} />
       </div>
     </section>
   );

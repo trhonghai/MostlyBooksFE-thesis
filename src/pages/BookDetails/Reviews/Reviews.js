@@ -1,5 +1,8 @@
 import { faHeart as regularFaHeart } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as solidFaHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPen,
+  faHeart as solidFaHeart,
+} from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect } from "react";
@@ -9,8 +12,9 @@ import { useState } from "react";
 import { useContext } from "react";
 import AuthContext from "~/context/AuthProvider";
 import toast from "react-hot-toast";
+import ReviewForm from "./ReviewForm";
 
-function Reviews({ data }) {
+function Reviews({ data, fetchBook }) {
   console.log(data);
   const { userCurrent } = useContext(AuthContext);
 
@@ -19,6 +23,14 @@ function Reviews({ data }) {
     useReview();
   const [liked, setLiked] = useState(false);
   const [likedReviews, setLikedReviews] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   const getReviews = async () => {
     const result = await getReviewsByBookId(data?.id);
     setReviews(result);
@@ -30,19 +42,20 @@ function Reviews({ data }) {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await getReviewsByBookId(data?.id);
-      setReviews(result || []); // Kiểm tra và gán mảng rỗng nếu `result` là undefined
-      const likedReviews = await Promise.all(
-        (result || []).map(async (review) => {
-          const isLiked = await checkLiked(review.id, userCurrent);
-          return { reviewId: review.id, isLiked };
-        })
-      );
-      setLikedReviews(likedReviews);
-    };
     fetchData();
-  }, [data?.id, userCurrent]);
+  }, [data?.id]);
+
+  const fetchData = async () => {
+    const result = await getReviewsByBookId(data?.id);
+    setReviews(result || []); // Kiểm tra và gán mảng rỗng nếu `result` là undefined
+    const likedReviews = await Promise.all(
+      (result || []).map(async (review) => {
+        const isLiked = await checkLiked(review.id, userCurrent);
+        return { reviewId: review.id, isLiked };
+      })
+    );
+    setLikedReviews(likedReviews);
+  };
 
   const totalReviews = reviews?.length;
 
@@ -140,10 +153,20 @@ function Reviews({ data }) {
             </div>
           </div>
         </div>
-        <div className="lg:col-span-2 lg:row-end-1 flex items-center">
-          <button className="max-w-xl w-96 rounded-full border py-3  font-medium">
-            Write a review
+        <div className="lg:col-span-2 lg:row-end-1 text-[#f7941e] flex items-center">
+          <button
+            onClick={openModal}
+            className="max-w-xl w-96 rounded-full border py-3  font-medium"
+          >
+            <FontAwesomeIcon icon={faPen} className="mr-2" />
+            Viết đánh giá
           </button>
+          <ReviewForm
+            fetchData={fetchData}
+            bookId={data?.id}
+            open={isModalOpen}
+            onClose={closeModal}
+          />
         </div>
       </div>
       <div className="">

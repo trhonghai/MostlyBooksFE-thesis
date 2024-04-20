@@ -115,7 +115,11 @@ function ManageBook() {
                     <td className="px-2 py-4">
                       <img className="w-32" src={book.img} />
                     </td>
-                    <td className="px-2 py-4">{book.name}</td>
+                    <td className="px-2 py-4">
+                      {book.name.length > 22
+                        ? book.name.substring(0, 22 - 3) + "..."
+                        : book.name}
+                    </td>
                     <td className="px-2 py-4">{book.category.name}</td>
                     <td className="px-2 py-4">{book.issue}</td>
                     <td className="px-2 py-4">{book.inventory}</td>

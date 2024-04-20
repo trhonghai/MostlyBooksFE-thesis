@@ -63,6 +63,13 @@ function useReview() {
     }
   };
 
+  const createReview = async (bookId, data) => {
+    try {
+      await axios.post(`http://localhost:8080/reviews/create/${bookId}`, data);
+    } catch (error) {
+      console.error("Error creating review:", error);
+    }
+  };
   return {
     getAllReviews,
     getReview,
@@ -71,6 +78,7 @@ function useReview() {
     likeReview,
     unlikeReview,
     checkLiked,
+    createReview,
   };
 }
 
