@@ -18,8 +18,8 @@ function Sidebar({ isSidebarOpen }) {
   const barMenu = [
     {
       icon: faHome,
-      title: "Dashboard",
-      link: config.routes.adminDashboard,
+      title: "Thống kê",
+      link: config.routes.adminStatistic,
     },
     {
       icon: faUserAlt,

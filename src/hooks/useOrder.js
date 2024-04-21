@@ -66,6 +66,18 @@ function useOrder() {
       console.error("Lấy danh mục thất bại:", error.message);
     }
   };
+  const fetchOrderByStatusOfCus = async (status) => {
+    console.log(status);
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/customer/order/order-status?customerId=${userCurrent}&status=${status}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Lấy danh mục thất bại:", error.message);
+    }
+  };
 
   const Cancelled = async (orderId) => {
     try {
@@ -149,6 +161,7 @@ function useOrder() {
       console.error("Lấy danh mục thất bại:", error.message);
     }
   };
+
   return {
     Orders,
     OrderDetails,
@@ -162,6 +175,7 @@ function useOrder() {
     delivered,
     captureOrdercash,
     cancleOrderCash,
+    fetchOrderByStatusOfCus,
   };
 }
 

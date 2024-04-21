@@ -127,6 +127,7 @@ function Checkout() {
         );
         console.log("Call API for cash on delivery");
       }
+      window.location.href = "http://localhost:3000";
     } catch (error) {
       console.error("Error creating payment:", error);
     }

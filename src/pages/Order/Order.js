@@ -9,7 +9,8 @@ import { formatPrice } from "~/utils/formatPrice";
 function Order() {
   const [orders, setOrders] = useState([]);
   const [orderDetails, setOrderDetails] = useState({});
-  const { Orders, OrderDetails, fetchOrderByStatus } = useOrder();
+  const { Orders, OrderDetails, fetchOrderByStatusOfCus, fetchOrderByStatus } =
+    useOrder();
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [orderCounts, setOrderCounts] = useState({
     all: 0,
@@ -22,28 +23,25 @@ function Order() {
 
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
-    fetchOrderByStatus(filter);
-    // Thực hiện các hành động khác tương ứng với việc thay đổi bộ lọc ở đây
+    fetchOrderByStatusOfCus(filter);
   };
+
   useEffect(() => {
-    // fetchOrders();
-    fetchOrdersByStatus(selectedFilter);
-    // updateOrderCounts(orders);
+    fetchOrders(selectedFilter);
   }, [selectedFilter]);
 
-  console.log(orderCounts);
-
-  const fetchOrdersByStatus = async (status) => {
+  const fetchOrders = async (status) => {
     try {
       let result;
       if (status === "all") {
         result = await Orders();
         updateOrderCounts(result);
       } else {
-        result = await fetchOrderByStatus(status);
+        result = await fetchOrderByStatusOfCus(status);
+        console.log(result);
       }
       setOrders(result);
-      result.forEach(async (order) => {
+      result?.forEach(async (order) => {
         const orderDetailData = await OrderDetails(order.id);
         setOrderDetails((prev) => ({ ...prev, [order.id]: orderDetailData }));
       });
@@ -72,7 +70,7 @@ function Order() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const offset = (currentPage - 1) * itemsPerPage;
-  const pageCount = Math.ceil(orders?.length / itemsPerPage);
+  const pageCount = Math.ceil((orders?.length || 0) / itemsPerPage);
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected + 1);
