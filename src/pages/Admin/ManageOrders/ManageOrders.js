@@ -191,7 +191,7 @@ function ManageOders() {
                         </td>
                         <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">
                           <p className="whitespace-no-wrap">
-                            {formatDate(order.orderDate)}
+                            {new Date(order.orderDate).toLocaleString()}
                           </p>
                         </td>
                         <td className="border-b text-left border-gray-200 bg-white px-5 py-5 text-sm">

@@ -1,8 +1,10 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useOrder } from "~/hooks";
 import { formatPrice } from "~/utils/formatPrice";
 
-function RevenueTable({ orders }) {
+function RevenueTable({ orderDelivered }) {
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
   const getMonthYearFromTimestamp = (timestamp) => {
     const date = new Date(timestamp);
     const month = date.getMonth() + 1; // Tháng bắt đầu từ 0 nên cần cộng thêm 1
@@ -16,7 +18,7 @@ function RevenueTable({ orders }) {
     const revenueByYear = {};
 
     orders.forEach((order) => {
-      const { amount, orderDate } = order;
+      const { amount, shipping, orderDate } = order;
       const { month, year } = getMonthYearFromTimestamp(orderDate);
 
       // Tính tổng doanh thu theo tháng
@@ -26,26 +28,32 @@ function RevenueTable({ orders }) {
       if (!revenueByMonth[year][month]) {
         revenueByMonth[year][month] = 0;
       }
-      revenueByMonth[year][month] += amount;
+      revenueByMonth[year][month] += amount + shipping;
 
       // Tính tổng doanh thu theo năm
       if (!revenueByYear[year]) {
         revenueByYear[year] = 0;
       }
-      revenueByYear[year] += amount;
+      revenueByYear[year] += amount + shipping;
     });
 
     return { revenueByMonth, revenueByYear };
   };
 
   const { revenueByMonth, revenueByYear } =
-    calculateRevenueByMonthAndYear(orders);
-  const [collapsed, setCollapsed] = useState(false);
+    calculateRevenueByMonthAndYear(orderDelivered);
+  const [collapsed, setCollapsed] = useState(true);
 
   // Hàm để xử lý sự kiện click nút thu gọn
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
   };
+
+  // Hàm để xử lý sự kiện khi thay đổi năm được chọn
+  const handleYearChange = (event) => {
+    setSelectedYear(parseInt(event.target.value));
+  };
+
   return (
     <div className="p-6 relative flex flex-col min-w-0 mb-4 lg:mb-0 break-words bg-gray-50 dark:bg-gray-800 w-full shadow-lg rounded">
       <div className="rounded-t mb-0 px-0 border-0">
@@ -54,6 +62,19 @@ function RevenueTable({ orders }) {
             <h3 className="font-semibold text-base text-gray-900 dark:text-gray-50">
               Doanh thu theo tháng
             </h3>
+          </div>
+          <div>
+            <select
+              className="text-xs font-semibold"
+              value={selectedYear}
+              onChange={handleYearChange}
+            >
+              {Object.keys(revenueByYear).map((year) => (
+                <option key={year} value={parseInt(year)}>
+                  {year}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="block w-full overflow-x-auto">
@@ -76,23 +97,24 @@ function RevenueTable({ orders }) {
               {Array.from({ length: 12 }, (_, index) => index + 1).map(
                 (month) => {
                   const year = new Date().getFullYear();
-                  const revenue = revenueByMonth[year]?.[month] || 0;
-                  const orderCount = orders.filter(
+                  const revenue = revenueByMonth[selectedYear]?.[month] || 0;
+                  const orderCount = orderDelivered.filter(
                     (order) =>
                       getMonthYearFromTimestamp(order.orderDate).month ===
                         month &&
-                      getMonthYearFromTimestamp(order.orderDate).year === year
+                      getMonthYearFromTimestamp(order.orderDate).year ===
+                        selectedYear
                   ).length;
                   if (collapsed && revenue === 0 && orderCount === 0) {
                     return null;
                   }
                   return (
                     <tr
-                      key={`${year}-${month}`}
+                      key={`${selectedYear}-${month}`}
                       className="text-gray-700 dark:text-gray-100"
                     >
                       <th className="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                        {month}/{year}
+                        {month}/{selectedYear}
                       </th>
                       <td className="border-t-0 px-4 text-left align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         {formatPrice(revenue)}
