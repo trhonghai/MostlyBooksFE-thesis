@@ -6,8 +6,8 @@ function Footer() {
       <div class="container w-9/12 px-4 mx-auto">
         <div class="-mx-4 flex flex-wrap justify-between">
           <div class="px-4 my-4 w-full xl:w-1/5">
-            <a href="/" class="block w-56 mb-10">
-              <img className="w-48 h-28 object-cover" src={images.Logo} />
+            <a href="/" class="block w-56 ">
+              <img className="w-48 h-16 object-cover" src={images.Logo} />
             </a>
             <p class="text-justify">
               MostlyBooks.com nhận đặt hàng trực tuyến và giao hàng tận nơi.

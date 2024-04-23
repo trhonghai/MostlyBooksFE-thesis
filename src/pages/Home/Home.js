@@ -5,6 +5,7 @@ import HomeSlide from "./HomeSlide";
 import { useState } from "react";
 import axios from "axios";
 import SaleProduct from "./SaleProduct";
+import NewProduct from "./NewProduct/NewProduct";
 
 function Home() {
   return (
@@ -12,6 +13,7 @@ function Home() {
       <HomeSlide />
 
       <SaleProduct />
+      <NewProduct />
       <div className="flex pb-4 items-center">
         <BestSellerProduct />
       </div>

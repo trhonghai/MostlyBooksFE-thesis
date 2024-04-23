@@ -1,20 +1,18 @@
 import axios from "axios";
-import { useEffect } from "react";
 import { useState } from "react";
+import { useEffect } from "react";
 import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import { Link } from "react-router-dom";
 import images from "~/assets/images";
 import Book from "~/components/Book";
 import { responsive } from "~/utils/responsiveBook";
 
-function BestSellerProductS() {
+function NewProduct() {
   const [books, setBooks] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/books/api/bestseller"
+          "http://localhost:8080/books/new-books"
         );
         setBooks(response.data);
         console.log(response.data);
@@ -32,7 +30,7 @@ function BestSellerProductS() {
           <img className="w-10" src={images.BestSeller} />
           <div>
             <span class="text-xl pl-2 mt-4 text-left font-bold sm:text-xl">
-              Sản phẩm bán chạy tháng này
+              Sản phẩm mới
             </span>
           </div>
         </div>
@@ -46,4 +44,4 @@ function BestSellerProductS() {
   );
 }
 
-export default BestSellerProductS;
+export default NewProduct;

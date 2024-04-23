@@ -10,6 +10,7 @@ import Chart from "./Chart";
 import { shoppingCartIcon } from "~/components/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
+import { faBook } from "@fortawesome/free-solid-svg-icons";
 
 function ManageStatistic() {
   const [totalRevenue, setTotalRevenue] = useState(0);
@@ -93,7 +94,7 @@ function ManageStatistic() {
                 <div className="text-2xl font-semibold mr-4">{totalOrders}</div>
 
                 <div className="flex items-center justify-center h-12 w-12 items-center justify-center rounded-full bg-blue-200 dark:bg-meta-4">
-                  {shoppingCartIcon()}
+                  {shoppingCartIcon("text-gray-500")}
                 </div>
               </div>
               <div className="text-sm font-medium text-gray-400">
@@ -111,7 +112,13 @@ function ManageStatistic() {
         <div className="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
           <div className="flex justify-between mb-6">
             <div>
-              <div className="text-2xl font-semibold mb-1">{totalBook}</div>
+              <div className="flex items-center mb-1">
+                <div className="text-2xl font-semibold mr-4">{totalBook}</div>
+
+                <div className="flex items-center justify-center h-12 w-12 items-center justify-center rounded-full bg-blue-200 dark:bg-meta-4">
+                  <FontAwesomeIcon icon={faBook} />
+                </div>
+              </div>
               <div className="text-sm font-medium text-gray-400">
                 Tổng sản phẩm
               </div>
