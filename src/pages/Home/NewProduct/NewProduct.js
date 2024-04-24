@@ -34,7 +34,7 @@ function NewProduct() {
           </div>
         </div>
         <Carousel responsive={responsive}>
-          {books.map((book) => (
+          {books?.map((book) => (
             <Book key={book.id} data={book} />
           ))}
         </Carousel>

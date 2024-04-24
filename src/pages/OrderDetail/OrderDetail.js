@@ -209,7 +209,7 @@ function OrderDetail() {
                         Phí vận chuyển
                       </p>
                       <p className="text-base dark:text-gray-300 leading-4 text-gray-600">
-                        {formatPrice(order.shipping)}
+                        {formatPrice(order?.shipping)}
                       </p>
                     </div>
                   </div>
@@ -218,13 +218,13 @@ function OrderDetail() {
                       Tổng cộng
                     </p>
                     <p className="text-base dark:text-gray-300 font-semibold leading-4 text-gray-600">
-                      {formatPrice(order.amount + order.shipping)}
+                      {formatPrice(order?.amount + order?.shipping)}
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 dark:bg-gray-800 space-y-6">
                   <div className="w-full justify-center items-center">
-                    {order.orderStatus.status === "PENDING" && (
+                    {order?.orderStatus?.status === "PENDING" && (
                       <div>
                         <button
                           onClick={openModal}

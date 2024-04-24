@@ -25,5 +25,6 @@ const routes = {
   checkout: "/checkout",
   order: "/account/orders",
   orderDetail: "/account/orders/:id",
+  paymentSuccess: "/success",
 };
 export default routes;

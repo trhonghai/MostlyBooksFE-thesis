@@ -15,6 +15,7 @@ import AuthContext from "~/context/AuthProvider";
 import { Rating } from "@mui/material";
 import { formatPrice } from "~/utils/formatPrice";
 import config from "~/config";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
 
 function BookDetails() {
   const { id } = useParams();
@@ -160,6 +161,19 @@ function BookDetails() {
                   {formatPrice(book?.price)}
                 </h1>
               </div>
+            </div>
+            <div className="flex items-center mt-4">
+              <button>
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  size="xl"
+                  className=" text-[#FFD16B]"
+                />
+              </button>
+              <h2 className="ml-2 text-sm font-medium text-gray-500">
+                {" "}
+                Yêu thích
+              </h2>
             </div>
             <div className=" flex mt-4 justify-start ">
               <div>Số lượng:</div>

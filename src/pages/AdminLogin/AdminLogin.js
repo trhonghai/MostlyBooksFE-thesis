@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import images from "~/assets/images";
 import config from "~/config";
@@ -22,7 +23,7 @@ function AdminLogin() {
 
     try {
       await login(data);
-      alert("Đăng nhập thành công");
+      toast.success("Đăng nhập thành công");
       navigate(config.routes.adminUsers);
     } catch (error) {
       console.log(error);

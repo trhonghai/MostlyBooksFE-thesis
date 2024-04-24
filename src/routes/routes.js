@@ -26,6 +26,8 @@ import ManageAuthours from "~/pages/Admin/ManageAuthours";
 import ManageDiscount from "~/pages/Admin/ManageDiscount";
 import ManageReviews from "~/pages/Admin/ManageReviews";
 import ManageStatistic from "~/pages/Admin/ManageStatistic/ManageStatistic";
+import PaymentSuccess from "~/pages/PaymentSuccess";
+import Favorite from "~/pages/Favorite";
 
 const routes = [
   { path: config.routes.home, component: Home, layout: DefaultLayout },
@@ -144,6 +146,18 @@ const routes = [
     component: ManageStatistic,
     layout: AdminLayout,
     onlyAdmin: true,
+  },
+  {
+    path: config.routes.paymentSuccess,
+    component: PaymentSuccess,
+    layout: DefaultLayout,
+    protected: true,
+  },
+
+  {
+    path: config.routes.favorite,
+    component: Favorite,
+    layout: CusLayout,
   },
 ];
 

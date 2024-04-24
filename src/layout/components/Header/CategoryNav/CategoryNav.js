@@ -11,11 +11,10 @@ import { useFilter } from "~/context/FilterProvider";
 function CategoryNav() {
   const [categories, setCategories] = useState([]);
 
-  const { updateFilter, updateIsNewBooksClicked, fetchNewBooks } = useFilter();
+  const { updateFilter, fetchNewBooks } = useFilter();
 
   const handleCategoryClick = (categoryName) => {
     console.log("Category clicked:", categoryName);
-    updateIsNewBooksClicked(false);
     updateFilter({ categoryName });
   };
   const handleNewBooksClick = () => {

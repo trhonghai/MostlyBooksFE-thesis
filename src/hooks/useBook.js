@@ -130,6 +130,17 @@ function useBook() {
     }
   };
 
+  const getFavoriteBooks = async (id) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/favorite/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error getting favorite books:", error);
+    }
+  };
+
   return {
     getAllBook,
     createBook,
@@ -139,6 +150,7 @@ function useBook() {
     getDiscountByBookId,
     getBookByCategory,
     getNewBooks,
+    getFavoriteBooks,
   };
 }
 

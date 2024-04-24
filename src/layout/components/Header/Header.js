@@ -190,7 +190,7 @@ function Header() {
                 placement="bottom-end"
                 render={(attrs) => (
                   <div
-                    className="w-64 h-auto bg-white shadow shadow-gray-300  rounded-md  z-999"
+                    className="w-64 h-auto bg-white shadow-md shadow-gray-400   rounded-md  z-999"
                     tabIndex="-1"
                     {...attrs}
                   >

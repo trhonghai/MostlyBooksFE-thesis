@@ -16,7 +16,7 @@ function App() {
   console.log(userCurrent);
   console.log(userRole);
   console.log(isAdmin);
-  
+
   const renderRoutes = (routes) => {
     return routes.map((route, index) => {
       const Layout = route.layout || React.Fragment;
@@ -33,7 +33,7 @@ function App() {
         if (isAdmin) {
           element = (
             <Navigate
-              to={config.routes.adminUsers}
+              to={config.routes.adminStatistic}
               state={{ unnecessary: true }}
             />
           );

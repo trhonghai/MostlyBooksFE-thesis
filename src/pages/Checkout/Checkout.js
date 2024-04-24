@@ -78,16 +78,14 @@ function Checkout() {
 
   const calculateTotalPrice = () => {
     let total = 0;
-    const shippingCost = 30000; // Giá tiền ship
     items.forEach((item) => {
       total += item.price * item.quantity;
     });
-    total += shippingCost; // Cộng thêm giá tiền ship vào tổng giá tiền
     return total;
   };
   const calculateTotalPriceInUSD = () => {
     const exchangeRate = 25000; // Tỷ giá USD/VND
-    const totalInCurrency = calculateTotalPrice(); // Gọi hàm tính tổng giá tiền
+    const totalInCurrency = calculateTotalPrice() + shippingRate; // Gọi hàm tính tổng giá tiền
     const totalInUSD = totalInCurrency / exchangeRate; // Chuyển đổi sang USD
     return totalInUSD;
   };
