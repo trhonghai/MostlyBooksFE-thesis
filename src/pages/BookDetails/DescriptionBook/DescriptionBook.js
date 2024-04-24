@@ -28,7 +28,7 @@ function DesCriptionBook({ data }) {
             Năm xuất bản:
           </h2>
           <Link className="mt-4  text-base text-gray-900 text-left text-[#FBA31A]">
-            {/* {data?.publisher.name} */}
+            {data?.issue}
           </Link>
         </div>
         <div className="flex justify-start">

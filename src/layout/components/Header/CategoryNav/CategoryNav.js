@@ -9,15 +9,17 @@ import config from "~/config";
 import { useFilter } from "~/context/FilterProvider";
 
 function CategoryNav() {
-  const [isOpen, setIsOpen] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [hoveredCategory, setHoveredCategory] = useState(null);
 
-  const { updateFilter } = useFilter();
+  const { updateFilter, updateIsNewBooksClicked, fetchNewBooks } = useFilter();
 
   const handleCategoryClick = (categoryName) => {
     console.log("Category clicked:", categoryName);
+    updateIsNewBooksClicked(false);
     updateFilter({ categoryName });
+  };
+  const handleNewBooksClick = () => {
+    updateFilter({ issue: "2024" });
   };
 
   useEffect(() => {
@@ -52,14 +54,7 @@ function CategoryNav() {
     );
     return subcategories;
   };
-  const handleMouseEnter = (categoryId) => {
-    setHoveredCategory(categoryId);
-    console.log(categoryId);
-  };
 
-  const handleMouseLeave = () => {
-    setHoveredCategory(null);
-  };
   return (
     <div className=" w-full h-auto bg-white border-b-[1px] pb-2 z-10 ">
       <div className=" h-full max-w-screen-xl mx-auto px-4 xl:px-0 flex items-center  gap-2">
@@ -80,16 +75,16 @@ function CategoryNav() {
                 {getParentCategories().map((category) => (
                   <li>
                     <Link
-                      to="/books"
-                      onMouseEnter={() => handleMouseEnter(category.id)}
-                      onMouseLeave={handleMouseLeave}
+                      to={config.routes.books}
+                      // onMouseEnter={() => handleMouseEnter(category.id)}
+                      // onMouseLeave={handleMouseLeave}
                       onClick={() => handleCategoryClick(category.name)}
                       className="relative block text-left px-4 font-medium py-2 text-black hover:bg-[#FFD16B] dark:hover:bg-gray-600 hover:text-white"
                     >
                       <FontAwesomeIcon icon={faAngleRight} className="mr-2" />
                       {category.name}
                     </Link>
-                    {hoveredCategory === category.id && (
+                    {/* {hoveredCategory === category.id && (
                       <ul>
                         {getSubcategories(category).map((subcategory) => (
                           <li key={subcategory.id}>
@@ -108,7 +103,7 @@ function CategoryNav() {
                           </li>
                         ))}
                       </ul>
-                    )}
+                    )} */}
                   </li>
                 ))}
               </ul>
@@ -128,9 +123,11 @@ function CategoryNav() {
             TẤT CẢ SÁCH
           </div>
         </Link>
-        <div className="flex font-medium text-sm text-black w-32 h-6 justify-center items-center pl-3 pr-6 text-gray-600  underline-offset-4 decoration-[1px] hover:text-[#FFD16B] md:border-r-[2px] border-r-[#FFD16B] duration-200 last:border-r-0">
-          SÁCH MỚI
-        </div>
+        <Link to={config.routes.books} onClick={handleNewBooksClick}>
+          <div className="flex font-medium text-sm text-black w-32 h-6 justify-center items-center pl-3 pr-6 text-gray-600  underline-offset-4 decoration-[1px] hover:text-[#FFD16B] md:border-r-[2px] border-r-[#FFD16B] duration-200 last:border-r-0">
+            SÁCH MỚI
+          </div>
+        </Link>
         <div className="flex font-medium text-sm text-black w-32 h-6 justify-center items-center pl-3 pr-6 text-gray-600  underline-offset-4 decoration-[1px] hover:text-[#FFD16B] md:border-r-[2px] border-r-[#FFD16B] duration-200 last:border-r-0">
           LIÊN HỆ
         </div>

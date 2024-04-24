@@ -5,7 +5,6 @@ import Sidebar from "./Sidebar";
 
 function BooksLayout({ children }) {
   return (
-    <FilterProvider>
       <div className="flex-col min-h-screen bg-white">
         <Header />
         <div className="flex-1 justify-center align-center items-center">
@@ -22,7 +21,6 @@ function BooksLayout({ children }) {
         </div>
         <Footer />
       </div>
-    </FilterProvider>
   );
 }
 

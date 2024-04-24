@@ -4,18 +4,17 @@ import { useEffect } from "react";
 import Carousel from "react-multi-carousel";
 import images from "~/assets/images";
 import Book from "~/components/Book";
+import { useBook } from "~/hooks";
 import { responsive } from "~/utils/responsiveBook";
 
 function NewProduct() {
   const [books, setBooks] = useState([]);
+  const { getNewBooks } = useBook();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/books/new-books"
-        );
-        setBooks(response.data);
-        console.log(response.data);
+        const result = await getNewBooks();
+        setBooks(result);
       } catch (error) {
         console.error(error);
       }

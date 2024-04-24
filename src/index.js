@@ -4,6 +4,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AuthProvider } from "./context/AuthProvider";
 import axios from "axios";
+import { FilterProvider } from "./context/FilterProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -23,7 +24,9 @@ axios.interceptors.request.use(
 root.render(
   // <React.StrictMode>
   <AuthProvider>
-    <App />
+    <FilterProvider>
+      <App />
+    </FilterProvider>
   </AuthProvider>
   // {/* </React.StrictMode> */}
 );

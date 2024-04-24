@@ -31,7 +31,7 @@ function Sidebar() {
     fetchPublisher();
   }, []);
 
-  const { updateFilter, filter } = useFilter();
+  const { updateFilter, filter, updateIsNewBooksClicked } = useFilter();
 
   const handleCategoryClick = (categoryName) => {
     updateFilter({ categoryName });
@@ -57,10 +57,7 @@ function Sidebar() {
               key={index}
               className="border-b py-4 flex hover:scale-115 transition duration-400 ease-in-out pl-4 block text-left w-full font-medium py-2 text-gray-600 hover:bg-[#FFD16B] hover:rounded-lg dark:hover:bg-gray-600 hover:text-white"
             >
-              <Link
-                to={category.to}
-                onClick={() => handleCategoryClick(category.name)}
-              >
+              <Link onClick={() => handleCategoryClick(category.name)}>
                 {category.name}
               </Link>
             </li>

@@ -63,9 +63,10 @@ function useBook() {
     minPrice,
     maxPrice,
     categoryName,
-    publisherName
+    publisherName,
+    issue
   ) => {
-    console.log(minPrice, maxPrice, categoryName, publisherName);
+    console.log(minPrice, maxPrice, categoryName, publisherName, issue);
     try {
       let url = `http://localhost:8080/books/filter?`;
 
@@ -82,6 +83,9 @@ function useBook() {
 
       if (publisherName !== null) {
         url += `publisherName=${publisherName}&`;
+      }
+      if (issue !== null) {
+        url += `issue=${issue}&`;
       }
       console.log(url);
       const response = await axios.get(url.slice(0, -1)); // Loại bỏ dấu '&' cuối cùng
@@ -104,6 +108,28 @@ function useBook() {
     }
   };
 
+  const getBookByCategory = async (categoryId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/books/get-book-by-category/${categoryId}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error getting book by category:", error);
+    }
+  };
+
+  const getNewBooks = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/books/new-books");
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     getAllBook,
     createBook,
@@ -111,6 +137,8 @@ function useBook() {
     updateBook,
     filterBooks,
     getDiscountByBookId,
+    getBookByCategory,
+    getNewBooks,
   };
 }
 

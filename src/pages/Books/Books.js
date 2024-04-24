@@ -9,31 +9,39 @@ import { useBook } from "~/hooks";
 
 function Books() {
   const { filter, bookData, updateFilter } = useFilter();
-  console.log(filter);
+  console.log(bookData);
 
   const [books, setBooks] = useState([]);
   const { getAllBook, filterBooks } = useBook();
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      let data;
-      if (Object.keys(filter).length > 0) {
-        const minPrice = filter.minPrice !== undefined ? filter.minPrice : null;
-        const maxPrice = filter.maxPrice !== undefined ? filter.maxPrice : null;
+    // Nếu bookData đã được fetch từ FilterProvider, sử dụng nó trực tiếp
+    if (bookData && bookData.length > 0) {
+      setBooks(bookData);
+    } else {
+      // Nếu không, gọi API để fetch dữ liệu sách
+      const fetchBooks = async () => {
+        let data;
+        if (Object.keys(filter).length > 0) {
+          const minPrice =
+            filter.minPrice !== undefined ? filter.minPrice : null;
+          const maxPrice =
+            filter.maxPrice !== undefined ? filter.maxPrice : null;
 
-        data = await filterBooks(
-          minPrice,
-          maxPrice,
-          filter.categoryName || null,
-          filter.publisherName || null
-        );
-      } else {
-        data = await getAllBook();
-      }
-      setBooks(data);
-    };
-    fetchBooks();
-  }, [filter]);
+          data = await filterBooks(
+            minPrice,
+            maxPrice,
+            filter.categoryName || null,
+            filter.publisherName || null
+          );
+        } else {
+          data = await getAllBook();
+        }
+        setBooks(data);
+      };
+      fetchBooks();
+    }
+  }, [filter, bookData]);
 
   const clearFilter = (key) => {
     if (key === "minPrice") {
