@@ -7,7 +7,7 @@ import ReviewDetailForm from "./ReviewDetailForm";
 import { faStar, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Box, Modal } from "@mui/material";
+import { Box, Modal, Pagination } from "@mui/material";
 
 function ManageReviews() {
   const [reviews, setReviews] = useState([]);
@@ -59,7 +59,18 @@ function ManageReviews() {
   useEffect(() => {
     fetchReviews();
   }, []);
+  const [page, setPage] = useState(1);
+  const PER_PAGE = 10;
 
+  const count = Math.ceil(reviews?.length / PER_PAGE);
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+
+  const startIndex = (page - 1) * PER_PAGE;
+  const endIndex = startIndex + PER_PAGE;
+  const currentReviews = reviews?.slice(startIndex, endIndex);
   return (
     <div className="bg-white w-full shadow-lg overflow-hidden sm:rounded-lg">
       <div className="mx-auto max-w-screen-xl">
@@ -83,7 +94,7 @@ function ManageReviews() {
                   </tr>
                 </thead>
                 <tbody>
-                  {reviews.map((review) => (
+                  {currentReviews.map((review) => (
                     <tr
                       key={review.id}
                       className="border-b border-gray-200 hover:bg-gray-100"
@@ -192,6 +203,16 @@ function ManageReviews() {
         onClose={closeModalDetail}
         reviewCurrent={reviewCurrent}
       />
+      <div className="flex items-center justify-center border-t bg-white px-5 py-5 sm:flex-row sm:justify-center">
+        <Pagination
+          count={count}
+          page={page}
+          onChange={handleChange}
+          size="large"
+          variant="outlined"
+          shape="rounded"
+        />
+      </div>
     </div>
   );
 }

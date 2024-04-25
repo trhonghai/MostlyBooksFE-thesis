@@ -28,6 +28,7 @@ import ManageReviews from "~/pages/Admin/ManageReviews";
 import ManageStatistic from "~/pages/Admin/ManageStatistic/ManageStatistic";
 import PaymentSuccess from "~/pages/PaymentSuccess";
 import Favorite from "~/pages/Favorite";
+import Contact from "~/pages/Contact";
 
 const routes = [
   { path: config.routes.home, component: Home, layout: DefaultLayout },
@@ -158,6 +159,12 @@ const routes = [
     path: config.routes.favorite,
     component: Favorite,
     layout: CusLayout,
+    protected: true,
+  },
+  {
+    path: config.routes.contact,
+    component: Contact,
+    layout: DefaultLayout,
   },
 ];
 

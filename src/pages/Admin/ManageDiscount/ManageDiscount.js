@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useBook, useDiscount } from "~/hooks";
 import DiscountForm from "./DiscountForm/DiscountForm";
-import { Box, Modal } from "@mui/material";
+import { Box, Modal, Pagination } from "@mui/material";
 import toast from "react-hot-toast";
 
 function ManageDiscount() {
@@ -70,7 +70,18 @@ function ManageDiscount() {
       toast.error("Xóa danh mục thất bại");
     }
   };
+  const [page, setPage] = useState(1);
+  const PER_PAGE = 10;
 
+  const count = Math.ceil(discounts?.length / PER_PAGE);
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+
+  const startIndex = (page - 1) * PER_PAGE;
+  const endIndex = startIndex + PER_PAGE;
+  const currentDiscounts = discounts?.slice(startIndex, endIndex);
   return (
     <div className="bg-white w-full shadow-lg overflow-hidden sm:rounded-lg">
       <div className="mx-auto max-w-screen-xl">
@@ -109,7 +120,7 @@ function ManageDiscount() {
                 </tr>
               </thead>
               <tbody>
-                {discounts?.map((item, index) => (
+                {currentDiscounts?.map((item, index) => (
                   <tr
                     key={index}
                     className="hover:bg-gray-100 border-b border-gray-200 py-10 text-left"
@@ -205,6 +216,16 @@ function ManageDiscount() {
               </tbody>
             </table>
           </div>
+        </div>
+        <div className="flex items-center justify-center border-t bg-white px-5 py-5 sm:flex-row sm:justify-center">
+          <Pagination
+            count={count}
+            page={page}
+            onChange={handleChange}
+            size="large"
+            variant="outlined"
+            shape="rounded"
+          />
         </div>
       </div>
     </div>

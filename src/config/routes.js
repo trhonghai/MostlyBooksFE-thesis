@@ -26,5 +26,6 @@ const routes = {
   order: "/account/orders",
   orderDetail: "/account/orders/:id",
   paymentSuccess: "/success",
+  contact: "/contact",
 };
 export default routes;

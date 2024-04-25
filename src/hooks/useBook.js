@@ -1,4 +1,6 @@
 import axios from "axios";
+import { useContext } from "react";
+import AuthContext from "~/context/AuthProvider";
 
 function useBook() {
   const getAllBook = async () => {
@@ -141,6 +143,51 @@ function useBook() {
     }
   };
 
+  const { userCurrent } = useContext(AuthContext);
+  const addFavoriteBook = async (bookId) => {
+    try {
+      const data = {
+        customer: {
+          id: userCurrent,
+        },
+        book: {
+          id: bookId,
+        },
+      };
+      const response = await axios.post(
+        `http://localhost:8080/api/favorite/new`,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error adding favorite book:", error);
+    }
+  };
+
+  const checkLikedBook = async (bookId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/favorite/check?customerId=${userCurrent}&bookId=${bookId}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error checking liked book:", error);
+    }
+  };
+
+  const deleteFavoriteBook = async (id, bookId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/api/favorite/delete?Id=${id}&bookId=${bookId}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting favorite book:", error);
+    }
+  };
+
   return {
     getAllBook,
     createBook,
@@ -151,6 +198,9 @@ function useBook() {
     getBookByCategory,
     getNewBooks,
     getFavoriteBooks,
+    addFavoriteBook,
+    checkLikedBook,
+    deleteFavoriteBook,
   };
 }
 

@@ -127,9 +127,11 @@ function CategoryNav() {
             SÁCH MỚI
           </div>
         </Link>
-        <div className="flex font-medium text-sm text-black w-32 h-6 justify-center items-center pl-3 pr-6 text-gray-600  underline-offset-4 decoration-[1px] hover:text-[#FFD16B] md:border-r-[2px] border-r-[#FFD16B] duration-200 last:border-r-0">
-          LIÊN HỆ
-        </div>
+        <Link to={config.routes.contact}>
+          <div className="flex font-medium text-sm text-black w-32 h-6 justify-center items-center pl-3 pr-6 text-gray-600  underline-offset-4 decoration-[1px] hover:text-[#FFD16B] md:border-r-[2px] border-r-[#FFD16B] duration-200 last:border-r-0">
+            LIÊN HỆ
+          </div>
+        </Link>
       </div>
     </div>
   );

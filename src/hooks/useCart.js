@@ -10,7 +10,25 @@ function useCart() {
     return { result: response.data };
   };
 
-  return { fetchCartItem };
+  const AddtoCart = async (id, price, quantity) => {
+    const cartId = localStorage.getItem("cartId");
+    try {
+      const data = {
+        cartId: cartId,
+        bookId: id,
+        price: price,
+        quantity: quantity,
+      };
+      console.log(quantity);
+
+      const response = await axios.post(
+        "http://localhost:8080/user-cart/add-to-cart",
+        data
+      );
+      return response.data;
+    } catch (error) {}
+  };
+  return { fetchCartItem, AddtoCart };
 }
 
 export default useCart;

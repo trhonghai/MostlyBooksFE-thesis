@@ -9,26 +9,48 @@ import RelateProduct from "../Home/RelateProduct";
 import DesCriptionBook from "./DescriptionBook/DescriptionBook";
 import FlashSale from "./FlashSale";
 import Reviews from "./Reviews";
-import { useBook } from "~/hooks";
+import { useBook, useCart } from "~/hooks";
 import toast from "react-hot-toast";
 import AuthContext from "~/context/AuthProvider";
 import { Rating } from "@mui/material";
 import { formatPrice } from "~/utils/formatPrice";
 import config from "~/config";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as regularFaHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as solidFaHeart } from "@fortawesome/free-solid-svg-icons";
+import { set } from "date-fns";
 
 function BookDetails() {
   const { id } = useParams();
   const [book, setBook] = useState();
   const [discounts, setDiscounts] = useState([]);
   const [quantity, setQuantity] = useState(1);
-  const { getDiscountByBookId } = useBook();
+  const {
+    getDiscountByBookId,
+    addFavoriteBook,
+    checkLikedBook,
+    deleteFavoriteBook,
+  } = useBook();
   const [rating, setRating] = useState(0);
   const { getTotalCartItems, totalCartItems } = useContext(AuthContext);
+  const [isLiked, setIsLiked] = useState(false);
+  const [idFavorite, setIdFavorite] = useState();
+  const checkLiked = async () => {
+    try {
+      const result = await checkLikedBook(id);
+      if (result) {
+        setIsLiked(result);
+        setIdFavorite(result);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(idFavorite);
 
   useEffect(() => {
     fetchBook();
-  }, [id]);
+    checkLiked();
+  }, [id, isLiked]);
   const fetchBook = async () => {
     const response = await axios.get(`http://localhost:8080/books/${id}`);
     console.log(response.data);
@@ -47,23 +69,13 @@ function BookDetails() {
     getTotalCartItems();
   }, [totalCartItems]);
 
-  const AddtoCart = async (id, price, quantity) => {
-    const cartId = localStorage.getItem("cartId");
-    try {
-      const data = {
-        cartId: cartId,
-        bookId: id,
-        price: price,
-        quantity: quantity,
-      };
-      console.log(quantity);
+  const { AddtoCart } = useCart();
 
-      const response = await axios.post(
-        "http://localhost:8080/user-cart/add-to-cart",
-        data
-      );
+  const addItemIntoCart = async (id, price, quantity) => {
+    try {
+      const result = AddtoCart(id, price, quantity);
+      console.log(result);
       toast.success("Thêm sản phẩm thành công");
-      console.log(response);
     } catch (error) {
       toast.error("Thêm sản phẩm thất bại");
     }
@@ -75,6 +87,30 @@ function BookDetails() {
   const decreaseQuantity = () => {
     if (quantity > 1) {
       setQuantity((prevQuantity) => prevQuantity - 1);
+    }
+  };
+
+  const handleAddFavorite = async (id) => {
+    try {
+      if (!isLiked) {
+        const result = await addFavoriteBook(id);
+        if (result) {
+          toast.success("Thêm vào yêu thích thành công");
+        } else {
+          toast.error("Thêm vào yêu thích thất bại");
+        }
+        setIsLiked(true);
+      } else {
+        const result = await deleteFavoriteBook(idFavorite, id);
+        if (result) {
+          toast.success("Xóa khỏi yêu thích thành công");
+        } else {
+          toast.error("Xóa khỏi yêu thích thất bại");
+        }
+        setIsLiked(false);
+      }
+    } catch (error) {
+      toast.error("Thêm vào yêu thích thất bại");
     }
   };
 
@@ -163,16 +199,16 @@ function BookDetails() {
               </div>
             </div>
             <div className="flex items-center mt-4">
-              <button>
+              <button onClick={() => handleAddFavorite(book?.id)}>
                 <FontAwesomeIcon
-                  icon={faHeart}
+                  icon={isLiked ? solidFaHeart : regularFaHeart}
                   size="xl"
-                  className=" text-[#FFD16B]"
+                  className="text-[#FFD16B]"
                 />
               </button>
               <h2 className="ml-2 text-sm font-medium text-gray-500">
                 {" "}
-                Yêu thích
+                Yêu thích ({book?.liked})
               </h2>
             </div>
             <div className=" flex mt-4 justify-start ">
@@ -200,7 +236,7 @@ function BookDetails() {
                 type="button"
                 onClick={() => {
                   if (book.inventory > 0) {
-                    AddtoCart(book.id, book.price, quantity);
+                    addItemIntoCart(book.id, book.price, quantity);
                   }
                 }}
                 disabled={book?.inventory === 0}
@@ -222,7 +258,7 @@ function BookDetails() {
                 href={config.routes.cart}
                 onClick={() => {
                   if (book.inventory > 0) {
-                    AddtoCart(book.id, book.price, quantity);
+                    addItemIntoCart(book.id, book.price, quantity);
                   }
                 }}
                 disabled={book?.inventory === 0}

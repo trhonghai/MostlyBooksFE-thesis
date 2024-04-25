@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import useBook from "~/hooks/useBook";
 import BookForm from "./BookForm";
+import { Pagination } from "@mui/material";
 
 function ManageBook() {
   const { getAllBook, getAbook } = useBook();
@@ -74,6 +75,19 @@ function ManageBook() {
     }
   };
 
+  const [page, setPage] = useState(1);
+  const PER_PAGE = 10;
+
+  const count = Math.ceil(books.length / PER_PAGE);
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+
+  const startIndex = (page - 1) * PER_PAGE;
+  const endIndex = startIndex + PER_PAGE;
+  const currentBooks = books.slice(startIndex, endIndex);
+
   return (
     <div className="bg-white w-full shadow-lg overflow-hidden sm:rounded-lg">
       <div className="mx-auto max-w-screen-xl">
@@ -109,7 +123,7 @@ function ManageBook() {
                 </tr>
               </thead>
               <tbody className="text-gray-500 text-left bg-white divide-y divide-gray-200">
-                {books.map((book) => (
+                {currentBooks.map((book) => (
                   <tr key={book.id} className="hover:bg-gray-100">
                     <td className="px-2 py-4">{book.id}</td>
                     <td className="px-2 py-4">
@@ -146,6 +160,16 @@ function ManageBook() {
                 />
               </tbody>
             </table>
+          </div>
+          <div className="flex items-center justify-center border-t bg-white px-5 py-5 sm:flex-row sm:justify-center">
+            <Pagination
+              count={count}
+              page={page}
+              onChange={handleChange}
+              size="large"
+              variant="outlined"
+              shape="rounded"
+            />
           </div>
         </div>
       </div>
