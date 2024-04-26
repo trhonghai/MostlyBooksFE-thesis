@@ -17,7 +17,7 @@ function ManageBook() {
   const [bookCurrent, setBookCurrent] = useState({
     name: "",
     description: "",
-    price: 0,
+    originalPrice: 0,
     pages: 0,
     isbn_10: "",
     isbn_13: "",

@@ -94,7 +94,7 @@ function CartItem() {
     let totalPrice = 0;
     cartItem.forEach((item) => {
       if (item.isChecked) {
-        totalPrice += item.book.price * item.quantity;
+        totalPrice += item.price * item.quantity;
       }
     });
     return totalPrice;

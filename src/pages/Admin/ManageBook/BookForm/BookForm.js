@@ -59,7 +59,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
   const [bookData, setBookData] = useState({
     name: "",
     description: "",
-    price: 0,
+    originalPrice: 0,
     pages: 0,
     isbn_10: "",
     isbn_13: "",
@@ -81,7 +81,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
   const [dataUpdate, setDataUpdate] = useState({
     name: "",
     description: "",
-    price: 0,
+    originalPrice: 0,
     pages: 0,
     isbn_10: "",
     isbn_13: "",
@@ -265,19 +265,23 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
 
                   <div className="w-full">
                     <label
-                      for="price"
+                      for="originalPrice"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Price
                     </label>
                     <input
                       type="text"
-                      name="price"
-                      id="price"
+                      name="originalPrice"
+                      id="originalPrice"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="120.000đ"
                       required=""
-                      value={bookCurrent ? dataUpdate.price : bookData.price}
+                      value={
+                        bookCurrent
+                          ? dataUpdate.originalPrice
+                          : bookData.originalPrice
+                      }
                       onChange={handleChange}
                     />
                   </div>

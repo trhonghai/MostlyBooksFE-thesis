@@ -74,7 +74,7 @@ function Book({ data }) {
             </div>
 
             <del className="text-xs text-left font-bold text-gray-500">
-              {formatPrice(data.price)}
+              {formatPrice(data.originalPrice)}
             </del>
 
             <div className="flex items-center space-x-1">

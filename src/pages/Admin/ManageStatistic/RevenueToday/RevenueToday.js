@@ -18,7 +18,7 @@ function TodayRevenue({ orderDelivered }) {
       });
 
       const totalRevenue = filteredOrders.reduce(
-        (total, order) => total + order.amount,
+        (total, order) => total + order.amount + order.shipping,
         0
       );
 

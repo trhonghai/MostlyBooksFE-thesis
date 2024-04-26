@@ -27,6 +27,7 @@ function ManageUsers() {
   useEffect(() => {
     loadUsers();
   }, []);
+  console.log(users);
 
   const loadUserCurrent = async (id) => {
     const response = await axios.get(`http://localhost:8080/users/${id}`);
@@ -148,7 +149,7 @@ function ManageUsers() {
                       ))}
                     </td>
                     <td className="border-b  text-left border-gray-200 bg-white px-2 py-5 text-sm">
-                      {user.enabled ? (
+                      {user?.enabled ? (
                         <span className="px-2  inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                           Active
                         </span>

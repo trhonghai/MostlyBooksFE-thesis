@@ -232,7 +232,7 @@ function Checkout() {
                               alt="Product image"
                             />
                             <span className="font-semibold">
-                              Cây cam ngọt của tôi
+                              {item.book.name}
                             </span>
                           </div>
                         </td>
