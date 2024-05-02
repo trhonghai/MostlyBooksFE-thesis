@@ -29,6 +29,7 @@ import ManageStatistic from "~/pages/Admin/ManageStatistic/ManageStatistic";
 import PaymentSuccess from "~/pages/PaymentSuccess";
 import Favorite from "~/pages/Favorite";
 import Contact from "~/pages/Contact";
+import Invoice from "~/pages/Admin/AdminOrderDetail/Invoice";
 
 const routes = [
   { path: config.routes.home, component: Home, layout: DefaultLayout },

@@ -309,7 +309,7 @@ function Address() {
                           <select
                             name="city"
                             id="city"
-                            classNameName="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.city}
                             onChange={handleChange}
                           >
@@ -333,7 +333,7 @@ function Address() {
                           <select
                             name="district"
                             id="district"
-                            classNameName="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.district}
                             onChange={handleChange}
                           >
@@ -357,7 +357,7 @@ function Address() {
                           <select
                             name="ward"
                             id="ward"
-                            classNameName="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.ward}
                             onChange={handleChange}
                           >

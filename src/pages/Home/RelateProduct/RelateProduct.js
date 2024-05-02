@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Book from "~/components/Book";
+import Carousel from "react-multi-carousel";
 
 function RelateProduct({ bookId }) {
   const responsive = {
@@ -95,7 +95,7 @@ function RelateProduct({ bookId }) {
         </div>
         <Carousel responsive={responsive}>
           {books.map((book) => (
-            <Book key={book.id} data={book} />
+            <Book key={book?.id} data={book} />
           ))}
         </Carousel>
       </div>

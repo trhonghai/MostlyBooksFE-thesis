@@ -13,6 +13,9 @@ import config from "~/config";
 import AuthContext from "~/context/AuthProvider";
 import { useOrder } from "~/hooks";
 import { formatPrice } from "~/utils/formatPrice";
+import Invoice from "./Invoice";
+import { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 
 function AdminOrderDetail() {
   const location = useLocation();
@@ -31,12 +34,25 @@ function AdminOrderDetail() {
   const [orderDetails, setOrderDetails] = useState([]);
   const { userRole } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isShowInvoice, setIsShowInvoice] = useState(false);
+  const invoiceRef = useRef(null);
+
+  const handlePrint = useReactToPrint({
+    content: () => invoiceRef.current,
+    documentTitle: `Hóa đơn thanh toán - Đơn hàng: ${order.id}`,
+  });
+
+  const closeShowInvoiceModal = () => {
+    setIsShowInvoice(false);
+  };
 
   useEffect(() => {
     if (order) {
       fetchOrderDetail();
     }
   }, [order]);
+  console.log(orderDetails);
+  console.log(order);
 
   const [isModalCancelOpen, setIsModalCancelOpen] = useState(false);
   const openModalCancle = () => {
@@ -161,6 +177,78 @@ function AdminOrderDetail() {
               </Link>
               CHI TIẾT ĐƠN HÀNG
             </h3>
+          </div>
+          <div className="flex justify-center items-center w-full space-x-4">
+            {[
+              "PENDING",
+              "CAPTURED",
+              "SHIPPED",
+              "DELIVERED",
+              "REFUNDED",
+              "CANCELLED",
+            ].map((status) => (
+              <div
+                key={status}
+                className={`flex items-center space-x-1 ${
+                  order?.orderStatus?.status === status
+                    ? "bg-yellow-400"
+                    : order?.orderStatus?.status === "PENDING" &&
+                      status === "CAPTURED"
+                    ? "bg-gray-200"
+                    : order?.orderStatus?.status === "PENDING" &&
+                      status === "SHIPPED"
+                    ? "bg-gray-200"
+                    : order?.orderStatus?.status === "PENDING" &&
+                      status === "DELIVERED"
+                    ? "bg-gray-200"
+                    : order?.orderStatus?.status === "PENDING" &&
+                      status === "REFUNDED"
+                    ? "bg-gray-200"
+                    : order?.orderStatus?.status === "PENDING" &&
+                      status === "CANCELLED"
+                    ? "bg-gray-200"
+                    : ""
+                } p-2 rounded-full`}
+              >
+                <div
+                  className={`h-3 w-3 rounded-full ${
+                    order?.orderStatus?.status === status
+                      ? "bg-yellow-600"
+                      : order?.orderStatus?.status === "PENDING" &&
+                        status === "CAPTURED"
+                      ? "bg-gray-600"
+                      : order?.orderStatus?.status === "PENDING" &&
+                        status === "SHIPPED"
+                      ? "bg-gray-600"
+                      : order?.orderStatus?.status === "PENDING" &&
+                        status === "DELIVERED"
+                      ? "bg-gray-600"
+                      : order?.orderStatus?.status === "PENDING" &&
+                        status === "REFUNDED"
+                      ? "bg-gray-600"
+                      : order?.orderStatus?.status === "PENDING" &&
+                        status === "CANCELLED"
+                      ? "bg-gray-600"
+                      : ""
+                  }`}
+                ></div>
+                <p className="text-sm font-semibold">
+                  {status === "PENDING"
+                    ? "Đang chờ xử lý"
+                    : status === "CAPTURED"
+                    ? "Đã xác nhận"
+                    : status === "SHIPPED"
+                    ? "Đang giao hàng"
+                    : status === "DELIVERED"
+                    ? "Đã giao hàng"
+                    : status === "REFUNDED"
+                    ? "Đã hoàn tiền"
+                    : status === "CANCELLED"
+                    ? "Đã hủy"
+                    : ""}
+                </p>
+              </div>
+            ))}
           </div>
           <div className="px-4 py-2 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
             <div className="flex flex-col justify-start items-start w-full space-y-2 md:space-y-2 xl:space-y-8">
@@ -397,6 +485,14 @@ function AdminOrderDetail() {
                       userRole.includes("Admin") &&
                       order.orderStatus.status === "CAPTURED" && (
                         <div>
+                          <div className="flex">
+                            <button
+                              onClick={() => setIsShowInvoice(true)}
+                              className="transition duration-300 ease-in-out mb-4 hover:bg-[#FFD16B] hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
+                            >
+                              Xem hóa đơn
+                            </button>
+                          </div>
                           <button
                             onClick={() => ShipOrderHandler(order.id)}
                             className="transition duration-300 ease-in-out mb-4 hover:bg-[#FFD16B] hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#FFD16B] text-base font-medium leading-4 text-white"
@@ -409,6 +505,16 @@ function AdminOrderDetail() {
                           >
                             Hủy đơn hàng / Hoàn tiền
                           </button>
+                          <Modal
+                            open={isShowInvoice}
+                            onClose={() => setIsShowInvoice(false)}
+                          >
+                            <Invoice
+                              orderDetails={orderDetails}
+                              order={order}
+                              close={closeShowInvoiceModal}
+                            />
+                          </Modal>
                         </div>
                       )}
 

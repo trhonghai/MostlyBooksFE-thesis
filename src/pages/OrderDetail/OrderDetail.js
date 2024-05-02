@@ -90,6 +90,79 @@ function OrderDetail() {
               CHI TIẾT ĐƠN HÀNG
             </h3>
           </div>
+          <div className="flex justify-center items-center w-full space-x-4">
+            {[
+              "PENDING",
+              "CAPTURED",
+              "SHIPPED",
+              "DELIVERED",
+              "REFUNDED",
+              "CANCELLED",
+            ].map((status) => (
+              <div
+                key={status}
+                className={`flex items-center space-x-1 ${
+                  order?.orderStatus?.status === status
+                    ? "bg-yellow-400"
+                    : order?.orderStatus?.status === "PENDING" &&
+                      status === "CAPTURED"
+                    ? "bg-gray-200"
+                    : order?.orderStatus?.status === "PENDING" &&
+                      status === "SHIPPED"
+                    ? "bg-gray-200"
+                    : order?.orderStatus?.status === "PENDING" &&
+                      status === "DELIVERED"
+                    ? "bg-gray-200"
+                    : order?.orderStatus?.status === "PENDING" &&
+                      status === "REFUNDED"
+                    ? "bg-gray-200"
+                    : order?.orderStatus?.status === "PENDING" &&
+                      status === "CANCELLED"
+                    ? "bg-gray-200"
+                    : ""
+                } p-2 rounded-full`}
+              >
+                <div
+                  className={`h-3 w-3 rounded-full ${
+                    order?.orderStatus?.status === status
+                      ? "bg-yellow-600"
+                      : order?.orderStatus?.status === "PENDING" &&
+                        status === "CAPTURED"
+                      ? "bg-gray-600"
+                      : order?.orderStatus?.status === "PENDING" &&
+                        status === "SHIPPED"
+                      ? "bg-gray-600"
+                      : order?.orderStatus?.status === "PENDING" &&
+                        status === "DELIVERED"
+                      ? "bg-gray-600"
+                      : order?.orderStatus?.status === "PENDING" &&
+                        status === "REFUNDED"
+                      ? "bg-gray-600"
+                      : order?.orderStatus?.status === "PENDING" &&
+                        status === "CANCELLED"
+                      ? "bg-gray-600"
+                      : ""
+                  }`}
+                ></div>
+                <p className="text-sm font-semibold">
+                  {status === "PENDING"
+                    ? "Đang chờ xử lý"
+                    : status === "CAPTURED"
+                    ? "Đã xác nhận"
+                    : status === "SHIPPED"
+                    ? "Đang giao hàng"
+                    : status === "DELIVERED"
+                    ? "Đã giao hàng"
+                    : status === "REFUNDED"
+                    ? "Đã hoàn tiền"
+                    : status === "CANCELLED"
+                    ? "Đã hủy"
+                    : ""}
+                </p>
+              </div>
+            ))}
+          </div>
+
           <div className="px-4 py-2 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
             <div className="flex flex-col justify-start items-start w-full space-y-2 md:space-y-2 xl:space-y-8">
               {orderDetails.map((orderDetail) => (

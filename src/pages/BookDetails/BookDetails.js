@@ -198,6 +198,30 @@ function BookDetails() {
                 </h1>
               </div>
             </div>
+            <div className="flex ">
+              <del className="text-lg flex mr-4 items-start text-left font-bold text-gray-500">
+                {formatPrice(book?.originalPrice)}
+              </del>
+              {discounts.length > 0 && (
+                <div className="bg-red-400 text-white px-1 rounded-lg">
+                  {discounts.map((item) => {
+                    const currentDate = new Date();
+                    const startDate = new Date(item?.startDate);
+                    const endDate = new Date(item?.endDate);
+
+                    // Kiểm tra xem thời hạn ưu đãi đã hết hạn chưa
+                    if (currentDate >= startDate && currentDate <= endDate) {
+                      return (
+                        <span key={item.id}>-{item.discountPercentage}%</span>
+                      );
+                    } else {
+                      return null; // Không hiển thị nếu ưu đãi đã hết hạn
+                    }
+                  })}
+                </div>
+              )}
+            </div>
+
             <div className="flex items-center mt-4">
               <button onClick={() => handleAddFavorite(book?.id)}>
                 <FontAwesomeIcon

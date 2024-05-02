@@ -1,3 +1,4 @@
+import { Pagination } from "@mui/material";
 import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
@@ -76,6 +77,19 @@ function Order() {
     setCurrentPage(selected + 1);
   };
 
+  const [page, setPage] = useState(1);
+  const PER_PAGE = 5;
+
+  const count = Math.ceil(orders.length / PER_PAGE);
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+
+  const startIndex = (page - 1) * PER_PAGE;
+  const endIndex = startIndex + PER_PAGE;
+  const currentOrders = orders.slice(startIndex, endIndex);
+
   return (
     <div className="bg-white max-w-4xl shadow overflow-hidden sm:rounded-lg">
       <div className="mx-auto max-w-screen-lg">
@@ -91,7 +105,7 @@ function Order() {
               orderCounts={orderCounts}
             />
           </div>
-          {orders?.length > 0 ? (
+          {currentOrders?.length > 0 ? (
             <div className="overflow-x-auto px-4">
               <table className="w-full min-w-full divide-y divide-gray-200">
                 <thead>
@@ -104,7 +118,7 @@ function Order() {
                   </tr>
                 </thead>
                 <tbody className="text-gray-500 bg-white divide-y divide-gray-200">
-                  {orders?.slice(offset, offset + itemsPerPage).map((order) => {
+                  {currentOrders?.slice(offset, offset + itemsPerPage).map((order) => {
                     // Tính tổng số lượng cho mỗi đơn hàng
                     let totalQuantity = 0;
                     orderDetails[order.id]?.forEach((detail) => {
@@ -194,21 +208,13 @@ function Order() {
                 </tbody>
               </table>
               <div className="flex items-center justify-center border-t bg-white px-5 py-5 sm:flex-row sm:justify-center">
-                <ReactPaginate
-                  previousLabel={"Prev"}
-                  nextLabel={"Next"}
-                  pageCount={pageCount}
-                  onPageChange={handlePageChange}
-                  containerClassName={
-                    "pagination flex justify-between items-center"
-                  }
-                  activeClassName={"active"}
-                  previousClassName={
-                    "inline-flex justify-center items-center h-12 w-12 rounded-full border text-sm font-semibold text-gray-600 transition duration-150 hover:bg-gray-100"
-                  }
-                  nextClassName={
-                    "inline-flex justify-center items-center h-12 w-12 rounded-full border text-sm font-semibold text-gray-600 transition duration-150 hover:bg-gray-100"
-                  }
+                <Pagination
+                  count={count}
+                  page={page}
+                  onChange={handleChange}
+                  size="large"
+                  variant="outlined"
+                  shape="rounded"
                 />
               </div>
             </div>

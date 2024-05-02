@@ -59,7 +59,7 @@ function BestSellerProductS() {
 
         <Carousel responsive={responsive}>
           {books.map((book) => (
-            <Book key={book.id} data={book} />
+            <Book key={book?.id} data={book} />
           ))}
         </Carousel>
       </div>

@@ -56,14 +56,23 @@ function Register() {
 
     try {
       // Kiểm tra khả dụng của email trước khi tiếp tục
-      await checkEmailAvailability();
-      console.log(isEmailTaken);
+      const emailAvailability = await checkEmailAvailability();
+      console.log(emailAvailability);
 
       // Kiểm tra nếu email đã tồn tại
+      if (password.length < 8) {
+        setError((prev) => ({
+          ...prev,
+          password: "Mật khẩu cần ít nhất 8 ký tự",
+        }));
+        toast.error("Mật khẩu cần ít nhất 8 ký tự!");
+        return; // Dừng thực hiện hàm handleSubmit nếu mật khẩu không đủ dài
+      }
 
       // Kiểm tra mật khẩu và mật khẩu xác nhận có khớp nhau không
       if (password !== cPassword) {
         setError((prev) => ({ ...prev, cPassword: "Mật khẩu không khớp" }));
+        toast.error("Mật khẩu không khớp");
         return;
       } else {
         setError((prev) => ({ ...prev, cPassword: "" }));
@@ -76,13 +85,14 @@ function Register() {
           ? new Date(data.dateOfBirth).toISOString()
           : "",
       };
+      console.log(emailAvailability);
 
-      if (isEmailTaken === "Duplicated") {
+      if (emailAvailability === "Duplicated") {
         setError((prev) => ({ ...prev, email: "Email đã tồn tại" }));
         toast.error("Email đã tồn tại");
       } else {
         await register(dataToSend);
-        toast.success("Đăng ký tài khoản thành công");
+        toast.success("Đăng ký tài khoản thành công.");
         navigate("/login");
       }
       // Thực hiện đăng ký
@@ -97,7 +107,7 @@ function Register() {
       const response = await axios.post(
         `http://localhost:8080/users/check_email?email=${data.email}`
       );
-      setIsEmailTaken(response.data);
+      return response.data;
     } catch (error) {
       console.error("Error checking email:", error);
     }
@@ -177,6 +187,9 @@ function Register() {
                 required
               />
             </div>
+            {error.password && (
+              <div style={{ color: "red" }}>{error.password}</div>
+            )}
             <div>
               <label className="block mt-2 text-left text-gray-700">
                 Nhập lại mật khẩu
