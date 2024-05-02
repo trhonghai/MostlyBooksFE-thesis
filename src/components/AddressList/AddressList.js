@@ -249,6 +249,7 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
                           </h2>
                           <label for="full_name">Họ</label>
                           <input
+                            required
                             type="text"
                             name="firstName"
                             id="firstName"
@@ -261,6 +262,7 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
                         <div class="md:col-span-5">
                           <label for="email">Tên</label>
                           <input
+                            required
                             type="text"
                             name="lastName"
                             id="lastName"
@@ -273,6 +275,7 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
                         <div class="md:col-span-5">
                           <label for="email">Số điện thoại</label>
                           <input
+                            required
                             type="text"
                             name="phoneNumber"
                             id="phoneNumber"
@@ -285,6 +288,7 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
                         <div class="md:col-span-3">
                           <label for="address">Địa chỉ cụ thể</label>
                           <input
+                            required
                             type="text"
                             name="address"
                             id="address"
@@ -298,6 +302,7 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
                         <div class="md:col-span-2">
                           <label for="city">Thành phố</label>
                           <select
+                            required
                             name="city"
                             id="city"
                             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
@@ -323,6 +328,7 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
                           <label for="country">Quận/Huyện</label>
 
                           <select
+                            required
                             name="district"
                             id="district"
                             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
@@ -347,6 +353,7 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
                         <div class="md:col-span-2">
                           <label for="state">Phường/Xã</label>
                           <select
+                            required
                             name="ward"
                             id="ward"
                             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
@@ -372,6 +379,7 @@ function AddressList({ data, addressChecked, setAddressChecked }) {
                         </div>
                         <div class="flex items-center md:col-span-2">
                           <input
+                            required
                             className="w-4 h-4 "
                             name="defaultForShopping"
                             checked={addressData.defaultForShopping === true}

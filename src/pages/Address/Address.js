@@ -258,6 +258,7 @@ function Address() {
                           </h2>
                           <label for="full_name">Họ</label>
                           <input
+                            required
                             type="text"
                             name="firstName"
                             id="firstName"
@@ -270,6 +271,7 @@ function Address() {
                         <div className="md:col-span-5">
                           <label for="email">Tên</label>
                           <input
+                            required
                             type="text"
                             name="lastName"
                             id="lastName"
@@ -288,6 +290,7 @@ function Address() {
                             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.phoneNumber}
                             onChange={handleChange}
+                            required
                           />
                         </div>
 
@@ -300,6 +303,7 @@ function Address() {
                             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.address}
                             placeholder=""
+                            required
                             onChange={handleChange}
                           />
                         </div>
@@ -311,6 +315,7 @@ function Address() {
                             id="city"
                             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.city}
+                            required
                             onChange={handleChange}
                           >
                             {addressData.city === "" ? (
@@ -335,6 +340,7 @@ function Address() {
                             id="district"
                             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.district}
+                            required
                             onChange={handleChange}
                           >
                             {addressData.district === "" ? (
@@ -359,6 +365,7 @@ function Address() {
                             id="ward"
                             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                             value={addressData.ward}
+                            required
                             onChange={handleChange}
                           >
                             {addressData.ward === "" ? (

@@ -31,7 +31,8 @@ function BookDetails() {
     deleteFavoriteBook,
   } = useBook();
   const [rating, setRating] = useState(0);
-  const { getTotalCartItems, totalCartItems } = useContext(AuthContext);
+  const { getTotalCartItems, totalCartItems, userCurrent } =
+    useContext(AuthContext);
   const [isLiked, setIsLiked] = useState(false);
   const [idFavorite, setIdFavorite] = useState();
   const checkLiked = async () => {
@@ -73,9 +74,12 @@ function BookDetails() {
 
   const addItemIntoCart = async (id, price, quantity) => {
     try {
-      const result = AddtoCart(id, price, quantity);
-      console.log(result);
-      toast.success("Thêm sản phẩm thành công");
+      if (userCurrent) {
+        const result = await AddtoCart(id, price, quantity);
+        toast.success("Thêm sản phẩm thành công");
+      } else {
+        toast.error("Vui lòng đăng nhập để sử dụng chức năng này");
+      }
     } catch (error) {
       toast.error("Thêm sản phẩm thất bại");
     }

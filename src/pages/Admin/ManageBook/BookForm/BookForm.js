@@ -174,29 +174,54 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const dataRequest = {
-      ...bookData,
-    };
-    if (mode === "add") {
-      console.log(dataRequest, file);
-      await createBook(dataRequest, file);
-      toast.success("Thêm sách thành công!");
-    } else {
-      if (file) {
-        // Nếu có, thực hiện cập nhật cả thông tin sách và hình ảnh mới
-        await updateBook(dataUpdate, file, bookCurrent.id);
-        toast.success("Cập nhật sách thành công!");
-      } else {
-        console.log(dataUpdate);
-        // Nếu không, chỉ cập nhật thông tin sách
-        await updateBook(dataUpdate, null, bookCurrent.id);
-        toast.success("Cập nhật sách thành công!");
+    try {
+      // Kiểm tra xem các trường dữ liệu bắt buộc đã được nhập hay chưa
 
-        console.log(dataUpdate);
+      if (mode === "add") {
+        if (
+          !bookData.name ||
+          !bookData.authour ||
+          !bookData.category ||
+          !bookData.publisher ||
+          !bookData.description ||
+          !bookData.originalPrice ||
+          !bookData.pages ||
+          !bookData.isbn_10 ||
+          !bookData.isbn_13 ||
+          !bookData.dimensions ||
+          !bookData.weight ||
+          !bookData.inventory ||
+          !bookData.issue
+        ) {
+          throw new Error("Vui lòng nhập đầy đủ các thông tin sách!");
+        }
+
+        const dataRequest = {
+          ...bookData,
+        };
+        console.log(dataRequest, file);
+        await createBook(dataRequest, file);
+        toast.success("Thêm sách thành công!");
+      } else {
+        if (file) {
+          // Nếu có, thực hiện cập nhật cả thông tin sách và hình ảnh mới
+          await updateBook(dataUpdate, file, bookCurrent.id);
+          toast.success("Cập nhật sách thành công!");
+        } else {
+          console.log(dataUpdate);
+          // Nếu không, chỉ cập nhật thông tin sách
+          await updateBook(dataUpdate, null, bookCurrent.id);
+          toast.success("Cập nhật sách thành công!");
+
+          console.log(dataUpdate);
+        }
       }
+      onClose();
+      fetchBooks();
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message); // Thông báo lỗi
     }
-    onClose();
-    fetchBooks();
   };
 
   const handleFileDetailImageChange = (e) => {
@@ -587,7 +612,7 @@ function BookForm({ open, onClose, mode, bookCurrent, fetchBooks }) {
                     type="submit"
                     className="inline-flex w-48 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#FFD16B] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
                   >
-                    Thêm
+                    {mode === "add" ? "Thêm" : "Cập nhật"}
                   </button>
                   <button
                     onClick={onClose}

@@ -1,6 +1,7 @@
 import { data } from "autoprefixer";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import images from "~/assets/images";
 import AddressList from "~/components/AddressList/AddressList";
@@ -13,7 +14,7 @@ function Checkout() {
   const [addressChecked, setAddressChecked] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("paypal");
   const [shippingRate, setShippingRate] = useState(0);
-
+  const navigate = useNavigate();
   const { deleteOrderById } = useOrder();
   const location = useLocation();
   const orderData = location.state && location.state.orderData;
@@ -100,30 +101,36 @@ function Checkout() {
 
   const createPayment = async () => {
     try {
-      if (paymentMethod === "paypal") {
-        console.log(paymentRequest);
-        const response = await axios.post(
-          "http://localhost:8080/api/paypal/orders/create",
-          paymentRequest
-        );
-        if (orderData) {
-          await deleteOrderById(orderId);
+      if (addressChecked) {
+        if (paymentMethod === "paypal") {
+          console.log(paymentRequest);
+          const response = await axios.post(
+            "http://localhost:8080/api/paypal/orders/create",
+            paymentRequest
+          );
+          if (orderData) {
+            await deleteOrderById(orderId);
+          }
+          localStorage.removeItem("dataCheckOut");
+          window.location.href = response.data.links
+            .map((link) => {
+              if (link.rel === "approve") return link.href;
+            })
+            .filter((item) => {
+              return item !== undefined;
+            })
+            .join("");
+        } else {
+          const response = await axios.post(
+            "http://localhost:8080/api/payment/cash-on-delivery",
+            paymentRequest
+          );
+          toast.success("Đặt hàng thành công!");
+          navigate("/success");
+          console.log("Call API for cash on delivery");
         }
-        localStorage.removeItem("dataCheckOut");
-        window.location.href = response.data.links
-          .map((link) => {
-            if (link.rel === "approve") return link.href;
-          })
-          .filter((item) => {
-            return item !== undefined;
-          })
-          .join("");
       } else {
-        const response = await axios.post(
-          "http://localhost:8080/api/payment/cash-on-delivery",
-          paymentRequest
-        );
-        console.log("Call API for cash on delivery");
+        toast.error("Vui lòng chọn hoặc thêm địa chỉ giao hàng mới!");
       }
     } catch (error) {
       console.error("Error creating payment:", error);

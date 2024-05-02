@@ -34,7 +34,7 @@ function useAddress() {
   const createAddress = async (data) => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/provinces/newAddress/${customerId}`,
+        `http://localhost:8080/provinces/newAddress/${userCurrent}`,
         data
       );
       console.log(response.data);

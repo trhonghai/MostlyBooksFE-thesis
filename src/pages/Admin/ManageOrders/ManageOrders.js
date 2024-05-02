@@ -10,7 +10,6 @@ import { formatPrice } from "~/utils/formatPrice";
 function ManageOders() {
   const [orders, setOrders] = useState([]);
   const [orderDetails, setOrderDetails] = useState({});
-
   const { getAllOrders, OrderDetails, fetchOrderByStatus } = useOrder();
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [orderCounts, setOrderCounts] = useState({
@@ -22,7 +21,6 @@ function ManageOders() {
     CANCELLED: 0,
     REFUNDED: 0,
   });
-  
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
     fetchOrderByStatus(filter);
@@ -30,16 +28,17 @@ function ManageOders() {
   };
   useEffect(() => {
     fetchOrders(selectedFilter);
+    console.log(selectedFilter);
   }, [selectedFilter]);
-
-  console.log(orders);
 
   const fetchOrders = async (status) => {
     try {
       let result;
+      console.log(status);
       if (status === "all") {
         // Gọi API để lấy tất cả các đơn hàng khi trạng thái được chọn là "tất cả"
         result = await getAllOrders();
+        console.log(result);
         updateOrderCounts(result);
       } else {
         // Gọi API để lấy các đơn hàng dựa trên trạng thái
@@ -57,7 +56,6 @@ function ManageOders() {
       console.error("Error fetching orders:", error);
     }
   };
-
   const updateOrderCounts = (orders) => {
     const counts = {
       all: orders.length,
@@ -68,7 +66,6 @@ function ManageOders() {
       CANCELLED: 0,
       REFUNDED: 0,
     };
-
     orders.forEach((order) => {
       const status = order.orderStatus.status;
       counts[status]++;
