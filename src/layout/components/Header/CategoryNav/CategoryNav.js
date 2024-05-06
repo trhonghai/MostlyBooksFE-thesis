@@ -83,26 +83,6 @@ function CategoryNav() {
                       <FontAwesomeIcon icon={faAngleRight} className="mr-2" />
                       {category.name}
                     </Link>
-                    {/* {hoveredCategory === category.id && (
-                      <ul>
-                        {getSubcategories(category).map((subcategory) => (
-                          <li key={subcategory.id}>
-                            <div className=" w-48 h-auto bg-white absolute top-0 left-64 border-solid border border-[#FFD16B]">
-                              <Link
-                                // Thay đổi thành đường dẫn phù hợp với ứng dụng của bạn
-                                className="  block text-left px-4 font-medium py-2 text-black hover:bg-[#FFD16B] dark:hover:bg-gray-600 hover:text-white"
-                              >
-                                <FontAwesomeIcon
-                                  icon={faAngleRight}
-                                  className="mr-2"
-                                />
-                                {subcategory.name}
-                              </Link>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )} */}
                   </li>
                 ))}
               </ul>

@@ -5,7 +5,7 @@ import AuthContext from "~/context/AuthProvider";
 import { useReview } from "~/hooks";
 import toast from "react-hot-toast";
 
-function ReviewForm({ bookId, open, onClose, fetchData }) {
+function ReviewForm({ bookId, open, onClose }) {
   const [ratingValue, setRatingValue] = useState(3);
   const { userCurrent } = useContext(AuthContext);
   const [reviewRequest, setReviewRequest] = useState({
@@ -30,9 +30,10 @@ function ReviewForm({ bookId, open, onClose, fetchData }) {
 
   const handleReviewSubmit = async () => {
     try {
+      console.log(reviewRequest, bookId);
       await createReview(bookId, reviewRequest);
       toast.success("Đánh giá sách thành công!");
-      fetchData();
+      // fetchData();
 
       onClose();
       setReviewRequest({

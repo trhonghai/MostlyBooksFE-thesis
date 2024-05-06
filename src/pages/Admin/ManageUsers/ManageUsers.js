@@ -139,7 +139,7 @@ function ManageUsers() {
                       {user.email}
                     </td>
                     <td className="border-b  text-left border-gray-200 bg-white px-2 py-5 text-sm">
-                      {user.roles.map((role) => (
+                      {user?.roles?.map((role) => (
                         <p
                           key={role.id}
                           className="px-2 py-4 whitespace-nowrap"

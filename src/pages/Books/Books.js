@@ -18,6 +18,9 @@ function Books() {
     // Nếu bookData đã được fetch từ FilterProvider, sử dụng nó trực tiếp
     if (bookData && bookData.length > 0) {
       setBooks(bookData);
+      const startIndex = (page - 1) * PER_PAGE;
+      const endIndex = startIndex + PER_PAGE;
+      const currentBooks = books.slice(startIndex, endIndex);
     } else {
       // Nếu không, gọi API để fetch dữ liệu sách
       const fetchBooks = async () => {

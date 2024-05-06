@@ -1,9 +1,4 @@
-import {
-  faLocationDot,
-  faLocation,
-  faMobileAlt,
-  faPhoneAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faMobileAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MailIcon } from "~/components/icons";
 

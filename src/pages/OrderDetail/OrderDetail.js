@@ -13,6 +13,7 @@ import { Link, useLocation } from "react-router-dom";
 import config from "~/config";
 import { useOrder } from "~/hooks";
 import { formatPrice } from "~/utils/formatPrice";
+import ReviewForm from "../BookDetails/Reviews/ReviewForm";
 
 function OrderDetail() {
   const location = useLocation();
@@ -21,8 +22,16 @@ function OrderDetail() {
   const [orderDetails, setOrderDetails] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalReviewOpen, setIsModalReviewOpen] = useState(false);
   const openModal = () => {
     setIsModalOpen(true);
+  };
+
+  const openModalReview = () => {
+    setIsModalReviewOpen(true);
+  };
+  const closeModalReview = () => {
+    setIsModalReviewOpen(false);
   };
 
   const closeModal = () => {
@@ -33,7 +42,6 @@ function OrderDetail() {
     if (order) {
       fetchOrderDetail();
     }
-    console.log(orderDetails);
   }, [order]);
 
   const fetchOrderDetail = async () => {
@@ -208,6 +216,20 @@ function OrderDetail() {
                           )}
                         </p>
                       </div>
+                      {order?.orderStatus?.status === "DELIVERED" && (
+                        <button
+                          onClick={openModalReview}
+                          className="transition mt-4 duration-300 ease-in-out mb-4 hover:bg-red-500 hover:text-white dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 w-46 bg-red-600 text-base font-medium leading-4 text-white"
+                        >
+                          Đánh giá
+                        </button>
+                      )}
+                      <ReviewForm
+                        // fetchData={fetchData}
+                        bookId={orderDetail?.book?.id}
+                        open={isModalReviewOpen}
+                        onClose={closeModalReview}
+                      />
                     </div>
                   </div>
                 </div>

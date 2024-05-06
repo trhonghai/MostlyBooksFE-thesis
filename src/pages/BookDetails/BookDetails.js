@@ -17,7 +17,6 @@ import { formatPrice } from "~/utils/formatPrice";
 import config from "~/config";
 import { faHeart as regularFaHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as solidFaHeart } from "@fortawesome/free-solid-svg-icons";
-import { set } from "date-fns";
 
 function BookDetails() {
   const { id } = useParams();
@@ -96,22 +95,26 @@ function BookDetails() {
 
   const handleAddFavorite = async (id) => {
     try {
-      if (!isLiked) {
-        const result = await addFavoriteBook(id);
-        if (result) {
-          toast.success("Thêm vào yêu thích thành công");
+      if (userCurrent) {
+        if (!isLiked) {
+          const result = await addFavoriteBook(id);
+          if (result) {
+            toast.success("Thêm vào yêu thích thành công");
+          } else {
+            toast.error("Thêm vào yêu thích thất bại");
+          }
+          setIsLiked(true);
         } else {
-          toast.error("Thêm vào yêu thích thất bại");
+          const result = await deleteFavoriteBook(idFavorite, id);
+          if (result) {
+            toast.success("Xóa khỏi yêu thích thành công");
+          } else {
+            toast.error("Xóa khỏi yêu thích thất bại");
+          }
+          setIsLiked(false);
         }
-        setIsLiked(true);
       } else {
-        const result = await deleteFavoriteBook(idFavorite, id);
-        if (result) {
-          toast.success("Xóa khỏi yêu thích thành công");
-        } else {
-          toast.error("Xóa khỏi yêu thích thất bại");
-        }
-        setIsLiked(false);
+        toast.error("Vui lòng đăng nhập để sử dụng chức năng này");
       }
     } catch (error) {
       toast.error("Thêm vào yêu thích thất bại");
@@ -119,7 +122,7 @@ function BookDetails() {
   };
 
   return (
-    <section className="pt-2 justify-center bg-gray-100">
+    <section className="pt-2 mb-4 justify-center bg-gray-100">
       <div className="container w-9/12 mx-auto px-4 bg-white rounded-lg">
         <div className="lg:col-gap-12 xl:col-gap-16 mt-4 grid grid-cols-1 gap-12 lg:grid-cols-4 lg:gap-16">
           <div className="lg:col-span-2 lg:row-end-1 mt-4">

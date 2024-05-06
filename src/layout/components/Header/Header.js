@@ -10,13 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAddressBook,
   faArrowRightFromBracket,
-  faBagShopping,
-  faCartShopping,
-  faDolly,
-  faDollyBox,
   faReceipt,
-  faShoppingBasket,
-  faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faUser } from "@fortawesome/free-regular-svg-icons";
 import CategoryNav from "./CategoryNav";
@@ -26,9 +20,9 @@ import { useLogout } from "~/hooks";
 import axios from "axios";
 import BookOnSearch from "~/components/BookOnSearch";
 import toast from "react-hot-toast";
-import AuthContext from "~/context/AuthProvider";
 import { shoppingCartIcon } from "~/components/icons";
-import { FilterProvider } from "~/context/FilterProvider";
+import AuthContext from "~/context/AuthProvider";
+import { set } from "date-fns";
 
 export const userMenu = [
   {
@@ -49,7 +43,7 @@ export const userMenu = [
   {
     title: "Sổ địa chỉ",
     icon: faAddressBook,
-    to: "/account/favorite",
+    to: "/account/address",
   },
 ];
 
@@ -69,7 +63,8 @@ function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [totalCartItems, setTotalCartItems] = useState(0);
-  // const { totalCartItems } = useContext(AuthContext);
+  const { userCurrent } = useContext(AuthContext);
+  const [userInfor, setUserInfor] = useState({});
   console.log(totalCartItems);
 
   const handleSearch = async () => {
@@ -96,9 +91,7 @@ function Header() {
     }
   };
 
-  const currentUser = localStorage.getItem("refresh_token");
-
-  // console.log(currentUser);
+  // console.log(userCurrent);
 
   const handleLogout = async () => {
     await logout();
@@ -113,7 +106,19 @@ function Header() {
   };
   useEffect(() => {
     getTotalCartItem();
+    getInforCus();
   }, []);
+
+  const getInforCus = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/user-infor/${userCurrent}`
+      );
+      setUserInfor(response.data);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
+  };
 
   const getTotalCartItem = async () => {
     try {
@@ -181,12 +186,10 @@ function Header() {
         </div>
 
         <div className="hidden md:inline-flex  gap-2">
-          {currentUser ? (
+          {userCurrent ? (
             <>
               <Tippy
                 interactive
-                // visible
-                // disabled={false}
                 placement="bottom-end"
                 render={(attrs) => (
                   <div
@@ -206,7 +209,7 @@ function Header() {
 
                         <div className="grid">
                           <span className="ml-2 text-gray-700 dark:text-gray-200">
-                            Trương Hồng Hải
+                            {userInfor.firstName} {userInfor.lastName}
                           </span>
                           <span className="ml-2 text-xs text-gray-500 dark:text-gray-200">
                             Thành viên

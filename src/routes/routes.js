@@ -30,6 +30,7 @@ import PaymentSuccess from "~/pages/PaymentSuccess";
 import Favorite from "~/pages/Favorite";
 import Contact from "~/pages/Contact";
 import Invoice from "~/pages/Admin/AdminOrderDetail/Invoice";
+import ManageShippingRate from "~/pages/Admin/ManageShippingRate";
 
 const routes = [
   { path: config.routes.home, component: Home, layout: DefaultLayout },
@@ -166,6 +167,12 @@ const routes = [
     path: config.routes.contact,
     component: Contact,
     layout: DefaultLayout,
+  },
+  {
+    path: config.routes.adminShipping,
+    component: ManageShippingRate,
+    layout: AdminLayout,
+    onlyAdmin: true,
   },
 ];
 

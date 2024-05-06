@@ -153,7 +153,7 @@ function Reviews({ data, fetchBook }) {
             </div>
           </div>
         </div>
-        <div className="lg:col-span-2 lg:row-end-1 text-[#f7941e] flex items-center">
+        {/* <div className="lg:col-span-2 lg:row-end-1 text-[#f7941e] flex items-center">
           <button
             onClick={openModal}
             className="max-w-xl w-96 rounded-full border py-3  font-medium"
@@ -162,12 +162,12 @@ function Reviews({ data, fetchBook }) {
             Viết đánh giá
           </button>
           <ReviewForm
-            fetchData={fetchData}
+            // fetchData={fetchData}
             bookId={data?.id}
             open={isModalOpen}
             onClose={closeModal}
           />
-        </div>
+        </div> */}
       </div>
       <div className="">
         <ul className="">
@@ -199,7 +199,7 @@ function Reviews({ data, fetchBook }) {
                           : regularFaHeart
                       }
                     />
-                    {review.liked}
+                    <span className="ml-2">{review.liked}</span>
                   </button>
                 </div>
               </div>

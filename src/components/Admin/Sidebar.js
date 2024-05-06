@@ -3,6 +3,7 @@ import {
   faBagShopping,
   faBars,
   faBook,
+  faBus,
   faHome,
   faList,
   faTag,
@@ -60,6 +61,11 @@ function Sidebar({ isSidebarOpen }) {
       icon: faComment,
       title: "Đánh giá",
       link: config.routes.adminReviews,
+    },
+    {
+      icon: faBus,
+      title: "Vận chuyển",
+      link: config.routes.adminShipping,
     },
   ];
   return (
